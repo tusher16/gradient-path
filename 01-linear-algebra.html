@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Linear Algebra — Elementary to Advanced Roadmap</title>
+<script>
+  (function() {
+    var saved = localStorage.getItem('gradient_path_theme');
+    if (saved) {
+      document.documentElement.setAttribute('data-theme', saved);
+    } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+      document.documentElement.setAttribute('data-theme', 'light');
+    } else {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    }
+  })();
+</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<style>
+:root, [data-theme="dark"] {
+  --bg: #0f1117;
+  --panel: #14161f;
+  --card: #171a26;
+  --line: #262a3d;
+  --ink: #e7e8f0;
+  --dim: #a3a6bd;
+  --mut: #6b6e85;
+  --accent: #a78bfa;
+  --t1: #34d399;
+  --t2: #60a5fa;
+  --t3: #f59e0b;
+  --danger: #f87171;
+  --diagram-bg: #11131c;
+  --code-bg: #11131c;
+}
+
+[data-theme="light"] {
+  --bg: #f8fafc;
+  --panel: #ffffff;
+  --card: #ffffff;
+  --line: #e2e8f0;
+  --ink: #0f172a;
+  --dim: #475569;
+  --mut: #64748b;
+  --accent: #6d28d9;
+  --t1: #059669;
+  --t2: #2563eb;
+  --t3: #d97706;
+  --danger: #dc2626;
+  --diagram-bg: #f1f5f9;
+  --code-bg: #f1f5f9;
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.65 -apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;transition:background .2s,color .2s}
+a{color:var(--accent)}
+.app-shell{display:flex;min-height:100vh}
+.sidebar{position:sticky;top:0;align-self:flex-start;height:100vh;overflow-y:auto;width:300px;flex:0 0 300px;background:var(--panel);border-right:1px solid var(--line);padding:20px 16px 40px;transition:background .2s}
+.sidebar-brand{display:flex;gap:10px;align-items:center;margin-bottom:14px}
+.sidebar-brand .logo{font-size:24px;color:var(--accent)}
+.sidebar-brand .name{font-weight:700;font-size:14px}
+.sidebar-brand .sub{font-size:11px;color:var(--mut)}
+.sidebar-home-link{display:block;font-size:12.5px;color:var(--dim);text-decoration:none;margin-bottom:16px}
+.sidebar-home-link:hover{color:var(--ink)}
+.progress-wrap{margin-bottom:18px}
+.progress-label{display:flex;justify-content:space-between;font-size:11.5px;color:var(--mut);margin-bottom:6px}
+.progress-label b{color:var(--ink)}
+.progress-track{height:6px;border-radius:3px;background:var(--line);overflow:hidden}
+.progress-fill{height:100%;width:0;background:var(--accent);border-radius:3px;transition:width .3s}
+.toc-tier{margin-bottom:14px}
+.toc-tier-title{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;margin:0 0 6px 6px}
+.toc-tier-title.t1{color:var(--t1)}.toc-tier-title.t2{color:var(--t2)}.toc-tier-title.t3{color:var(--t3)}
+.toc-link{display:flex;align-items:center;gap:8px;padding:5px 8px;border-radius:7px;font-size:12.5px;color:var(--dim);text-decoration:none;line-height:1.35}
+.toc-link:hover{background:rgba(167,139,250,.08);color:var(--ink)}
+.toc-link .dot{width:7px;height:7px;border-radius:50%;border:1.5px solid var(--mut);flex:0 0 7px}
+.toc-link.reviewed .dot{background:var(--accent);border-color:var(--accent)}
+.toc-link.active{background:rgba(167,139,250,.14);color:var(--ink)}
+.sidebar-toggle{display:none}
+.main{flex:1;min-width:0;padding:36px 44px 80px;max-width:1080px}
+.eyebrow{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:800}
+.hero h1{font-size:30px;margin:6px 0 10px;line-height:1.25}
+.lede{color:var(--dim);max-width:72ch;margin:0}
+.meta-row{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 0}
+.badge{font-size:12px;padding:4px 10px;border:1px solid var(--line);border-radius:999px;color:var(--dim);background:var(--panel)}
+.badge.source a{color:var(--accent);text-decoration:none}
+.global-controls{display:flex;gap:10px;margin-top:16px}
+.btn{background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:8px 16px;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:all .15s}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#ffffff;font-weight:700}
+[data-theme="dark"] .btn.primary{color:#14121f}
+.tier-section{margin-top:46px}
+.tier-header{display:flex;align-items:center;gap:12px}
+.tier-pill{font-size:11px;font-weight:800;letter-spacing:.1em;padding:3px 10px;border-radius:999px}
+.tier-pill.t1{background:rgba(52,211,153,.15);color:var(--t1)}
+.tier-pill.t2{background:rgba(96,165,250,.15);color:var(--t2)}
+.tier-pill.t3{background:rgba(245,158,11,.15);color:var(--t3)}
+.tier-header h2{margin:0;font-size:22px}
+.tier-count{color:var(--mut);font-size:12.5px}
+.tier-desc{color:var(--dim);margin:8px 0 18px;max-width:75ch}
+.concept-card{background:var(--card);border:1px solid var(--line);border-radius:12px;margin-bottom:14px;overflow:hidden;transition:background .2s,border-color .2s}
+.concept-card.t1{border-left:3px solid var(--t1)}
+.concept-card.t2{border-left:3px solid var(--t2)}
+.concept-card.t3{border-left:3px solid var(--t3)}
+.concept-header{display:flex;align-items:center;gap:12px;padding:13px 18px;cursor:pointer;user-select:none}
+.concept-header:hover{background:rgba(167,139,250,.05)}
+.concept-num{color:var(--mut);font-weight:700;font-size:13px}
+.concept-title{font-weight:700;flex:1}
+.reviewed-wrap{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--mut)}
+.reviewed-wrap input{accent-color:var(--accent);cursor:pointer}
+.reviewed-wrap label{cursor:pointer}
+.concept-toggle-icon{color:var(--mut);transition:transform .2s}
+.concept-card.open .concept-toggle-icon{transform:rotate(90deg)}
+.concept-body{padding:4px 20px 20px;border-top:1px solid var(--line)}
+.concept-grid{display:grid;grid-template-columns:1.15fr .95fr;gap:22px;align-items:start;margin-top:14px}
+.concept-explain p{margin:0 0 12px}
+.diagram-box{background:var(--diagram-bg);border:1px solid var(--line);border-radius:10px;padding:10px;transition:background .2s}
+.diagram-box svg{display:block;width:100%;height:auto}
+.diagram-caption{font-size:11.5px;color:var(--mut);text-align:center;margin-top:8px;line-height:1.5}
+.callout{border:1px solid rgba(167,139,250,.3);border-left:3px solid var(--accent);background:rgba(167,139,250,.06);border-radius:10px;padding:12px 16px;margin-top:18px}
+.callout-label{display:block;font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--accent);font-weight:800;margin-bottom:4px}
+.callout p{margin:0;color:var(--dim);font-size:13.5px}
+.qa-block{margin-top:18px}
+.qa-block-title{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--mut);font-weight:800;margin-bottom:8px}
+.qa-item{border:1px solid var(--line);border-radius:99px;margin-bottom:8px;overflow:hidden;background:var(--panel);transition:background .2s}
+.qa-item{border-radius:9px}
+.qa-question{display:flex;gap:8px;align-items:baseline;padding:10px 14px;cursor:pointer;font-size:13.5px;user-select:none}
+.qa-question:hover{background:rgba(96,165,250,.06)}
+.q-mark{color:var(--t2);font-weight:800;font-size:12px}
+.q-chevron{margin-left:auto;color:var(--mut);transition:transform .2s}
+.qa-item.open .q-chevron{transform:rotate(90deg)}
+.qa-answer{padding:10px 14px 12px 36px;color:var(--dim);font-size:13.5px;border-top:1px dashed var(--line)}
+.qa-answer strong{color:var(--t1)}
+.qa-answer code{background:var(--code-bg);border:1px solid var(--line);border-radius:4px;padding:1px 5px;font-size:12px}
+.resource-links{margin-top:16px;display:flex;flex-wrap:wrap;gap:10px}
+.resource-links a{font-size:12.5px;text-decoration:none;border:1px solid var(--line);padding:5px 11px;border-radius:999px;color:var(--accent);background:var(--panel)}
+.resource-links a:hover{border-color:var(--accent)}
+.page-footer{margin-top:60px;border-top:1px solid var(--line);padding-top:26px}
+.page-footer h3{margin:0 0 12px}
+.footer-resources div{color:var(--dim);font-size:13.5px;margin-bottom:6px}
+.footer-note{color:var(--mut);font-size:12.5px;margin-top:18px;line-height:1.7}
+.katex{font-size:1.02em}
+
+/* SVG dynamic color overrides for light mode */
+[data-theme="light"] svg [stroke="#e7e8f0"] { stroke: var(--ink); }
+[data-theme="light"] svg [fill="#e7e8f0"] { fill: var(--ink); }
+[data-theme="light"] svg [stroke="#a3a6bd"] { stroke: var(--dim); }
+[data-theme="light"] svg [fill="#a3a6bd"] { fill: var(--dim); }
+[data-theme="light"] svg [stroke="#6b6e85"] { stroke: var(--mut); }
+[data-theme="light"] svg [fill="#6b6e85"] { fill: var(--mut); }
+[data-theme="light"] svg [stroke="#262a3d"] { stroke: var(--line); }
+[data-theme="light"] svg [fill="#262a3d"] { fill: var(--line); }
+[data-theme="light"] svg [stroke="#a78bfa"] { stroke: var(--accent); }
+[data-theme="light"] svg [fill="#a78bfa"] { fill: var(--accent); }
+[data-theme="light"] svg [stroke="#34d399"] { stroke: var(--t1); }
+[data-theme="light"] svg [fill="#34d399"] { fill: var(--t1); }
+[data-theme="light"] svg [stroke="#60a5fa"] { stroke: var(--t2); }
+[data-theme="light"] svg [fill="#60a5fa"] { fill: var(--t2); }
+[data-theme="light"] svg [stroke="#f59e0b"] { stroke: var(--t3); }
+[data-theme="light"] svg [fill="#f59e0b"] { fill: var(--t3); }
+[data-theme="light"] svg [stroke="#f87171"] { stroke: var(--danger); }
+[data-theme="light"] svg [fill="#f87171"] { fill: var(--danger); }
+
+@media(max-width:960px){
+  .concept-grid{grid-template-columns:1fr}
+  .sidebar{position:fixed;left:0;top:0;z-index:50;transform:translateX(-100%);transition:transform .25s;width:290px;height:100vh}
+  .sidebar.open{transform:none;box-shadow:0 0 40px rgba(0,0,0,.6)}
+  .sidebar-toggle{display:block;position:fixed;top:12px;left:12px;z-index:60;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:6px 10px;font-size:16px;cursor:pointer}
+  .main{padding:64px 20px 60px}
+  .hero h1{font-size:24px}
+}
+</style>
+</head>
+<body>
+<button class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle menu">&#9776;</button>
+<div class="app-shell">
+  <nav class="sidebar">
+    <div class="sidebar-brand">
+      <span class="logo">&#120121;</span>
+      <div><div class="name">Gradient Path</div><div class="sub">AI/ML Study Hub</div></div>
+    </div>
+    <a class="sidebar-home-link" href="index.html">&larr; Back to all modules</a>
+    <div class="progress-wrap">
+      <div class="progress-label"><span>Reviewed</span><b id="progress-count">0 / 25</b></div>
+      <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+    </div>
+    <div class="toc-tier"><div class="toc-tier-title t1">Tier 1 · Elementary</div><a class="toc-link t1" href="#scalars-vectors-matrices" data-id="scalars-vectors-matrices"><span class="dot"></span>1.1 Scalars, Vectors &amp; Matrices</a><a class="toc-link t1" href="#vector-addition-scalar-multiplication" data-id="vector-addition-scalar-multiplication"><span class="dot"></span>1.2 Vector Addition &amp; Scalar Multiplication</a><a class="toc-link t1" href="#dot-product" data-id="dot-product"><span class="dot"></span>1.3 Dot Product</a><a class="toc-link t1" href="#vector-norms" data-id="vector-norms"><span class="dot"></span>1.4 Vector Norms (L1 / L2)</a><a class="toc-link t1" href="#matrix-multiplication-transpose" data-id="matrix-multiplication-transpose"><span class="dot"></span>1.5 Matrix Multiplication &amp; Transpose</a><a class="toc-link t1" href="#systems-of-linear-equations" data-id="systems-of-linear-equations"><span class="dot"></span>1.6 Systems of Linear Equations</a><a class="toc-link t1" href="#gaussian-elimination" data-id="gaussian-elimination"><span class="dot"></span>1.7 Gaussian Elimination</a><a class="toc-link t1" href="#determinants" data-id="determinants"><span class="dot"></span>1.8 Determinants</a><a class="toc-link t1" href="#matrix-inverse" data-id="matrix-inverse"><span class="dot"></span>1.9 Matrix Inverse</a></div><div class="toc-tier"><div class="toc-tier-title t2">Tier 2 · Intermediate</div><a class="toc-link t2" href="#vector-spaces-subspaces" data-id="vector-spaces-subspaces"><span class="dot"></span>2.1 Vector Spaces &amp; Subspaces</a><a class="toc-link t2" href="#span" data-id="span"><span class="dot"></span>2.2 Span</a><a class="toc-link t2" href="#linear-independence" data-id="linear-independence"><span class="dot"></span>2.3 Linear Independence</a><a class="toc-link t2" href="#basis-dimension" data-id="basis-dimension"><span class="dot"></span>2.4 Basis &amp; Dimension</a><a class="toc-link t2" href="#rank" data-id="rank"><span class="dot"></span>2.5 Rank</a><a class="toc-link t2" href="#null-space" data-id="null-space"><span class="dot"></span>2.6 Null Space</a><a class="toc-link t2" href="#linear-transformations" data-id="linear-transformations"><span class="dot"></span>2.7 Linear Transformations</a><a class="toc-link t2" href="#orthogonality-projections" data-id="orthogonality-projections"><span class="dot"></span>2.8 Orthogonality &amp; Projections</a><a class="toc-link t2" href="#least-squares" data-id="least-squares"><span class="dot"></span>2.9 Least Squares</a></div><div class="toc-tier"><div class="toc-tier-title t3">Tier 3 · Advanced</div><a class="toc-link t3" href="#eigenvalues-eigenvectors" data-id="eigenvalues-eigenvectors"><span class="dot"></span>3.1 Eigenvalues &amp; Eigenvectors</a><a class="toc-link t3" href="#diagonalization" data-id="diagonalization"><span class="dot"></span>3.2 Diagonalization</a><a class="toc-link t3" href="#svd" data-id="svd"><span class="dot"></span>3.3 Singular Value Decomposition (SVD)</a><a class="toc-link t3" href="#pca" data-id="pca"><span class="dot"></span>3.4 Principal Component Analysis (PCA)</a><a class="toc-link t3" href="#quadratic-forms-positive-definiteness" data-id="quadratic-forms-positive-definiteness"><span class="dot"></span>3.5 Quadratic Forms &amp; Positive-Definiteness</a><a class="toc-link t3" href="#matrix-decompositions" data-id="matrix-decompositions"><span class="dot"></span>3.6 Matrix Decompositions (LU, QR, Cholesky)</a><a class="toc-link t3" href="#ml-applications-embeddings-attention-lora-hessians" data-id="ml-applications-embeddings-attention-lora-hessians"><span class="dot"></span>3.7 ML Applications: Embeddings, Attention, LoRA &amp; Hessians</a></div>
+  </nav>
+  <main class="main">
+    <div class="hero">
+      <span class="eyebrow">ML Foundations &middot; Module 1 of the interview-prep series</span>
+      <h1>Linear Algebra — Elementary to Advanced Roadmap</h1>
+      <p class="lede">Every concept from scratch through SVD/LoRA, with a plain-language explanation, a diagram, a real-world ML example, and click-to-reveal interview Q&amp;A. Built to be re-read a few minutes each night until it sticks.</p>
+      <div class="meta-row">
+        <span class="badge">&#11088; Mastery: Beginner</span>
+        <span class="badge">Status: Not Started &rarr; you decide when that changes</span>
+        <span class="badge">25 concepts &middot; 3 tiers</span>
+        <span class="badge source">&#128279; <a href="https://app.notion.com/p/396859801c1381518a52ddfce51aac77" target="_blank" rel="noopener">Source card in Notion</a></span>
+      </div>
+      <div class="global-controls">
+        <button class="btn primary" id="btn-reveal-all">Reveal all answers</button>
+        <button class="btn" id="btn-expand-all">Expand all</button>
+        <button class="btn" id="theme-toggle" aria-label="Toggle theme"><span id="theme-icon">🌙</span> <span id="theme-label">Dark</span></button>
+      </div>
+    </div>
+
+<section class="tier-section" id="tier-1">
+  <div class="tier-header">
+    <span class="tier-pill t1">TIER 1</span>
+    <h2>Elementary</h2>
+    <span class="tier-count">9 concepts</span>
+  </div>
+  <p class="tier-desc">The vocabulary and hand-computation toolkit — vectors, matrices, and the operations you'd be expected to do without a calculator.</p>
+
+<article class="concept-card t1" id="scalars-vectors-matrices">
+  <div class="concept-header">
+    <span class="concept-num">1.1</span>
+    <span class="concept-title">Scalars, Vectors &amp; Matrices</span>
+    <span class="reviewed-wrap">
+      <input type="checkbox" class="reviewed-check" data-id="scalars-vectors-matrices" id="cb-scalars-vectors-matrices">
+      <label for="cb-scalars-vectors-matrices">reviewed</label>
+    </span>
+    <span class="concept-toggle-icon">&#9656;</span>
+  </div>
+  <div class="concept-body" hidden>
+    <div class="concept-grid">
+      <div class="concept-explain"><p>A <strong>scalar</strong> is a single number with magnitude only, no direction — a temperature reading, a learning rate. A <strong>vector</strong> is an ordered list of numbers with both magnitude and direction (or, in ML, simply a data point's features): $v \in \mathbb{R}^n$. A <strong>matrix</strong> is a 2D array of numbers, $A \in \mathbb{R}^{m \times n}$, used to hold a whole dataset (rows = samples, columns = features), a linear transformation, or the weights connecting two neural network layers.</p><p>Interview framing: scalar (0D), vector (1D), matrix (2D) — this generalizes to <strong>tensors</strong> (nD), the term PyTorch and TensorFlow use throughout. Knowing this ladder cold makes shape-related bugs much faster to reason about.</p></div>
+      <div class="diagram-wrap">
+        <div class="diagram-box"><svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif"><defs><marker id="arrow-t1c1-ink" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e7e8f0"/></marker></defs><circle cx="45" cy="95" r="4" fill="#e7e8f0"/><text x="45" y="75" fill="#e7e8f0" font-size="18" text-anchor="middle" font-weight="700">7</text><text x="45" y="182" fill="#6b6e85" font-size="11" text-anchor="middle">scalar</text><line x1="115" y1="150" x2="195" y2="78" stroke="#e7e8f0" stroke-width="2.4" stroke-linecap="round" marker-end="url(#arrow-t1c1-ink)"/><text x="205" y="72" fill="#e7e8f0" font-size="15" text-anchor="middle" font-weight="700">v</text><text x="155" y="182" fill="#6b6e85" font-size="11" text-anchor="middle">vector</text><rect x="235" y="55" width="72" height="72" rx="3" fill="none" stroke="#a3a6bd" stroke-width="1.6"/><line x1="259.0" y1="55" x2="259.0" y2="127" stroke="#262a3d" stroke-width="1"/><line x1="235" y1="79.0" x2="307" y2="79.0" stroke="#262a3d" stroke-width="1"/><line x1="283.0" y1="55" x2="283.0" y2="127" stroke="#262a3d" stroke-width="1"/><line x1="235" y1="103.0" x2="307" y2="103.0" stroke="#262a3d" stroke-width="1"/><text x="271" y="182" fill="#6b6e85" font-size="11" text-anchor="middle">matrix</text></svg></div>
+        <div class="diagram-caption">0-, 1-, and 2-index objects — the same ladder tensors extend further.</div>
+      </div>
+    </div>
+    <div class="callout">
+      <span class="callout-label">Real-World Lens</span>
+      <p>A grayscale image is literally a matrix of pixel intensities (height × width); a color image is a 3D tensor (H×W×3). A user's embedding in a recommender system is a vector (e.g. 128 dimensions). An entire Netflix user-item ratings table is a matrix.</p>
+    </div>
+    <div class="qa-block"><div class="qa-block-title">Interview Drill</div><div class="qa-item"><div class="qa-question"><span class="q-mark">Q1.</span> What's the difference between a vector and a $1 \times n$ matrix?<span class="q-chevron">&#9656;</span></div><div class="qa-answer" hidden><strong>A.</strong> Mathematically they hold the same data — a vector can be viewed as an $n \times 1$ (column) or $1 \times n$ (row) matrix. In practice, NumPy distinguishes a true 1D array (shape <code>(n,)</code>) from a 2D row/column matrix (shape <code>(1,n)</code> or <code>(n,1)</code>), which matters for broadcasting and matmul rules — a very common source of shape bugs.</div></div><div class="qa-item"><div class="qa-question"><span class="q-mark">Q2.</span> Why does tensor rank/dimensionality matter so much in deep learning frameworks?<span class="q-chevron">&#9656;</span></div><div class="qa-answer" hidden><strong>A.</strong> Because matmul, broadcasting, and convolution are all defined per-shape. A batch of images is a 4D tensor (batch, channels, height, width); mismatched ranks are the single most common runtime error in model code. Thinking scalar → vector → matrix → tensor as an escalating "how many indices do I need to address one number" ladder makes debugging shape errors intuitive.</div></div><div class="qa-item"><div class="qa-question"><span class="q-mark">Q3.</span> Interview trap: is a grayscale image a vector or a matrix?<span class="q-chevron">&#9656;</span></div><div class="qa-answer" hidden><strong>A.</strong> Natively a matrix (H×W). But classic pipelines (plain logistic regression, PCA) often flatten it into a vector of length H×W, discarding 2D spatial structure — exactly why CNNs, which preserve that structure via convolutions, outperform flattening-based approaches on images.</div></div></div>
+    <div class="resource-links"><a href="https://www.youtube.com/watch?v=fNk_zzaMoSs" target="_blank" rel="noopener">3Blue1Brown: Vectors, what even are they? &#8599;</a></div>
+  </div>
+</article>
+<article class="concept-card t1" id="vector-addition-scalar-multiplication">
+  <div class="concept-header">
+    <span class="concept-num">1.2</span>
+    <span class="concept-title">Vector Addition &amp; Scalar Multiplication</span>
+    <span class="reviewed-wrap">
+      <input type="checkbox" class="reviewed-check" data-id="vector-addition-scalar-multiplication" id="cb-vector-addition-scalar-multiplication">
+      <label for="cb-vector-addition-scalar-multiplication">reviewed</label>
+    </span>
+    <span class="concept-toggle-icon">&#9656;</span>
+  </div>
+  <div class="concept-body" hidden>
+    <div class="concept-grid">
+      <div class="concept-explain"><p><strong>Vector addition</strong> adds component-wise; geometrically it's "tip-to-tail" — place the second vector's tail at the first vector's tip, and the sum runs from the origin to the new tip. <strong>Scalar multiplication</strong> multiplies every component by a scalar $c$: it stretches ($|c|>1$), shrinks ($|c|&lt;1$), or reverses direction ($c&lt;0$) without changing the vector's line of direction (unless flipped).</p><p>Together these two operations define linearity itself — any linear combination $c_1v_1 + c_2v_2 + \ldots$ is built from just these two primitives. Every other linear-algebra concept sits on top of this pair.</p></div>
+      <div class="diagram-wrap">
+        <div class="diagram-box"><svg viewBox="0 0 320 220" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif"><defs><marker id="arrow-t1c2-dim" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#a3a6bd"/></marker><marker id="arrow-t1c2-t1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#34d399"/></marker><marker id="arrow-t1c2-accent" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#a78bfa"/></marker><marker id="arrow-t1c2-danger" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#f87171"/></marker></defs><text x="95" y="18" fill="#6b6e85" font-size="10.5" text-anchor="middle">addition (tip-to-tail)</text><line x1="30" y1="170" x2="110" y2="130" stroke="#a3a6bd" stroke-width="2.4" stroke-linecap="round" marker-end="url(#arrow-t1c2-dim)"/><text x="68" y="160" fill="#a3a6bd" font-size="13" text-anchor="middle" font-weight="700">u</text><line x1="110" y1="130" x2="180" y2="45" stroke="#a3a6bd" stroke-width="2.4" stroke-linecap="round" marker-end="url(#arrow-t1c2-dim)"/><text x="156" y="85" fill="#a3a6bd" font-size="13" text-anchor="middle" font-weight="700">v</text><line x1="30" y1="170" x2="180" y2="45" stroke="#a78bfa" stroke-width="2.4" stroke-linecap="round" marker-end="url(#arrow-t1c2-accent)" stroke-dasharray="5,4"/><text x="92" y="90" fill="#a78bfa" font-size="13" text-anchor="middle" font-weight="700">u+v</text><line x1="210" y1="10" x2="210" y2="210" stroke="#262a3d" stroke-width="1" stroke-dasharray="4,4"/><text x="255" y="18" fill="#6b6e85" font-size="10.5" text-anchor="middle">scaling</text><line x1="255" y1="140" x2="275" y2="110" stroke="#a3a6bd" stroke-width="2.4" stroke-linecap="round" marker-end="url(#arrow-t1c2-dim)"/><text x="284" y="126" fill="#a3a6bd" font-size="12" text-anchor="start" font-weight="700">w</text><line x1="255" y1="140" x2="295" y2="80" stroke="#34d399" stroke-width="2.4" stroke-linecap="round" marker-end="url(#arrow-t1c2-t1)"/><text x="302" y="75" fill="#34d399" font-size="12" text-anchor="start" font-weight="700">2w</text><line x1="255" y1="140" x2="235" y2="170" stroke="#f87171" stroke-width="2.4" stroke-linecap="round" marker-end="url(#arrow-t1c2-danger)"/><text x="222" y="182" fill="#f87171" font-size="12" text-anchor="end" font-weight="700">-w</text></svg></div>
+        <div class="diagram-caption">Tip-to-tail addition, and scaling a vector up, down, or into reverse.</div>
+      </div>
+    </div>
+    <div class="callout">
+      <span class="callout-label">Real-World Lens</span>
+      <p>Gradient descent's update rule $\theta_{new} = \theta_{old} - \eta \nabla L(\theta)$ is scalar multiplication (learning rate $\eta$ times the gradient vector) followed by vector subtraction. Word embedding arithmetic — king − man + woman ≈ queen — is vector addition/subtraction in embedding space.</p>
+    </div>
+    <div class="qa-block"><div class="qa-block-title">Interview Drill</div><div class="qa-item"><div class="qa-question"><span class="q-mark">Q1.</span> Why does gradient descent use vector subtraction rather than some other combination rule?<span class="q-chevron">&#9656;</span></div><div class="qa-answer" hidden><strong>A.</strong> $\nabla L(\theta)$ points in the direction of steepest ascent; subtracting a scaled version of it moves parameters in the steepest-descent direction. This is literally vector addition of $\theta$ and the vector $-\eta\nabla L(\theta)$ — understanding addition and scalar multiplication directly explains the single most common line of code in ML.</div></div><div class="qa-item"><div class="qa-question"><span class="q-mark">Q2.</span> What happens geometrically if you accidentally use a negative learning rate?<span class="q-chevron">&#9656;</span></div><div class="qa-answer" hidden><strong>A.</strong> Every update moves in the direction of steepest ascent instead of descent, so loss increases each step (the classic "loss is exploding" bug) — because scalar multiplication by a negative number reverses the vector's direction entirely.</div></div><div class="qa-item"><div class="qa-question"><span class="q-mark">Q3.</span> Is vector addition commutative, and why does that matter for batched operations?<span class="q-chevron">&#9656;</span></div><div class="qa-answer" hidden><strong>A.</strong> Yes, $u+v = v+u$ (and it's associative), which is why frameworks can freely reorder or parallelize elementwise-sum reductions — e.g. summing gradients across a batch — without changing the result, a property parallel/distributed training relies on.</div></div></div>
+  </div>
+</article>
+<article class="concept-card t1" id="dot-product">
+  <div class="concept-header">
+    <span class="concept-num">1.3</span>
+    <span class="concept-title">Dot Product</span>
+    <span class="reviewed-wrap">
+      <input type="checkbox" class="reviewed-check" data-id="dot-product" id="cb-dot-product">
+      <label for="cb-dot-product">reviewed</label>
+    </span>
+    <span class="concept-toggle-icon">&#9656;</span>
+  </div>
+  <div class="concept-body" hidden>
+    <div class="concept-grid">
+      <div class="concept-explain"><p>For $u, v \in \mathbb{R}^n$: $u \cdot v = \sum_i u_i v_i = \|u\| \|v\| \cos\theta$, where $\theta$ is the angle between them. Two readings of the same number: <strong>algebraic</strong> (sum of elementwise products) and <strong>geometric</strong> (magnitude × magnitude × cosine of the angle — a measure of alignment).</p><p>A dot product of zero means the vectors are <strong>orthogonal</strong> (perpendicular, no shared direction); positive means they point somewhat the same way; negative means somewhat opposite.</p></div>
+      <div class="diagram-wrap">
+        <div class="diagram-box"><svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif"><defs><marker id="arrow-t1c3-dim" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#a3a6bd"/></marker></defs><line x1="40" y1="160" x2="220" y2="160" stroke="#a3a6bd" stroke-width="2.4" stroke-linecap="round" marker-end="url(#arrow-t1c3-dim)"/><text x="235" y="164" fill="#a3a6bd" font-size="13" text-anchor="start" font-weight="700">u</text><line x1="40" y1="160" x2="160" y2="50" stroke="#a3a6bd" stroke-width="2.4" stroke-linecap="round" marker-end="url(#arrow-t1c3-dim)"/><text x="168" y="44" fill="#a3a6bd" font-size="13" text-anchor="start" font-weight="700">v</text><path d="M 85,160 Q 90,138 108,128" fill="none" stroke="#a78bfa" stroke-width="1.6"/><text x="98" y="148" fill="#a78bfa" font-size="12" text-anchor="middle" font-weight="700">θ</text><line x1="160" y1="50" x2="160" y2="160" stroke="#6b6e85" stroke-width="1.2" stroke-dasharray="4,3"/><line x1="40" y1="160" x2="160" y2="160" stroke="#a78bfa" stroke-width="4"/><text x="100" y="185" fill="#a78bfa" font-size="10.5" text-anchor="middle" font-weight="700">proj of v onto u</text></svg></div>
+        <div class="diagram-caption">u·v = |u||v|cos(θ) — algebraic sum of products, or geometric alignment.</div>
+      </div>
+    </div>
+    <div class="callout">
+      <span class="callout-label">Real-World Lens</span>
+      <p>Cosine similarity (a normalized dot product) is the standard way to compare text/image embeddings in semantic search and recommenders. Every neuron's pre-activation is a dot product of input and weight vectors plus bias: $z = w \cdot x + b$. Attention scores in Transformers are dot products of Query and Key vectors.</p>
+    </div>
+    <div class="qa-block"><div class="qa-block-title">Interview Drill</div><div class="qa-item"><div class="qa-question"><span class="q-mark">Q1.</span> How is cosine similarity related to the dot product, and why normalize embeddings before comparing them?<span class="q-chevron">&#9656;</span></div><div class="qa-answer" hidden><strong>A.</strong> Cosine similarity is $\frac{u \cdot v}{\|u\|\|v\|}$ — the dot product with the effect of magnitude removed, so it purely measures directional alignment. Embeddings are compared this way so a document's similarity score isn't inflated just because it's longer or has larger-magnitude embeddings.</div></div><div class="qa-item"><div class="qa-question"><span class="q-mark">Q2.</span> In "scaled dot-product attention," what is being scaled, and why?<span class="q-chevron">&#9656;</span></div><div class="qa-answer" hidden><strong>A.</strong> The raw dot products $QK^\top$ are divided by $\sqrt{d_k}$ before the softmax. As dimension $d_k$ grows, dot products of random vectors grow in variance, pushing softmax into saturated regions with vanishing gradients; the $\sqrt{d_k}$ scaling keeps that variance roughly constant regardless of dimension.</div></div><div class="qa-item"><div class="qa-question"><span class="q-mark">Q3.</span> What does it mean in ML terms if two feature vectors have a dot product of zero?<span class="q-chevron">&#9656;</span></div><div class="qa-answer" hidden><strong>A.</strong> They're orthogonal — no linear relationship or redundancy between them in the inner-product sense. This matters in orthogonal weight initialization or feature engineering, where each vector should contribute independent information.</div></div></div>
+  </div>
+</article>
+<article class="concept-card t1" id="vector-norms">
+  <div class="concept-header">
+    <span class="concept-num">1.4</span>
+    <span class="concept-title">Vector Norms (L1 / L2)</span>
+    <span class="reviewed-wrap">
+      <input type="checkbox" class="reviewed-check" data-id="vector-norms" id="cb-vector-norms">
+      <label for="cb-vector-norms">reviewed</label>
+    </span>
+    <span class="concept-toggle-icon">&#9656;</span>
+  </div>
+  <div class="concept-body" hidden>
+    <div class="concept-grid">
+      <div class="concept-explain"><p>A norm measures a vector's "size." <strong>L2 (Euclidean)</strong>: $\|v\|_2 = \sqrt{\sum v_i^2}$ — ordinary straight-line length. <strong>L1 (Manhattan/taxicab)</strong>: $\|v\|_1 = \sum |v_i|$ — sum of absolute values, like walking city blocks.</p><p>The set of vectors with norm 1 (the "unit ball") is a circle for L2 and a diamond for L1. That shape difference is exactly why L1 regularization induces sparsity (exact zeros) while L2 shrinks weights smoothly toward zero without ever quite reaching it — the diamond's corners sit on the axes, so a loss-plus-L1-penalty optimum is likely to land exactly on an axis (a zero coefficient).</p></div>
+      <div class="diagram-wrap">
+        <div class="diagram-box"><svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif"><line x1="80" y1="105" x2="240" y2="105" stroke="#262a3d" stroke-width="1"/><line x1="160" y1="35" x2="160" y2="175" stroke="#262a3d" stroke-width="1"/><circle cx="160" cy="105" r="55" fill="none" stroke="#60a5fa" stroke-width="2.4"/><polygon points="160,50 215,105 160,160 105,105" fill="none" stroke="#f59e0b" stroke-width="2.4"/><circle cx="20" cy="185" r="4" fill="#60a5fa"/><text x="30" y="189" fill="#60a5fa" font-size="10.5" text-anchor="start">L2 norm (circle)</text><polygon points="175,180 181,185 175,190 169,185" fill="#f59e0b"/><text x="187" y="189" fill="#f59e0b" font-size="10.5" text-anchor="start">L1 norm (diamond)</text></svg></div>
+        <div class="diagram-caption">The L2 unit ball is a circle; the L1 unit ball is a diamond with corners on the axes.</div>
+      </div>
+    </div>
+    <div class="callout">
+      <span class="callout-label">Real-World Lens</span>
+      <p>Lasso regression (L1) does automatic feature selection by zeroing out irrelevant weights. Ridge regression / weight decay (L2) prevents overfitting by keeping weights small without eliminating any. L2 norm is also just Euclidean distance, used constantly in k-NN and k-means.</p>
+    </div>
+    <div class="qa-block"><div class="qa-block-title">Interview Drill</div><div class="qa-item"><div class="qa-question"><span class="q-mark">Q1.</span> Why does L1 regularization produce sparse solutions but L2 doesn't?<span class="q-chevron">&#9656;</span></div><div class="qa-answer" hidden><strong>A.</strong> The L1 constraint region is a diamond with sharp corners on the coordinate axes; the loss's elliptical contours are statistically likely to first touch that region exactly at a corner — one or more coefficients exactly zero. The L2 region is a smooth circle with no corners, so the contact point generically has all coordinates nonzero, just shrunk.</div></div><div class="qa-item"><div class="qa-question"><span class="q-mark">Q2.</span> When would you prefer Ridge over Lasso in practice?<span class="q-chevron">&#9656;</span></div><div class="qa-answer" hidden><strong>A.</strong> When you believe most or all features are at least somewhat relevant (you don't want to zero any out), or when features are highly correlated — L1 tends to arbitrarily keep one of a correlated group and zero out the rest (unstable), whereas L2 shrinks correlated features together more smoothly.</div></div><div class="qa-item"><div class="qa-question"><span class="q-mark">Q3.</span> Compute the L2 norm of v = [3, 4] by hand.<span class="q-chevron">&#9656;</span></div><div class="qa-answer" hidden><strong>A.</strong> $\|v\|_2 = \sqrt{3^2+4^2} = \sqrt{9+16} = \sqrt{25} = 5$ — the classic 3-4-5 triangle, a good sanity-check example to keep in your back pocket.</div></div></div>
+  </div>
+</article>
+<article class="concept-card t1" id="matrix-multiplication-transpose">
+  <div class="concept-header">
+    <span class="concept-num">1.5</span>
+    <span class="concept-title">Matrix Multiplication &amp; Transpose</span>
+    <span class="reviewed-wrap">
+      <input type="checkbox" class="reviewed-check" data-id="matrix-multiplication-transpose" id="cb-matrix-multiplication-transpose">
+      <label for="cb-matrix-multiplication-transpose">reviewed</label>
+    </span>
+    <span class="concept-toggle-icon">&#9656;</span>
+  </div>
+  <div class="concept-body" hidden>
+    <div class="concept-grid">
+      <div class="concept-explain"><p>For $A$ ($m\times n$) and $B$ ($n \times p$): $(AB)_{ij} = \sum_k A_{ik}B_{kj}$ — inner dimensions must match, result is $m \times p$. Matrix multiplication is <strong>not commutative</strong> ($AB \ne BA$ in general) though it is associative and distributive. Multiplying a vector by a matrix applies a linear transformation to it; multiplying two matrices composes two transformations.</p><p><strong>Transpose</strong> $A^\top$ flips rows into columns: $(A^\top)_{ij} = A_{ji}$, and $(AB)^\top = B^\top A^\top$ (order reverses).</p></div>
+      <div class="diagram-wrap">
+        <div class="diagram-box"><svg viewBox="0 0 320 195" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif"><text x="160" y="20" fill="#6b6e85" font-size="10.5" text-anchor="middle">row · column → one entry</text><rect x="15" y="55" width="65" height="90" rx="3" fill="none" stroke="#a3a6bd" stroke-width="1.6"/><line x1="36.7" y1="55" x2="36.7" y2="120" stroke="#262a3d" stroke-width="1"/><line x1="15" y1="76.7" x2="80" y2="76.7" stroke="#262a3d" stroke-width="1"/><line x1="58.3" y1="55" x2="58.3" y2="120" stroke="#262a3d" stroke-width="1"/><line x1="15" y1="98.3" x2="80" y2="98.3" stroke="#262a3d" stroke-width="1"/><rect x="15" y="85" width="65" height="30" rx="3" fill="#60a5fa" fill-opacity="0.30"/><text x="47" y="162" fill="#e7e8f0" font-size="13" text-anchor="middle" font-weight="700">A</text><text x="47" y="176" fill="#6b6e85" font-size="10" text-anchor="middle">(m×n)</text><text x="95" y="108" fill="#a3a6bd" font-size="20" text-anchor="middle">×</text><rect x="115" y="55" width="65" height="90" rx="3" fill="none" stroke="#a3a6bd" stroke-width="1.6"/><line x1="136.7" y1="55" x2="136.7" y2="120" stroke="#262a3d" stroke-width="1"/><line x1="115" y1="76.7" x2="180" y2="76.7" stroke="#262a3d" stroke-width="1"/><line x1="158.3" y1="55" x2="158.3" y2="120" stroke="#262a3d" stroke-width="1"/><line x1="115" y1="98.3" x2="180" y2="98.3" stroke="#262a3d" stroke-width="1"/><rect x="137" y="55" width="21" height="90" rx="3" fill="#f59e0b" fill-opacity="0.30"/><text x="147" y="162" fill="#e7e8f0" font-size="13" text-anchor="middle" font-weight="700">B</text><text x="147" y="176" fill="#6b6e85" font-size="10" text-anchor="middle">(n×p)</text><text x="195" y="108" fill="#a3a6bd" font-size="20" text-anchor="middle">=</text><rect x="215" y="55" width="65" height="90" rx="3" fill="none" stroke="#a3a6bd" stroke-width="1.6"/><line x1="236.7" y1="55" x2="236.7" y2="120" stroke="#262a3d" stroke-width="1"/><line x1="215" y1="76.7" x2="280" y2="76.7" stroke="#262a3d" stroke-width="1"/><line x1="258.3" y1="55" x2="258.3" y2="120" stroke="#262a3d" stroke-width="1"/><line x1="215" y1="98.3" x2="280" y2="98.3" stroke="#262a3d" stroke-width="1"/><rect x="237" y="85" width="21" height="30" rx="3" fill="#a78bfa" fill-opacity="0.45"/><text x="247" y="162" fill="#e7e8f0" font-size="13" text-anchor="middle" font-weight="700">C</text><text x="247" y="176" fill="#6b6e85" font-size="10" text-anchor="middle">(m×p)</text></svg></div>
+        <div class="diagram-caption">Each output entry is a dot product of one row of A and one column of B.</div>
+      </div>
+    </div>
+    <div class="callout">
+      <span class="callout-label">Real-World Lens</span>
+      <p>A fully-connected layer is literally $h = Wx + b$ — matrix-vector multiplication; a batch is matrix-matrix multiplication. GPUs are essentially matmul accelerators; nearly all deep learning compute reduces to matmul FLOPs. Transpose shows up in every backprop step and in Gram matrices ($X^\top X$) for covariance/least-squares.</p>
+    </div>
+    <div class="qa-block"><div class="qa-block-title">Interview Drill</div><div class="qa-item"><div class="qa-question"><span class="q-mark">Q1.</span> Why must the "inner dimensions" match for matrix multiplication, and how does this appear as a bug?<span class="q-chevron">&#9656;</span></div><div class="qa-answer" hidden><strong>A.</strong> Each output entry is a dot product of a row of A and a column of B, which only makes sense if they're the same length. In practice this shows up as shape-mismatch errors ("expected size 128 but got 256") when one layer's output dimension doesn't match the next layer's expected input.</div></div><div class="qa-item"><div class="qa-question"><span class="q-mark">Q2.</span> Is matrix multiplication commutative? Give an ML-relevant reason this matters.<span class="q-chevron">&#9656;</span></div><div class="qa-answer" hidden><strong>A.</strong> No — $AB \ne BA$ in general, and $BA$ may not even be defined. This matters directly in backprop: the order of chain-rule matrix multiplications (e.g. $\delta \cdot W^\top$ vs. $W^\top \cdot \delta$) must respect actual shape/order requirements, never be swapped arbitrarily.</div></div><div class="qa-item"><div class="qa-question"><span class="q-mark">Q3.</span> How does transpose relate to a Gram/covariance matrix, and why is that everywhere in ML?<span class="q-chevron">&#9656;</span></div><div class="qa-answer" hidden><strong>A.</strong> For data matrix $X$ (rows = samples, columns = features), $X^\top X$ captures pairwise feature relationships in one $n \times n$ matrix — the backbone of PCA, ridge regression's normal equations, and second-moment statistics throughout ML.</div></div></div>
+  </div>
+</article>
+<article class="concept-card t1" id="systems-of-linear-equations">
+  <div class="concept-header">
+    <span class="concept-num">1.6</span>
+    <span class="concept-title">Systems of Linear Equations</span>
+    <span class="reviewed-wrap">
+      <input type="checkbox" class="reviewed-check" data-id="systems-of-linear-equations" id="cb-systems-of-linear-equations">
+      <label for="cb-systems-of-linear-equations">reviewed</label>
+    </span>
+    <span class="concept-toggle-icon">&#9656;</span>
+  </div>
+  <div class="concept-body" hidden>
+    <div class="concept-grid">
+      <div class="concept-explain"><p>A system like $2x+3y=8,\ x-y=1$ is written $Ax=b$: $A$ the coefficient matrix, $x$ the unknowns, $b$ the constants. Solving means finding the linear combination of $A$'s columns (weighted by $x$) that equals $b$. In 2D, each equation is a line; the solution is where the lines intersect.</p><p>A system has exactly one solution (lines cross once — $A$ invertible), no solution (parallel, inconsistent lines), or infinitely many solutions (identical/dependent lines) — never any other count.</p></div>
+      <div class="diagram-wrap">
+        <div class="diagram-box"><svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif"><line x1="15" y1="175" x2="95" y2="175" stroke="#262a3d" stroke-width="1"/><line x1="15" y1="90" x2="15" y2="175" stroke="#262a3d" stroke-width="1"/><line x1="15" y1="175" x2="95" y2="115" stroke="#60a5fa" stroke-width="2.2"/><line x1="15" y1="120" x2="95" y2="170" stroke="#f59e0b" stroke-width="2.2"/><circle cx="55" cy="145" r="3.2" fill="#a78bfa"/><text x="55" y="193" fill="#6b6e85" font-size="10" text-anchor="middle">unique solution</text><line x1="107" y1="90" x2="107" y2="190" stroke="#262a3d" stroke-width="1" stroke-dasharray="3,3"/><line x1="125" y1="175" x2="200" y2="175" stroke="#262a3d" stroke-width="1"/><line x1="130" y1="175" x2="200" y2="115" stroke="#60a5fa" stroke-width="2.2"/><line x1="130" y1="150" x2="200" y2="90" stroke="#f59e0b" stroke-width="2.2"/><text x="165" y="193" fill="#6b6e85" font-size="10" text-anchor="middle">no solution</text><line x1="212" y1="90" x2="212" y2="190" stroke="#262a3d" stroke-width="1" stroke-dasharray="3,3"/><line x1="230" y1="175" x2="305" y2="175" stroke="#262a3d" stroke-width="1"/><line x1="240" y1="175" x2="300" y2="115" stroke="#60a5fa" stroke-width="3"/><line x1="240" y1="175" x2="300" y2="115" stroke="#f59e0b" stroke-width="1.4" stroke-dasharray="5,3"/><text x="270" y="193" fill="#6b6e85" font-size="10" text-anchor="middle">infinite solutions</text></svg></div>
+        <div class="diagram-caption">Two lines meeting at a point, running parallel forever, or perfectly overlapping.</div>
+      </div>
+    </div>
+    <div class="callout">
+      <span class="callout-label">Real-World Lens</span>
+      <p>Linear regression's normal equations $(X^\top X)\beta = X^\top y$ are exactly a linear system to solve for the best-fit coefficients. Circuit design, resource-allocation constraints, and finite-difference numerical solvers all reduce to $Ax=b$ at their core.</p>
+    </div>
+    <div class="qa-block"><div class="qa-block-title">Interview Drill</div><div class="qa-item"><div class="qa-question"><span class="q-mark">Q1.</span> How does "solving Ax=b" relate to fitting a linear regression model?<span class="q-chevron">&#9656;</span></div><div class="qa-answer" hidden><strong>A.</strong> The normal equations $(X^\top X)\beta = X^\top y$ are exactly a linear system with $A = X^\top X$ and $b = X^\top y$; solving it (directly or via QR/Cholesky, since $X^\top X$ is symmetric positive-semidefinite) gives the closed-form least-squares coefficients.</div></div><div class="qa-item"><div class="qa-question"><span class="q-mark">Q2.</span> What does "no solution" mean geometrically for a 2-variable system, and what does it say about A?<span class="q-chevron">&#9656;</span></div><div class="qa-answer" hidden><strong>A.</strong> The two lines are parallel and never meet. Algebraically this happens when A's rows are linearly dependent (A is singular) but the corresponding entries of b are inconsistent with that dependency — so no x satisfies both equations at once.</div></div><div class="qa-item"><div class="qa-question"><span class="q-mark">Q3.</span> How many solutions can a linear system have — is exactly two ever possible?<span class="q-chevron">&#9656;</span></div><div class="qa-answer" hidden><strong>A.</strong> Zero, exactly one, or infinitely many — never exactly two or any other finite count above one. If two distinct solutions $x_1 \ne x_2$ existed, every point on the line through them would also be a solution, forcing infinitely many.</div></div></div>
+  </div>
+</article>
+<article class="concept-card t1" id="gaussian-elimination">
+  <div class="concept-header">
+    <span class="concept-num">1.7</span>
+    <span class="concept-title">Gaussian Elimination</span>
+    <span class="reviewed-wrap">
+      <input type="checkbox" class="reviewed-check" data-id="gaussian-elimination" id="cb-gaussian-elimination">
+      <label for="cb-gaussian-elimination">reviewed</label>
+    </span>
+    <span class="concept-toggle-icon">&#9656;</span>
+  </div>
+  <div class="concept-body" hidden>
+    <div class="concept-grid">
+      <div class="concept-explain"><p>An algorithmic method to solve $Ax=b$ (or find rank, inverse, determinant) using row operations — swap rows, scale a row, add a multiple of one row to another — to reduce the augmented matrix $[A|b]$ to upper-triangular (row-echelon) form, then <strong>back-substitute</strong> from the bottom row upward.</p><p>This is the textbook algorithm underlying most numerical solvers — LU decomposition is essentially "Gaussian elimination, recorded as reusable matrix factors," and understanding elimination builds the intuition for why LU, QR, and Cholesky decompositions exist at all.</p></div>
+      <div class="diagram-wrap">
+        <div class="diagram-box"><svg viewBox="0 0 320 175" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif"><defs><marker id="arrow-t1c7-accent" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#a78bfa"/></marker></defs><rect x="20" y="40" width="90" height="90" rx="3" fill="none" stroke="#a3a6bd" stroke-width="1.6"/><line x1="50.0" y1="40" x2="50.0" y2="130" stroke="#262a3d" stroke-width="1"/><line x1="20" y1="70.0" x2="110" y2="70.0" stroke="#262a3d" stroke-width="1"/><line x1="80.0" y1="40" x2="80.0" y2="130" stroke="#262a3d" stroke-width="1"/><line x1="20" y1="100.0" x2="110" y2="100.0" stroke="#262a3d" stroke-width="1"/><text x="65" y="150" fill="#6b6e85" font-size="11" text-anchor="middle">before</text><line x1="120" y1="85" x2="168" y2="85" stroke="#a78bfa" stroke-width="2.4" stroke-linecap="round" marker-end="url(#arrow-t1c7-accent)"/><text x="144" y="76" fill="#a78bfa" font-size="10.5" text-anchor="middle">row reduce</text><rect x="190" y="40" width="90" height="90" rx="3" fill="none" stroke="#a3a6bd" stroke-width="1.6"/><line x1="220.0" y1="40" x2="220.0" y2="130" stroke="#262a3d" stroke-width="1"/><line x1="190" y1="70.0" x2="280" y2="70.0" stroke="#262a3d" stroke-width="1"/><line x1="250.0" y1="40" x2="250.0" y2="130" stroke="#262a3d" stroke-width="1"/><line x1="190" y1="100.0" x2="280" y2="100.0" stroke="#262a3d" stroke-width="1"/><rect x="190" y="70" width="30" height="30" rx="3" fill="#6b6e85" fill-opacity="0.35"/><rect x="190" y="100" width="30" height="30" rx="3" fill="#6b6e85" fill-opacity="0.35"/><rect x="220" y="100" width="30" height="30" rx="3" fill="#6b6e85" fill-opacity="0.35"/><text x="235" y="150" fill="#6b6e85" font-size="10" text-anchor="middle">after: zeros below diagonal</text></svg></div>
+        <div class="diagram-caption">Row operations zero out the lower-left triangle, then back-substitution solves upward.</div>
+      </div>
+    </div>
+    <div class="callout">
+      <span class="callout-label">Real-World Lens</span>
+      <p>It's the core of numerical linear solvers used in physics/graphics simulations, and the conceptual ancestor of every matrix decomposition used in production ML numerical libraries.</p>
+    </div>
+    <div class="qa-block"><div class="qa-block-title">Interview Drill</div><div class="qa-item"><div class="qa-question"><span class="q-mark">Q1.</span> Walk through solving a 3×3 system with Gaussian elimination — what are the two phases?<span class="q-chevron">&#9656;</span></div><div class="qa-answer" hidden><strong>A.</strong> Forward elimination: use row operations to zero out entries below the diagonal, producing an upper-triangular matrix. Back-substitution: starting from the last row (now one unknown), solve for each variable in turn, substituting upward.</div></div><div class="qa-item"><div class="qa-question"><span class="q-mark">Q2.</span> What goes wrong if a pivot is zero during elimination, and how is it handled?<span class="q-chevron">&#9656;</span></div><div class="qa-answer" hidden><strong>A.</strong> You can't divide by a zero pivot, so you perform partial pivoting — swap the current row with a lower row that has a nonzero (ideally largest-magnitude) entry in that column. Pivoting on the largest available entry also improves numerical stability even when the pivot isn't exactly zero.</div></div><div class="qa-item"><div class="qa-question"><span class="q-mark">Q3.</span> How does Gaussian elimination relate to computing a determinant or rank?<span class="q-chevron">&#9656;</span></div><div class="qa-answer" hidden><strong>A.</strong> After reducing A to upper-triangular form (tracking sign flips from row swaps), the determinant is the product of the diagonal entries. The rank is the number of nonzero rows (pivots) remaining in row-echelon form.</div></div></div>
+    <div class="resource-links"><a href="https://ocw.mit.edu/courses/18-06-linear-algebra-spring-2010/" target="_blank" rel="noopener">MIT 18.06 (Strang) — full course &#8599;</a></div>
+  </div>
+</article>
+<article class="concept-card t1" id="determinants">
+  <div class="concept-header">
+    <span class="concept-num">1.8</span>
+    <span class="concept-title">Determinants</span>
+    <span class="reviewed-wrap">
+      <input type="checkbox" class="reviewed-check" data-id="determinants" id="cb-determinants">
+      <label for="cb-determinants">reviewed</label>
+    </span>
+    <span class="concept-toggle-icon">&#9656;</span>
+  </div>
+  <div class="concept-body" hidden>
+    <div class="concept-grid">
+      <div class="concept-explain"><p>A scalar computed from a square matrix measuring how much its transformation scales area (2D) or volume (3D+), and whether it flips orientation (negative determinant). $\det(A)=0$ means the transformation collapses space into a lower dimension — the matrix is singular / non-invertible, its columns linearly dependent. For 2×2: $\det = ad-bc$.</p><p>Key properties: $\det(AB)=\det(A)\det(B)$, $\det(A^\top)=\det(A)$, $\det(A^{-1})=1/\det(A)$.</p></div>
+      <div class="diagram-wrap">
+        <div class="diagram-box"><svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif"><defs><marker id="arrow-t1c8-accent" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#a78bfa"/></marker></defs><rect x="40" y="60" width="60" height="60" rx="3" fill="none" stroke="#a3a6bd" stroke-width="1.8"/><text x="70" y="135" fill="#6b6e85" font-size="10" text-anchor="middle">unit square</text><line x1="108" y1="90" x2="148" y2="90" stroke="#a78bfa" stroke-width="2.4" stroke-linecap="round" marker-end="url(#arrow-t1c8-accent)"/><text x="128" y="78" fill="#a78bfa" font-size="12" text-anchor="middle" font-weight="700">A</text><polygon points="175,120 255,120 280,55 200,55" fill="#60a5fa" fill-opacity="0.22" stroke="#60a5fa" stroke-width="2"/><text x="228" y="140" fill="#60a5fa" font-size="10.5" text-anchor="middle">area = |det(A)|</text><line x1="40" y1="172" x2="110" y2="172" stroke="#f87171" stroke-width="2.4"/><circle cx="40" cy="172" r="3" fill="#f87171"/><circle cx="110" cy="172" r="3" fill="#f87171"/><text x="215" y="176" fill="#f87171" font-size="10" text-anchor="middle">det(A) = 0 → space collapses</text></svg></div>
+        <div class="diagram-caption">det(A) is the area/volume scale factor of A's transformation — zero means collapse.</div>
+      </div>
+    </div>
+    <div class="callout">
+      <span class="callout-label">Real-World Lens</span>
+      <p>Checking $\det(X^\top X) \approx 0$ is a standard sanity check before inverting a matrix for regression — a near-singular $X^\top X$ (from multicollinearity) means unstable, huge-variance coefficient estimates. Determinants also appear in the multivariate Gaussian's normalizing constant, relevant to Gaussian Mixture Models.</p>
+    </div>
+    <div class="qa-block"><div class="qa-block-title">Interview Drill</div><div class="qa-item"><div class="qa-question"><span class="q-mark">Q1.</span> What does it mean practically if det(XᵀX) ≈ 0 before running linear regression?<span class="q-chevron">&#9656;</span></div><div class="qa-answer" hidden><strong>A.</strong> It signals multicollinearity or more predictors than independent information — $X^\top X$ is singular or near-singular, so the normal equations don't have a unique, stable solution. You'd reach for ridge regression (adding $\lambda I$ restores invertibility) or drop/combine correlated features.</div></div><div class="qa-item"><div class="qa-question"><span class="q-mark">Q2.</span> Geometrically, what's the difference between a negative, positive, and zero determinant?<span class="q-chevron">&#9656;</span></div><div class="qa-answer" hidden><strong>A.</strong> Positive: the transformation preserves orientation and scales area/volume by $|\det(A)|$. Negative: same scaling but flips orientation (like a reflection). Zero: the transformation squashes space into a lower dimension, so no inverse exists.</div></div><div class="qa-item"><div class="qa-question"><span class="q-mark">Q3.</span> How do you compute a 3×3 determinant, and how does that connect to Gaussian elimination?<span class="q-chevron">&#9656;</span></div><div class="qa-answer" hidden><strong>A.</strong> Via cofactor expansion (a signed sum of 2×2 minors), or — more efficiently, and what's actually used computationally — by row-reducing to upper-triangular form and multiplying the diagonal entries, adjusting sign for each row swap.</div></div></div>
+  </div>
+</article>
+<article class="concept-card t1" id="matrix-inverse">
+  <div class="concept-header">
+    <span class="concept-num">1.9</span>
+    <span class="concept-title">Matrix Inverse</span>
+    <span class="reviewed-wrap">
+      <input type="checkbox" class="reviewed-check" data-id="matrix-inverse" id="cb-matrix-inverse">
+      <label for="cb-matrix-inverse">reviewed</label>
+    </span>
+    <span class="concept-toggle-icon">&#9656;</span>
+  </div>
+  <div class="concept-body" hidden>
+    <div class="concept-grid">
+      <div class="concept-explain"><p>For square $A$, the inverse $A^{-1}$ satisfies $AA^{-1}=A^{-1}A=I$. It exists if and only if $\det(A) \ne 0$ (A is "non-singular", full rank). Solving $Ax=b$ then gives $x = A^{-1}b$ — though in practice you almost never explicitly compute $A^{-1}$ to solve a system; you use decomposition-based solvers (LU, QR) instead, a classic interview gotcha.</p><p>For 2×2, $A=\begin{bmatrix}a&amp;b\\c&amp;d\end{bmatrix}$: $A^{-1} = \frac{1}{\det(A)}\begin{bmatrix}d&amp;-b\\-c&amp;a\end{bmatrix}$.</p></div>
+      <div class="diagram-wrap">
+        <div class="diagram-box"><svg viewBox="0 0 320 175" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif"><defs><marker id="arrow-t1c9-dim" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#a3a6bd"/></marker><marker id="arrow-t1c9-accent" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#a78bfa"/></marker></defs><circle cx="40" cy="90" r="4" fill="#e7e8f0"/><text x="40" y="70" fill="#e7e8f0" font-size="13" text-anchor="middle">x</text><line x1="56" y1="90" x2="140" y2="90" stroke="#a78bfa" stroke-width="2.4" stroke-linecap="round" marker-end="url(#arrow-t1c9-accent)"/><text x="98" y="78" fill="#a78bfa" font-size="13" text-anchor="middle" font-weight="700">A</text><circle cx="155" cy="90" r="4" fill="#60a5fa"/><text x="155" y="70" fill="#60a5fa" font-size="13" text-anchor="middle">Ax</text><line x1="171" y1="90" x2="255" y2="90" stroke="#a3a6bd" stroke-width="2.4" stroke-linecap="round" marker-end="url(#arrow-t1c9-dim)"/><text x="213" y="78" fill="#a3a6bd" font-size="13" text-anchor="middle" font-weight="700">A⁻¹</text><circle cx="270" cy="90" r="4" fill="#e7e8f0"/><text x="270" y="70" fill="#e7e8f0" font-size="13" text-anchor="middle">x</text><text x="160" y="150" fill="#a78bfa" font-size="13" text-anchor="middle" font-weight="700">A⁻¹A = AA⁻¹ = I</text></svg></div>
+        <div class="diagram-caption">A⁻¹ undoes A exactly — but computing it explicitly is rarely how you'd solve Ax=b.</div>
+      </div>
+    </div>
+    <div class="callout">
+      <span class="callout-label">Real-World Lens</span>
+      <p>The closed-form OLS solution $\beta = (X^\top X)^{-1}X^\top y$ conceptually uses a matrix inverse, though production code solves the equivalent system directly for numerical stability and speed. Inverse covariance (precision) matrices directly encode conditional independence in Gaussian graphical models.</p>
+    </div>
+    <div class="qa-block"><div class="qa-block-title">Interview Drill</div><div class="qa-item"><div class="qa-question"><span class="q-mark">Q1.</span> Why do practitioners avoid explicitly computing A⁻¹ when solving Ax=b in real ML code?<span class="q-chevron">&#9656;</span></div><div class="qa-answer" hidden><strong>A.</strong> Explicitly inverting is roughly 3x more computationally expensive than solving directly via LU/QR decomposition, and it's numerically less stable — errors can amplify, especially for ill-conditioned A. Libraries prefer <code>solve()</code>/<code>lstsq()</code> over computing <code>inv(A) @ b</code>.</div></div><div class="qa-item"><div class="qa-question"><span class="q-mark">Q2.</span> Under what condition does a matrix fail to have an inverse, and what does that mean for the system?<span class="q-chevron">&#9656;</span></div><div class="qa-answer" hidden><strong>A.</strong> A matrix is singular exactly when $\det(A)=0$, equivalently when its columns are linearly dependent / it lacks full rank. The corresponding system $Ax=b$ then has either no solution or infinitely many — never a single unique one.</div></div><div class="qa-item"><div class="qa-question"><span class="q-mark">Q3.</span> What's the relationship between matrix inverse and regression coefficients, and why add a small λI term?<span class="q-chevron">&#9656;</span></div><div class="qa-answer" hidden><strong>A.</strong> $\beta=(X^\top X)^{-1}X^\top y$ requires $X^\top X$ invertible; with collinear features or more features than samples it's singular or near-singular. Adding $\lambda I$ (ridge regression) — $\beta=(X^\top X+\lambda I)^{-1}X^\top y$ — guarantees invertibility (every eigenvalue shifts up by $\lambda$, becoming strictly positive) and stabilizes the estimate.</div></div></div>
+  </div>
+</article>
+</section>
+
+<section class="tier-section" id="tier-2">
+  <div class="tier-header">
+    <span class="tier-pill t2">TIER 2</span>
+    <h2>Intermediate</h2>
+    <span class="tier-count">9 concepts</span>
+  </div>
+  <p class="tier-desc">The structural ideas that explain why the elementary tools work — spaces, bases, rank, and the machinery behind fitting a model to data.</p>
+
+<article class="concept-card t2" id="vector-spaces-subspaces">
+  <div class="concept-header">
+    <span class="concept-num">2.1</span>
+    <span class="concept-title">Vector Spaces &amp; Subspaces</span>
+    <span class="reviewed-wrap">
+      <input type="checkbox" class="reviewed-check" data-id="vector-spaces-subspaces" id="cb-vector-spaces-subspaces">
+      <label for="cb-vector-spaces-subspaces">reviewed</label>
+    </span>
+    <span class="concept-toggle-icon">&#9656;</span>
+  </div>
+  <div class="concept-body" hidden>
+    <div class="concept-grid">
+      <div class="concept-explain"><p>A <strong>vector space</strong> is a set of vectors closed under addition and scalar multiplication, satisfying axioms like associativity and the existence of a zero vector — $\mathbb{R}^n$ is the standard example. A <strong>subspace</strong> is a subset that is itself a vector space: it must contain the zero vector, and any linear combination of vectors in the subspace must stay in the subspace.</p><p>Geometrically in $\mathbb{R}^3$: a plane or line through the origin is a subspace; a plane not through the origin is not — it fails to contain the zero vector and isn't closed under scalar multiplication.</p></div>
+      <div class="diagram-wrap">
+        <div class="diagram-box"><svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif"><polygon points="40,140 140,140 180,70 80,70" fill="#60a5fa" fill-opacity="0.18" stroke="#60a5fa" stroke-width="2"/><circle cx="110" cy="118" r="3.5" fill="#e7e8f0"/><text x="122" y="114" fill="#e7e8f0" font-size="10" text-anchor="middle">0</text><text x="110" y="165" fill="#60a5fa" font-size="10.5" text-anchor="middle">subspace (contains 0)</text><polygon points="200,140 290,140 270,70 180,70" fill="#f87171" fill-opacity="0.12" stroke="#f87171" stroke-width="2"/><text x="235" y="165" fill="#f87171" font-size="10.5" text-anchor="middle">NOT a subspace (offset)</text></svg></div>
+        <div class="diagram-caption">A subspace must contain the origin and be closed under addition &amp; scaling.</div>
+      </div>
+    </div>
+    <div class="callout">
+      <span class="callout-label">Real-World Lens</span>
+      <p>The set of all possible outputs of a linear layer (its column space / range) is a subspace of the output space — its dimension tells you the layer's effective capacity. The "manifold hypothesis" in deep learning assumes real data lies near a lower-dimensional subspace (or nonlinear manifold) within a high-dimensional space.</p>
+    </div>
+    <div class="qa-block"><div class="qa-block-title">Interview Drill</div><div class="qa-item"><div class="qa-question"><span class="q-mark">Q1.</span> Why must a subspace contain the zero vector?<span class="q-chevron">&#9656;</span></div><div class="qa-answer" hidden><strong>A.</strong> Closure under scalar multiplication requires that if $v$ is in the subspace, so is $0 \cdot v = 0$ for the scalar zero. Any nonempty subspace is forced to contain the zero vector — a set offset from the origin (like a plane not through it) can never be a subspace, only an "affine" space.</div></div><div class="qa-item"><div class="qa-question"><span class="q-mark">Q2.</span> Is the column space of a weight matrix W a subspace, and why does its dimension matter?<span class="q-chevron">&#9656;</span></div><div class="qa-answer" hidden><strong>A.</strong> Yes — it's the span of W's columns, closed under linear combination by construction. Its dimension (the rank of W) is the actual dimensionality of the output space the layer can produce; if rank is smaller than the output dimension, the layer can never reach the full output space no matter the input — a real bottleneck-diagnosis tool.</div></div><div class="qa-item"><div class="qa-question"><span class="q-mark">Q3.</span> Give a subset of R² that is NOT a subspace, and say which axiom it violates.<span class="q-chevron">&#9656;</span></div><div class="qa-answer" hidden><strong>A.</strong> The first quadrant $\{(x,y): x \ge 0, y \ge 0\}$ — it's closed under addition but not under scalar multiplication by negative scalars (e.g. $-1 \cdot (1,1) = (-1,-1)$ leaves the set), violating closure under scalar multiplication.</div></div></div>
+  </div>
+</article>
+<article class="concept-card t2" id="span">
+  <div class="concept-header">
+    <span class="concept-num">2.2</span>
+    <span class="concept-title">Span</span>
+    <span class="reviewed-wrap">
+      <input type="checkbox" class="reviewed-check" data-id="span" id="cb-span">
+      <label for="cb-span">reviewed</label>
+    </span>
+    <span class="concept-toggle-icon">&#9656;</span>
+  </div>
+  <div class="concept-body" hidden>
+    <div class="concept-grid">
+      <div class="concept-explain"><p>The <strong>span</strong> of $\{v_1,\ldots,v_k\}$ is the set of every linear combination $c_1v_1+\ldots+c_kv_k$ for any scalars $c_i$ — everything reachable by scaling and adding those vectors. The span of one nonzero vector is a line through the origin; the span of two non-parallel vectors in $\mathbb{R}^3$ is a plane through the origin; the span of $k$ linearly independent vectors in $\mathbb{R}^n$ is a $k$-dimensional subspace.</p></div>
+      <div class="diagram-wrap">
+        <div class="diagram-box"><svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif"><defs><marker id="arrow-t2c2-dim" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#a3a6bd"/></marker></defs><line x1="30" y1="190" x2="150" y2="20" stroke="#6b6e85" stroke-width="1.2" stroke-dasharray="4,3"/><line x1="70" y1="150" x2="110" y2="80" stroke="#a3a6bd" stroke-width="2.4" stroke-linecap="round" marker-end="url(#arrow-t2c2-dim)"/><text x="120" y="74" fill="#a3a6bd" font-size="13" text-anchor="middle">v</text><text x="70" y="190" fill="#6b6e85" font-size="10.5" text-anchor="middle">span{v} = a line</text><line x1="160" y1="10" x2="160" y2="195" stroke="#262a3d" stroke-width="1" stroke-dasharray="4,4"/><polygon points="230,150 270,100 250,40 210,90" fill="#60a5fa" fill-opacity="0.16" stroke="#60a5fa" stroke-width="1.5"/><line x1="230" y1="150" x2="270" y2="100" stroke="#a3a6bd" stroke-width="2.4" stroke-linecap="round" marker-end="url(#arrow-t2c2-dim)"/><text x="280" y="96" fill="#a3a6bd" font-size="12" text-anchor="middle">v1</text><line x1="230" y1="150" x2="210" y2="90" stroke="#a3a6bd" stroke-width="2.4" stroke-linecap="round" marker-end="url(#arrow-t2c2-dim)"/><text x="196" y="82" fill="#a3a6bd" font-size="12" text-anchor="middle">v2</text><text x="245" y="190" fill="#6b6e85" font-size="10.5" text-anchor="middle">span{v1,v2} = a plane</text></svg></div>
+        <div class="diagram-caption">Span is every linear combination reachable by scaling and adding a set of vectors.</div>
+      </div>
+    </div>
+    <div class="callout">
+      <span class="callout-label">Real-World Lens</span>
+      <p>"Can this set of basis functions/features represent the target function?" is a span question — polynomial regression's span of $\{1, x, x^2, \ldots\}$ determines what it can fit. Whether a network layer's weight columns span the needed output space determines representational capacity.</p>
+    </div>
+    <div class="qa-block"><div class="qa-block-title">Interview Drill</div><div class="qa-item"><div class="qa-question"><span class="q-mark">Q1.</span> If 3 vectors in R³ only span a plane, what does that tell you about them?<span class="q-chevron">&#9656;</span></div><div class="qa-answer" hidden><strong>A.</strong> They must be linearly dependent — one can be written as a combination of the other two, so effectively you only have 2 independent directions of information despite having 3 vectors.</div></div><div class="qa-item"><div class="qa-question"><span class="q-mark">Q2.</span> How does span relate to representational capacity in a neural network layer?<span class="q-chevron">&#9656;</span></div><div class="qa-answer" hidden><strong>A.</strong> The set of all outputs a linear layer can produce is exactly the span of its weight matrix's columns; if that span doesn't cover the target output space, no amount of training data can make the layer represent functions outside it — motivating wider layers or nonlinear activations.</div></div><div class="qa-item"><div class="qa-question"><span class="q-mark">Q3.</span> Does the span of {(1,0), (0,1), (1,1)} equal all of R²?<span class="q-chevron">&#9656;</span></div><div class="qa-answer" hidden><strong>A.</strong> Yes — even with 3 vectors, the span of any two independent ones among them (e.g. (1,0) and (0,1)) already covers all of R²; the third, dependent vector is redundant and neither shrinks nor grows the span.</div></div></div>
+  </div>
+</article>
+<article class="concept-card t2" id="linear-independence">
+  <div class="concept-header">
+    <span class="concept-num">2.3</span>
+    <span class="concept-title">Linear Independence</span>
+    <span class="reviewed-wrap">
+      <input type="checkbox" class="reviewed-check" data-id="linear-independence" id="cb-linear-independence">
+      <label for="cb-linear-independence">reviewed</label>
+    </span>
+    <span class="concept-toggle-icon">&#9656;</span>
+  </div>
+  <div class="concept-body" hidden>
+    <div class="concept-grid">
+      <div class="concept-explain"><p>A set $\{v_1,\ldots,v_k\}$ is <strong>linearly independent</strong> if the only solution to $c_1v_1+\ldots+c_kv_k=0$ is every $c_i=0$ — no vector can be written as a combination of the others. Otherwise the set is linearly dependent (redundant). Geometrically: two vectors are dependent exactly when they're parallel; three vectors in $\mathbb{R}^3$ are dependent exactly when they lie in a common plane.</p></div>
+      <div class="diagram-wrap">
+        <div class="diagram-box"><svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif"><defs><marker id="arrow-t2c3-t2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#60a5fa"/></marker><marker id="arrow-t2c3-t3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#f59e0b"/></marker></defs><line x1="80" y1="150" x2="150" y2="90" stroke="#60a5fa" stroke-width="2.4" stroke-linecap="round" marker-end="url(#arrow-t2c3-t2)"/><text x="158" y="84" fill="#60a5fa" font-size="12" text-anchor="middle">v1</text><line x1="80" y1="150" x2="110" y2="70" stroke="#f59e0b" stroke-width="2.4" stroke-linecap="round" marker-end="url(#arrow-t2c3-t3)"/><text x="100" y="60" fill="#f59e0b" font-size="12" text-anchor="middle">v2</text><text x="95" y="188" fill="#34d399" font-size="11" text-anchor="middle" font-weight="700">independent</text><line x1="190" y1="10" x2="190" y2="195" stroke="#262a3d" stroke-width="1" stroke-dasharray="4,4"/><line x1="230" y1="150" x2="280" y2="100" stroke="#60a5fa" stroke-width="2.4" stroke-linecap="round" marker-end="url(#arrow-t2c3-t2)"/><text x="288" y="96" fill="#60a5fa" font-size="12" text-anchor="middle">v</text><line x1="230" y1="150" x2="255" y2="125" stroke="#f59e0b" stroke-width="2.4" stroke-linecap="round" marker-end="url(#arrow-t2c3-t3)" stroke-dasharray="4,3"/><text x="263" y="133" fill="#f59e0b" font-size="11" text-anchor="middle">½v</text><text x="255" y="188" fill="#f87171" font-size="11" text-anchor="middle" font-weight="700">dependent (redundant)</text></svg></div>
+        <div class="diagram-caption">Independent vectors point in genuinely different directions; dependent ones are redundant.</div>
+      </div>
+    </div>
+    <div class="callout">
+      <span class="callout-label">Real-World Lens</span>
+      <p>Multicollinearity in regression is near-linear-dependence among feature columns — it inflates coefficient variance and destabilizes the model (why VIF, variance inflation factor, gets checked in applied stats). In deep learning, redundant filters correspond to learned weight vectors becoming linearly dependent, wasting model capacity.</p>
+    </div>
+    <div class="qa-block"><div class="qa-block-title">Interview Drill</div><div class="qa-item"><div class="qa-question"><span class="q-mark">Q1.</span> How does linear independence relate to multicollinearity, and why is multicollinearity a problem?<span class="q-chevron">&#9656;</span></div><div class="qa-answer" hidden><strong>A.</strong> Multicollinearity means feature columns are nearly linearly dependent — one feature is almost a combination of others. This makes $X^\top X$ nearly singular, so the least-squares solution becomes highly sensitive to small data changes (huge coefficient variance), even though predictions may still be fine — you lose the ability to interpret individual coefficients reliably.</div></div><div class="qa-item"><div class="qa-question"><span class="q-mark">Q2.</span> How do you test whether 3 vectors in R³ are linearly independent, computationally?<span class="q-chevron">&#9656;</span></div><div class="qa-answer" hidden><strong>A.</strong> Form a matrix with the vectors as columns and check whether its determinant is nonzero, or more generally check that its rank (via row reduction) equals the number of vectors — a rank smaller than that count means dependence.</div></div><div class="qa-item"><div class="qa-question"><span class="q-mark">Q3.</span> Can 4 vectors in R³ ever be linearly independent?<span class="q-chevron">&#9656;</span></div><div class="qa-answer" hidden><strong>A.</strong> No — in an $n$-dimensional space you can have at most $n$ linearly independent vectors. Any set of more than $n$ vectors in $\mathbb{R}^n$ is automatically dependent.</div></div></div>
+  </div>
+</article>
+<article class="concept-card t2" id="basis-dimension">
+  <div class="concept-header">
+    <span class="concept-num">2.4</span>
+    <span class="concept-title">Basis &amp; Dimension</span>
+    <span class="reviewed-wrap">
+      <input type="checkbox" class="reviewed-check" data-id="basis-dimension" id="cb-basis-dimension">
+      <label for="cb-basis-dimension">reviewed</label>
+    </span>
+    <span class="concept-toggle-icon">&#9656;</span>
+  </div>
+  <div class="concept-body" hidden>
+    <div class="concept-grid">
+      <div class="concept-explain"><p>A <strong>basis</strong> for a vector space is a set of vectors that is linearly independent AND spans the whole space — every vector in the space is a unique linear combination of basis vectors. The number of vectors in a basis is the <strong>dimension</strong> of the space, and this number is always the same no matter which basis you choose. The "standard basis" for $\mathbb{R}^n$ is $\{e_1,\ldots,e_n\}$, but any $n$ linearly independent vectors form an equally valid basis.</p></div>
+      <div class="diagram-wrap">
+        <div class="diagram-box"><svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif"><defs><marker id="arrow-t2c4-t2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#60a5fa"/></marker><marker id="arrow-t2c4-t3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#f59e0b"/></marker></defs><line x1="70" y1="150" x2="130" y2="150" stroke="#60a5fa" stroke-width="2.4" stroke-linecap="round" marker-end="url(#arrow-t2c4-t2)"/><text x="140" y="154" fill="#60a5fa" font-size="12" text-anchor="middle">e1</text><line x1="70" y1="150" x2="70" y2="90" stroke="#f59e0b" stroke-width="2.4" stroke-linecap="round" marker-end="url(#arrow-t2c4-t3)"/><text x="80" y="84" fill="#f59e0b" font-size="12" text-anchor="middle">e2</text><line x1="70" y1="115" x2="115" y2="115" stroke="#6b6e85" stroke-width="1" stroke-dasharray="3,2"/><line x1="115" y1="150" x2="115" y2="115" stroke="#6b6e85" stroke-width="1" stroke-dasharray="3,2"/><circle cx="115" cy="115" r="3.5" fill="#a78bfa"/><text x="124" y="110" fill="#a78bfa" font-size="11" text-anchor="middle">p</text><text x="95" y="188" fill="#6b6e85" font-size="10.5" text-anchor="middle">standard basis {e1,e2}</text><line x1="190" y1="10" x2="190" y2="195" stroke="#262a3d" stroke-width="1" stroke-dasharray="4,4"/><line x1="230" y1="150" x2="280" y2="120" stroke="#60a5fa" stroke-width="2.4" stroke-linecap="round" marker-end="url(#arrow-t2c4-t2)"/><text x="288" y="116" fill="#60a5fa" font-size="12" text-anchor="middle">b1</text><line x1="230" y1="150" x2="245" y2="95" stroke="#f59e0b" stroke-width="2.4" stroke-linecap="round" marker-end="url(#arrow-t2c4-t3)"/><text x="232" y="88" fill="#f59e0b" font-size="12" text-anchor="middle">b2</text><circle cx="255" cy="112" r="3.5" fill="#a78bfa"/><text x="263" y="108" fill="#a78bfa" font-size="11" text-anchor="middle">p</text><text x="255" y="188" fill="#6b6e85" font-size="10.5" text-anchor="middle">equally valid basis {b1,b2}</text></svg></div>
+        <div class="diagram-caption">Any two independent, spanning vectors form a valid basis — the same point, new coordinates.</div>
+      </div>
+    </div>
+    <div class="callout">
+      <span class="callout-label">Real-World Lens</span>
+      <p>Changing basis is exactly what PCA does — it finds a new basis (the covariance matrix's eigenvectors) in which variance is captured by as few dimensions as possible. Choosing a good basis, whether via feature engineering or a learned representation, is often the single biggest lever on model performance.</p>
+    </div>
+    <div class="qa-block"><div class="qa-block-title">Interview Drill</div><div class="qa-item"><div class="qa-question"><span class="q-mark">Q1.</span> Why is dimension well-defined even though a basis isn't unique?<span class="q-chevron">&#9656;</span></div><div class="qa-answer" hidden><strong>A.</strong> It's a theorem that every basis of a given vector space has exactly the same number of vectors, even though infinitely many valid bases exist. Dimension is a property of the space itself; a basis is just a choice of coordinate system for describing it.</div></div><div class="qa-item"><div class="qa-question"><span class="q-mark">Q2.</span> How does PCA relate to "change of basis"?<span class="q-chevron">&#9656;</span></div><div class="qa-answer" hidden><strong>A.</strong> PCA finds a new orthonormal basis (the covariance matrix's eigenvectors), ordered by variance captured; expressing the data in this new basis instead of the original feature basis concentrates variance into the first few coordinates, enabling dimensionality reduction by keeping only the top-k directions.</div></div><div class="qa-item"><div class="qa-question"><span class="q-mark">Q3.</span> If a space has dimension 5, can 4 vectors span it?<span class="q-chevron">&#9656;</span></div><div class="qa-answer" hidden><strong>A.</strong> No — spanning a 5-dimensional space requires at least 5 linearly independent vectors. A spanning set for a d-dimensional space needs at least d vectors, and a basis has exactly d.</div></div></div>
+    <div class="resource-links"><a href="https://www.youtube.com/playlist?list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab" target="_blank" rel="noopener">3Blue1Brown: Essence of Linear Algebra &#8599;</a></div>
+  </div>
+</article>
+<article class="concept-card t2" id="rank">
+  <div class="concept-header">
+    <span class="concept-num">2.5</span>
+    <span class="concept-title">Rank</span>
+    <span class="reviewed-wrap">
+      <input type="checkbox" class="reviewed-check" data-id="rank" id="cb-rank">
+      <label for="cb-rank">reviewed</label>
+    </span>
+    <span class="concept-toggle-icon">&#9656;</span>
+  </div>
+  <div class="concept-body" hidden>
+    <div class="concept-grid">
+      <div class="concept-explain"><p>The <strong>rank</strong> of a matrix is the dimension of its column space (equivalently, its row space — these are always equal): the number of truly independent rows/columns, i.e. how many dimensions of output the matrix can actually produce. "Full rank" means rank equals $\min(\text{rows},\text{cols})$; "rank-deficient" means it's lower, indicating redundancy. Computed practically via Gaussian elimination (count nonzero pivot rows) or via SVD (count nonzero singular values).</p></div>
+      <div class="diagram-wrap">
+        <div class="diagram-box"><svg viewBox="0 0 320 250" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif"><defs><marker id="arrow-t2c5-accent" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#a78bfa"/></marker><marker id="arrow-t2c5-danger" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#f87171"/></marker></defs><rect x="30" y="35" width="50" height="50" rx="3" fill="none" stroke="#a3a6bd" stroke-width="1.6"/><text x="55" y="98" fill="#6b6e85" font-size="9.5" text-anchor="middle">input</text><line x1="90" y1="60" x2="140" y2="60" stroke="#a78bfa" stroke-width="2.4" stroke-linecap="round" marker-end="url(#arrow-t2c5-accent)"/><text x="115" y="44" fill="#a78bfa" font-size="10" text-anchor="middle" font-weight="700">A (full rank)</text><polygon points="160,95 215,95 235,45 180,45" fill="#34d399" fill-opacity="0.22" stroke="#34d399" stroke-width="2"/><text x="275" y="73" fill="#34d399" font-size="11" text-anchor="middle" font-weight="700">rank 2</text><rect x="30" y="165" width="50" height="50" rx="3" fill="none" stroke="#a3a6bd" stroke-width="1.6"/><text x="55" y="228" fill="#6b6e85" font-size="9.5" text-anchor="middle">input</text><line x1="90" y1="190" x2="140" y2="190" stroke="#f87171" stroke-width="2.4" stroke-linecap="round" marker-end="url(#arrow-t2c5-danger)"/><text x="115" y="174" fill="#f87171" font-size="10" text-anchor="middle" font-weight="700">A (rank-deficient)</text><line x1="160" y1="215" x2="235" y2="170" stroke="#f87171" stroke-width="3"/><circle cx="160" cy="215" r="3" fill="#f87171"/><circle cx="235" cy="170" r="3" fill="#f87171"/><text x="275" y="195" fill="#f87171" font-size="11" text-anchor="middle" font-weight="700">rank 1</text></svg></div>
+        <div class="diagram-caption">Full rank preserves dimensionality; rank-deficient transforms collapse it.</div>
+      </div>
+    </div>
+    <div class="callout">
+      <span class="callout-label">Real-World Lens</span>
+      <p>Recommender systems assume a user-item ratings matrix has LOW rank (a handful of "taste dimensions" explain most preferences) — the core assumption behind matrix factorization, including the Netflix Prize-winning approaches. In LoRA fine-tuning, the hypothesis that weight UPDATES have low rank is exactly what makes rank a load-bearing concept in modern LLM engineering, not just classical linear algebra.</p>
+    </div>
+    <div class="qa-block"><div class="qa-block-title">Interview Drill</div><div class="qa-item"><div class="qa-question"><span class="q-mark">Q1.</span> What does it mean for a matrix to be rank-deficient, and how would you detect it numerically?<span class="q-chevron">&#9656;</span></div><div class="qa-answer" hidden><strong>A.</strong> Its columns (or rows) aren't all linearly independent — it maps input space onto a lower-dimensional output than its shape suggests. Practically, check the number of non-negligible singular values from SVD; small, near-zero singular values indicate directions the matrix effectively discards, since exact-zero pivots are rare with floating-point noise.</div></div><div class="qa-item"><div class="qa-question"><span class="q-mark">Q2.</span> How does rank motivate LoRA's approach to fine-tuning large language models?<span class="q-chevron">&#9656;</span></div><div class="qa-answer" hidden><strong>A.</strong> LoRA assumes the weight update $\Delta W$ needed to adapt a pretrained model has low "intrinsic rank" — a much lower rank $r$ (far smaller than $\min(d,k)$) captures most of the needed update, so $\Delta W$ can be parameterized as $BA$ (B is $d \times r$, A is $r \times k$), training only $r(d+k)$ parameters instead of the full $d \times k$.</div></div><div class="qa-item"><div class="qa-question"><span class="q-mark">Q3.</span> How does rank relate to the rank-nullity theorem and whether Ax=b has a unique solution?<span class="q-chevron">&#9656;</span></div><div class="qa-answer" hidden><strong>A.</strong> Rank-nullity says $\text{rank}(A)+\text{nullity}(A)=n$. If $A$ is $n\times n$ and full rank, nullity is 0, so $Ax=b$ has exactly one solution when a solution exists. If rank is lower than $n$, nullity is positive, meaning infinitely many solutions exist whenever any solution does.</div></div></div>
+  </div>
+</article>
+<article class="concept-card t2" id="null-space">
+  <div class="concept-header">
+    <span class="concept-num">2.6</span>
+    <span class="concept-title">Null Space</span>
+    <span class="reviewed-wrap">
+      <input type="checkbox" class="reviewed-check" data-id="null-space" id="cb-null-space">
+      <label for="cb-null-space">reviewed</label>
+    </span>
+    <span class="concept-toggle-icon">&#9656;</span>
+  </div>
+  <div class="concept-body" hidden>
+    <div class="concept-grid">
+      <div class="concept-explain"><p>The <strong>null space</strong> (kernel) of $A$ is the set of all vectors $x$ such that $Ax=0$ — everything the matrix crushes to zero. Its dimension is the nullity. The <strong>rank-nullity theorem</strong> ties this to rank: $\text{rank}(A)+\text{nullity}(A)=n$ (number of columns/inputs). A nontrivial null space means the matrix is not injective — different inputs map to the same output, so information is lost and the map can't be inverted.</p></div>
+      <div class="diagram-wrap">
+        <div class="diagram-box"><svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif"><defs><marker id="arrow-t2c6-accent" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#a78bfa"/></marker></defs><line x1="25" y1="195" x2="145" y2="85" stroke="#6b6e85" stroke-width="1.6" stroke-dasharray="5,3"/><circle cx="50" cy="172" r="3" fill="#a78bfa"/><circle cx="90" cy="136" r="3" fill="#a78bfa"/><circle cx="120" cy="108" r="3" fill="#a78bfa"/><text x="85" y="190" fill="#6b6e85" font-size="10.5" text-anchor="middle">null space (a line through 0)</text><line x1="160" y1="140" x2="215" y2="140" stroke="#a78bfa" stroke-width="2.4" stroke-linecap="round" marker-end="url(#arrow-t2c6-accent)"/><text x="188" y="128" fill="#a78bfa" font-size="13" text-anchor="middle" font-weight="700">A</text><circle cx="260" cy="140" r="5" fill="#f87171"/><text x="268" y="136" fill="#f87171" font-size="12" text-anchor="middle" font-weight="700">0</text><text x="260" y="172" fill="#f87171" font-size="10.5" text-anchor="middle">entire line ↦ 0</text></svg></div>
+        <div class="diagram-caption">Everything on the null-space line gets mapped to the zero vector.</div>
+      </div>
+    </div>
+    <div class="callout">
+      <span class="callout-label">Real-World Lens</span>
+      <p>If a neural network layer's weight matrix has a nontrivial null space, some input directions get mapped entirely to zero — invisible to every downstream layer (sometimes intentional, as in dimensionality reduction; sometimes a bug, like dead ReLU units zeroing out gradients). In an under-determined system, the null space describes the entire family of extra "free" solutions.</p>
+    </div>
+    <div class="qa-block"><div class="qa-block-title">Interview Drill</div><div class="qa-item"><div class="qa-question"><span class="q-mark">Q1.</span> What does a nontrivial null space imply about whether a transformation can be inverted?<span class="q-chevron">&#9656;</span></div><div class="qa-answer" hidden><strong>A.</strong> If Ax=0 has a nonzero solution, A maps at least two different inputs (x and 2x, and infinitely many others) to the same output — the map isn't one-to-one, so no inverse function can exist.</div></div><div class="qa-item"><div class="qa-question"><span class="q-mark">Q2.</span> How do rank and nullity relate for an m×n matrix where there are more unknowns than equations?<span class="q-chevron">&#9656;</span></div><div class="qa-answer" hidden><strong>A.</strong> Rank plus nullity always equals n. If the number of rows m is smaller than the number of columns n, rank(A) is at most m, so nullity is at least n minus m, which is strictly positive — there's guaranteed to be a nontrivial null space, meaning if Ax=b has any solution, it actually has infinitely many.</div></div><div class="qa-item"><div class="qa-question"><span class="q-mark">Q3.</span> Give a small example of a matrix with a nontrivial null space.<span class="q-chevron">&#9656;</span></div><div class="qa-answer" hidden><strong>A.</strong> $A=\begin{bmatrix}1&amp;2\\2&amp;4\end{bmatrix}$ (second row is twice the first). $Ax=0$ requires $x_1+2x_2=0$, satisfied by any $x=(-2t,t)$ — a 1-dimensional null space, matching that this rank-1 matrix has nullity $= n - \text{rank} = 2-1=1$.</div></div></div>
+  </div>
+</article>
+<article class="concept-card t2" id="linear-transformations">
+  <div class="concept-header">
+    <span class="concept-num">2.7</span>
+    <span class="concept-title">Linear Transformations</span>
+    <span class="reviewed-wrap">
+      <input type="checkbox" class="reviewed-check" data-id="linear-transformations" id="cb-linear-transformations">
+      <label for="cb-linear-transformations">reviewed</label>
+    </span>
+    <span class="concept-toggle-icon">&#9656;</span>
+  </div>
+  <div class="concept-body" hidden>
+    <div class="concept-grid">
+      <div class="concept-explain"><p>A function $T:\mathbb{R}^n \to \mathbb{R}^m$ is <strong>linear</strong> if it preserves addition and scalar multiplication: $T(u+v)=T(u)+T(v)$ and $T(cv)=cT(v)$. Every linear transformation is representable by a matrix ($T(x)=Ax$), and every matrix defines a linear transformation — one of the central equivalences in linear algebra. Named transformations — rotation, scaling, shearing, reflection, projection — each have a characteristic matrix form.</p></div>
+      <div class="diagram-wrap">
+        <div class="diagram-box"><svg viewBox="0 0 320 210" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif"><defs><marker id="arrow-t2c7-accent" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#a78bfa"/></marker></defs><line x1="20.0" y1="40" x2="20.0" y2="160" stroke="#a3a6bd" stroke-width="1.4"/><line x1="20" y1="40.0" x2="140" y2="40.0" stroke="#a3a6bd" stroke-width="1.4"/><line x1="60.0" y1="40" x2="60.0" y2="160" stroke="#a3a6bd" stroke-width="1.4"/><line x1="20" y1="80.0" x2="140" y2="80.0" stroke="#a3a6bd" stroke-width="1.4"/><line x1="100.0" y1="40" x2="100.0" y2="160" stroke="#a3a6bd" stroke-width="1.4"/><line x1="20" y1="120.0" x2="140" y2="120.0" stroke="#a3a6bd" stroke-width="1.4"/><line x1="140.0" y1="40" x2="140.0" y2="160" stroke="#a3a6bd" stroke-width="1.4"/><line x1="20" y1="160.0" x2="140" y2="160.0" stroke="#a3a6bd" stroke-width="1.4"/><text x="80" y="195" fill="#6b6e85" font-size="11" text-anchor="middle">before</text><line x1="150" y1="100" x2="168" y2="100" stroke="#a78bfa" stroke-width="2.4" stroke-linecap="round" marker-end="url(#arrow-t2c7-accent)"/><text x="159" y="90" fill="#a78bfa" font-size="12" text-anchor="middle" font-weight="700">T</text><g transform="translate(165,0) skewX(-22)"><line x1="20.0" y1="40" x2="20.0" y2="160" stroke="#a3a6bd" stroke-width="1.4"/><line x1="20" y1="40.0" x2="140" y2="40.0" stroke="#a3a6bd" stroke-width="1.4"/><line x1="60.0" y1="40" x2="60.0" y2="160" stroke="#a3a6bd" stroke-width="1.4"/><line x1="20" y1="80.0" x2="140" y2="80.0" stroke="#a3a6bd" stroke-width="1.4"/><line x1="100.0" y1="40" x2="100.0" y2="160" stroke="#a3a6bd" stroke-width="1.4"/><line x1="20" y1="120.0" x2="140" y2="120.0" stroke="#a3a6bd" stroke-width="1.4"/><line x1="140.0" y1="40" x2="140.0" y2="160" stroke="#a3a6bd" stroke-width="1.4"/><line x1="20" y1="160.0" x2="140" y2="160.0" stroke="#a3a6bd" stroke-width="1.4"/></g><text x="255" y="195" fill="#6b6e85" font-size="11" text-anchor="middle">after (shear)</text></svg></div>
+        <div class="diagram-caption">Grid lines stay straight, parallel, and evenly spaced under a linear transformation — here, a shear.</div>
+      </div>
+    </div>
+    <div class="callout">
+      <span class="callout-label">Real-World Lens</span>
+      <p>Every layer of a pre-activation neural network is a linear transformation; stacking them without nonlinear activations collapses into a single equivalent linear map, which is exactly why activation functions are necessary. Data augmentation (rotating/scaling images) and normalization/whitening are linear transformations of feature vectors.</p>
+    </div>
+    <div class="qa-block"><div class="qa-block-title">Interview Drill</div><div class="qa-item"><div class="qa-question"><span class="q-mark">Q1.</span> Why doesn't stacking multiple linear layers without activation functions add representational power?<span class="q-chevron">&#9656;</span></div><div class="qa-answer" hidden><strong>A.</strong> The composition of linear transformations is itself linear: $T_2(T_1(x)) = A_2A_1x = (A_2A_1)x$, just another single matrix. Any number of stacked purely-linear layers collapses mathematically into one equivalent layer — exactly why activation functions like ReLU or sigmoid are essential for depth to matter.</div></div><div class="qa-item"><div class="qa-question"><span class="q-mark">Q2.</span> How do you find the matrix for a linear transformation from what it does to the standard basis?<span class="q-chevron">&#9656;</span></div><div class="qa-answer" hidden><strong>A.</strong> The columns of the matrix ARE the images of the standard basis vectors: column $i$ = $T(e_i)$. Fast interview technique — if $e_1 \to (1,2)$ and $e_2 \to (3,4)$, the matrix is immediately $\begin{bmatrix}1&amp;3\\2&amp;4\end{bmatrix}$.</div></div><div class="qa-item"><div class="qa-question"><span class="q-mark">Q3.</span> Is a translation (shifting every point by a constant vector) a linear transformation?<span class="q-chevron">&#9656;</span></div><div class="qa-answer" hidden><strong>A.</strong> No — it doesn't preserve $T(0)=0$, which any linear transformation must satisfy. A pure shift is "affine," not linear. This trips people up because translations feel intuitively simple, but they fail the formal definition (graphics libraries use homogeneous coordinates as a workaround to still express translation as a matrix multiply).</div></div></div>
+    <div class="resource-links"><a href="https://www.youtube.com/watch?v=kYB8IZa5AuE" target="_blank" rel="noopener">3Blue1Brown: Linear transformations and matrices &#8599;</a></div>
+  </div>
+</article>
+<article class="concept-card t2" id="orthogonality-projections">
+  <div class="concept-header">
+    <span class="concept-num">2.8</span>
+    <span class="concept-title">Orthogonality &amp; Projections</span>
+    <span class="reviewed-wrap">
+      <input type="checkbox" class="reviewed-check" data-id="orthogonality-projections" id="cb-orthogonality-projections">
+      <label for="cb-orthogonality-projections">reviewed</label>
+    </span>
+    <span class="concept-toggle-icon">&#9656;</span>
+  </div>
+  <div class="concept-body" hidden>
+    <div class="concept-grid">
+      <div class="concept-explain"><p>Two vectors are <strong>orthogonal</strong> if their dot product is zero (perpendicular). An orthonormal set is mutually perpendicular and unit length. The projection of $v$ onto $u$ is $\text{proj}_u(v) = \frac{v \cdot u}{u \cdot u}u$ — the "shadow" $v$ casts on the line through $u$ — and $v - \text{proj}_u(v)$ is orthogonal to $u$ by construction. Projecting onto a subspace generalizes this: it finds the closest point in that subspace to $v$, the foundation of least squares.</p></div>
+      <div class="diagram-wrap">
+        <div class="diagram-box"><svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif"><defs><marker id="arrow-t2c8-dim" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#a3a6bd"/></marker></defs><line x1="50" y1="170" x2="250" y2="170" stroke="#a3a6bd" stroke-width="2.4" stroke-linecap="round" marker-end="url(#arrow-t2c8-dim)"/><text x="258" y="174" fill="#a3a6bd" font-size="13" text-anchor="middle">u</text><line x1="50" y1="170" x2="160" y2="60" stroke="#a3a6bd" stroke-width="2.4" stroke-linecap="round" marker-end="url(#arrow-t2c8-dim)"/><text x="168" y="52" fill="#a3a6bd" font-size="13" text-anchor="middle">v</text><line x1="160" y1="60" x2="160" y2="170" stroke="#6b6e85" stroke-width="1.2" stroke-dasharray="4,3"/><line x1="50" y1="170" x2="160" y2="170" stroke="#a78bfa" stroke-width="4"/><path d="M 150,170 L150,160 L160,160" fill="none" stroke="#e7e8f0" stroke-width="1.4"/><text x="105" y="190" fill="#a78bfa" font-size="11" text-anchor="middle">proj_u(v)</text><text x="172" y="115" fill="#6b6e85" font-size="10.5" text-anchor="start">(v − proj_u(v)) ⟂ u</text></svg></div>
+        <div class="diagram-caption">The projection is the closest point on u's line to v; the leftover residual is perpendicular to u.</div>
+      </div>
+    </div>
+    <div class="callout">
+      <span class="callout-label">Real-World Lens</span>
+      <p>Gram-Schmidt orthogonalization (repeatedly projecting-and-subtracting) builds orthonormal bases, underlying QR decomposition. Orthogonal weight initialization helps preserve gradient magnitudes across deep layers. Projecting high-dimensional data onto the top PCA components is literally an orthogonal projection used for dimensionality reduction and denoising.</p>
+    </div>
+    <div class="qa-block"><div class="qa-block-title">Interview Drill</div><div class="qa-item"><div class="qa-question"><span class="q-mark">Q1.</span> How does orthogonal projection connect to solving a least-squares regression problem?<span class="q-chevron">&#9656;</span></div><div class="qa-answer" hidden><strong>A.</strong> Least squares finds $\beta$ such that $X\beta$ is the closest point, in Euclidean distance, in the column space of X to the target y — by definition the orthogonal projection of y onto Col(X). That's exactly why the normal equations require the residual to be orthogonal to every column of X: $X^\top(y-X\beta)=0 \to X^\top X\beta = X^\top y$.</div></div><div class="qa-item"><div class="qa-question"><span class="q-mark">Q2.</span> Why is an orthonormal basis often preferred computationally?<span class="q-chevron">&#9656;</span></div><div class="qa-answer" hidden><strong>A.</strong> Coordinates (projections) become trivial dot products against each basis vector, with no linear system to solve — and matrix inverses become transposes ($Q^\top=Q^{-1}$ for orthogonal Q), which is both faster and far more numerically stable than general matrix inversion.</div></div><div class="qa-item"><div class="qa-question"><span class="q-mark">Q3.</span> What does Gram-Schmidt actually do, step by step?<span class="q-chevron">&#9656;</span></div><div class="qa-answer" hidden><strong>A.</strong> Keep the first vector as-is (normalized); for each subsequent vector, subtract off its projection onto all previously-processed orthonormal vectors (removing what's already "explained"), then normalize what's left — producing an orthonormal set spanning the same space, exactly the Q in QR decomposition.</div></div></div>
+  </div>
+</article>
+<article class="concept-card t2" id="least-squares">
+  <div class="concept-header">
+    <span class="concept-num">2.9</span>
+    <span class="concept-title">Least Squares</span>
+    <span class="reviewed-wrap">
+      <input type="checkbox" class="reviewed-check" data-id="least-squares" id="cb-least-squares">
+      <label for="cb-least-squares">reviewed</label>
+    </span>
+    <span class="concept-toggle-icon">&#9656;</span>
+  </div>
+  <div class="concept-body" hidden>
+    <div class="concept-grid">
+      <div class="concept-explain"><p>When $Ax=b$ has no exact solution (overdetermined — more equations than unknowns, common with noisy real data), <strong>least squares</strong> finds the $x$ minimizing $\|Ax-b\|^2$. Solved via the normal equations: $A^\top A x = A^\top b$ (or more stably via QR/SVD rather than explicit inversion). Geometrically, $Ax^*$ is the orthogonal projection of $b$ onto the column space of $A$.</p></div>
+      <div class="diagram-wrap">
+        <div class="diagram-box"><svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif"><line x1="70" y1="120" x2="70" y2="138.1" stroke="#6b6e85" stroke-width="1.2" stroke-dasharray="3,2"/><line x1="100" y1="135" x2="100" y2="125.4" stroke="#6b6e85" stroke-width="1.2" stroke-dasharray="3,2"/><line x1="130" y1="90" x2="130" y2="112.7" stroke="#6b6e85" stroke-width="1.2" stroke-dasharray="3,2"/><line x1="190" y1="70" x2="190" y2="87.3" stroke="#6b6e85" stroke-width="1.2" stroke-dasharray="3,2"/><line x1="220" y1="85" x2="220" y2="74.6" stroke="#6b6e85" stroke-width="1.2" stroke-dasharray="3,2"/><line x1="250" y1="50" x2="250" y2="61.9" stroke="#6b6e85" stroke-width="1.2" stroke-dasharray="3,2"/><line x1="280" y1="65" x2="280" y2="49.2" stroke="#6b6e85" stroke-width="1.2" stroke-dasharray="3,2"/><circle cx="40" cy="150" r="2.8" fill="#60a5fa"/><circle cx="70" cy="120" r="2.8" fill="#60a5fa"/><circle cx="100" cy="135" r="2.8" fill="#60a5fa"/><circle cx="130" cy="90" r="2.8" fill="#60a5fa"/><circle cx="160" cy="100" r="2.8" fill="#60a5fa"/><circle cx="190" cy="70" r="2.8" fill="#60a5fa"/><circle cx="220" cy="85" r="2.8" fill="#60a5fa"/><circle cx="250" cy="50" r="2.8" fill="#60a5fa"/><circle cx="280" cy="65" r="2.8" fill="#60a5fa"/><line x1="30" y1="155" x2="290" y2="45" stroke="#a78bfa" stroke-width="2.6"/><text x="160" y="190" fill="#a78bfa" font-size="10.5" text-anchor="middle">least squares: minimize Σ(residual)²</text></svg></div>
+        <div class="diagram-caption">The best-fit line minimizes the sum of squared vertical residuals.</div>
+      </div>
+    </div>
+    <div class="callout">
+      <span class="callout-label">Real-World Lens</span>
+      <p>This IS linear regression — the mathematical machinery behind fitting a line or hyperplane to noisy data by minimizing summed squared errors. It's also used in calibration, curve fitting, and as an inner subroutine inside more complex ML algorithms, including iteratively reweighted least squares for logistic regression.</p>
+    </div>
+    <div class="qa-block"><div class="qa-block-title">Interview Drill</div><div class="qa-item"><div class="qa-question"><span class="q-mark">Q1.</span> Derive, at a high level, why the normal equations come from minimizing ||Xβ − y||².<span class="q-chevron">&#9656;</span></div><div class="qa-answer" hidden><strong>A.</strong> Differentiating $\|X\beta-y\|^2=(X\beta-y)^\top(X\beta-y)$ with respect to $\beta$ and setting it to zero gives $2X^\top(X\beta-y)=0$, i.e. $X^\top X\beta = X^\top y$ — equivalent to requiring the residual $(X\beta-y)$ be orthogonal to every column of X.</div></div><div class="qa-item"><div class="qa-question"><span class="q-mark">Q2.</span> Why solve least squares via QR or SVD instead of directly computing (XᵀX)⁻¹Xᵀy?<span class="q-chevron">&#9656;</span></div><div class="qa-answer" hidden><strong>A.</strong> Forming $X^\top X$ squares the matrix's condition number, amplifying any ill-conditioning in X. QR decomposition (solve $R\beta=Q^\top y$ via back-substitution) or an SVD-based pseudoinverse avoids ever forming $X^\top X$, giving a far more numerically stable solution, especially with correlated features.</div></div><div class="qa-item"><div class="qa-question"><span class="q-mark">Q3.</span> What noise assumption does OLS make, and what happens if it's violated?<span class="q-chevron">&#9656;</span></div><div class="qa-answer" hidden><strong>A.</strong> OLS assumes errors are i.i.d. with constant variance (homoscedastic), and for the Gaussian-MLE justification, normally distributed with zero mean. If errors are heteroscedastic or correlated, OLS coefficients stay unbiased but are no longer minimum-variance, and standard errors computed the usual way become invalid — motivating weighted or generalized least squares.</div></div></div>
+  </div>
+</article>
+</section>
+
+<section class="tier-section" id="tier-3">
+  <div class="tier-header">
+    <span class="tier-pill t3">TIER 3</span>
+    <h2>Advanced</h2>
+    <span class="tier-count">7 concepts</span>
+  </div>
+  <p class="tier-desc">Where linear algebra becomes modern ML/LLM engineering — eigen-structure, SVD, PCA, and the exact matrix operations running inside Transformers today.</p>
+
+<article class="concept-card t3" id="eigenvalues-eigenvectors">
+  <div class="concept-header">
+    <span class="concept-num">3.1</span>
+    <span class="concept-title">Eigenvalues &amp; Eigenvectors</span>
+    <span class="reviewed-wrap">
+      <input type="checkbox" class="reviewed-check" data-id="eigenvalues-eigenvectors" id="cb-eigenvalues-eigenvectors">
+      <label for="cb-eigenvalues-eigenvectors">reviewed</label>
+    </span>
+    <span class="concept-toggle-icon">&#9656;</span>
+  </div>
+  <div class="concept-body" hidden>
+    <div class="concept-grid">
+      <div class="concept-explain"><p>For square $A$, a nonzero vector $v$ is an <strong>eigenvector</strong> if $Av=\lambda v$ for some scalar $\lambda$ (the <strong>eigenvalue</strong>) — the transformation only stretches or shrinks $v$ (flipping direction if $\lambda&lt;0$), it never rotates it off its own line. Found by solving $\det(A-\lambda I)=0$ for $\lambda$, then $(A-\lambda I)v=0$ for each $v$. An $n\times n$ matrix has $n$ eigenvalues counted with multiplicity, possibly complex or repeated.</p></div>
+      <div class="diagram-wrap">
+        <div class="diagram-box"><svg viewBox="0 0 320 210" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif"><defs><marker id="arrow-t3c1-dim" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#a3a6bd"/></marker><marker id="arrow-t3c1-t1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#34d399"/></marker><marker id="arrow-t3c1-t2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#60a5fa"/></marker><marker id="arrow-t3c1-t3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#f59e0b"/></marker></defs><text x="230" y="25" fill="#6b6e85" font-size="10.5" text-anchor="middle">dashed = before · solid = after</text><line x1="150" y1="150" x2="220" y2="130" stroke="#a3a6bd" stroke-width="2.4" stroke-linecap="round" marker-end="url(#arrow-t3c1-dim)" stroke-dasharray="4,3"/><line x1="150" y1="150" x2="200" y2="80" stroke="#60a5fa" stroke-width="2.4" stroke-linecap="round" marker-end="url(#arrow-t3c1-t2)"/><line x1="150" y1="150" x2="180" y2="85" stroke="#a3a6bd" stroke-width="2.4" stroke-linecap="round" marker-end="url(#arrow-t3c1-dim)" stroke-dasharray="4,3"/><line x1="150" y1="150" x2="110" y2="95" stroke="#f59e0b" stroke-width="2.4" stroke-linecap="round" marker-end="url(#arrow-t3c1-t3)"/><line x1="150" y1="150" x2="80" y2="130" stroke="#a3a6bd" stroke-width="2.4" stroke-linecap="round" marker-end="url(#arrow-t3c1-dim)" stroke-dasharray="4,3"/><line x1="150" y1="150" x2="45" y2="120" stroke="#34d399" stroke-width="3" stroke-linecap="round" marker-end="url(#arrow-t3c1-t1)"/><circle cx="150" cy="150" r="3.5" fill="#e7e8f0"/><text x="15" y="108" fill="#34d399" font-size="10" text-anchor="start">eigenvector — stays on line</text><text x="150" y="195" fill="#a78bfa" font-size="11.5" text-anchor="middle" font-weight="700">Av = λv : same line, just rescaled</text></svg></div>
+        <div class="diagram-caption">Most vectors rotate under a transformation — an eigenvector only stretches.</div>
+      </div>
+    </div>
+    <div class="callout">
+      <span class="callout-label">Real-World Lens</span>
+      <p>PCA's principal components are exactly the eigenvectors of the data's covariance matrix, ranked by eigenvalue (variance explained). The Hessian's eigenvalues at a critical point reveal whether it's a minimum, maximum, or saddle point — central to why saddle points, not local minima, dominate high-dimensional deep learning loss landscapes. PageRank is literally finding the dominant eigenvector of a web-link transition matrix.</p>
+    </div>
+    <div class="qa-block"><div class="qa-block-title">Interview Drill</div><div class="qa-item"><div class="qa-question"><span class="q-mark">Q1.</span> How do Hessian eigenvalues describe the shape of a loss landscape at a critical point?<span class="q-chevron">&#9656;</span></div><div class="qa-answer" hidden><strong>A.</strong> All positive: Hessian is positive-definite, the point is a local minimum. All negative: local maximum. Mixed signs: a saddle point. In high-dimensional deep learning, saddle points vastly outnumber true local minima — a major reason plain gradient descent can slow down near one even without a true minimum nearby.</div></div><div class="qa-item"><div class="qa-question"><span class="q-mark">Q2.</span> Why are PCA's principal components the eigenvectors of the covariance matrix specifically?<span class="q-chevron">&#9656;</span></div><div class="qa-answer" hidden><strong>A.</strong> PCA seeks the unit-length direction maximizing variance of the projected data — a constrained optimization problem whose Lagrangian solution is exactly the eigenvector equation $\Sigma v = \lambda v$, where $\Sigma$ is the covariance matrix. The eigenvalue equals the variance captured along that direction, which is why components are ranked by eigenvalue, largest first.</div></div><div class="qa-item"><div class="qa-question"><span class="q-mark">Q3.</span> Can a real matrix have complex eigenvalues, and what does that mean geometrically?<span class="q-chevron">&#9656;</span></div><div class="qa-answer" hidden><strong>A.</strong> Yes — a pure rotation matrix has complex eigenvalues, because no real, nonzero vector stays on its own line under a rotation (every vector visibly turns). Complex eigenvalues come in conjugate pairs for real matrices and signal a rotational/oscillatory component in the transformation.</div></div></div>
+    <div class="resource-links"><a href="https://www.youtube.com/watch?v=PFDu9oVAE-g" target="_blank" rel="noopener">3Blue1Brown: Eigenvectors and eigenvalues &#8599;</a></div>
+  </div>
+</article>
+<article class="concept-card t3" id="diagonalization">
+  <div class="concept-header">
+    <span class="concept-num">3.2</span>
+    <span class="concept-title">Diagonalization</span>
+    <span class="reviewed-wrap">
+      <input type="checkbox" class="reviewed-check" data-id="diagonalization" id="cb-diagonalization">
+      <label for="cb-diagonalization">reviewed</label>
+    </span>
+    <span class="concept-toggle-icon">&#9656;</span>
+  </div>
+  <div class="concept-body" hidden>
+    <div class="concept-grid">
+      <div class="concept-explain"><p>A square matrix $A$ is <strong>diagonalizable</strong> if $A = PDP^{-1}$, where $D$ is diagonal (A's eigenvalues) and P's columns are the corresponding eigenvectors. This requires $n$ linearly independent eigenvectors (guaranteed if all $n$ eigenvalues are distinct; can fail for repeated eigenvalues with a deficient eigenspace). It's powerful because $A^k = PD^kP^{-1}$, and $D^k$ is trivial — just raise each diagonal entry to the $k$-th power.</p></div>
+      <div class="diagram-wrap">
+        <div class="diagram-box"><svg viewBox="0 0 320 190" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif"><text x="47" y="93" fill="#e7e8f0" font-size="16" text-anchor="middle" font-weight="700">A</text><rect x="20" y="60" width="55" height="55" rx="3" fill="none" stroke="#e7e8f0" stroke-width="1.8"/><text x="47" y="130" fill="#6b6e85" font-size="9" text-anchor="middle">(original)</text><text x="85" y="93" fill="#a3a6bd" font-size="18" text-anchor="middle">=</text><rect x="105" y="60" width="55" height="55" rx="3" fill="none" stroke="#60a5fa" stroke-width="1.8"/><text x="132" y="93" fill="#60a5fa" font-size="16" text-anchor="middle" font-weight="700">P</text><text x="132" y="130" fill="#6b6e85" font-size="9" text-anchor="middle">eigenvectors</text><text x="170" y="93" fill="#a3a6bd" font-size="18" text-anchor="middle">×</text><rect x="190" y="60" width="55" height="55" rx="3" fill="none" stroke="#f59e0b" stroke-width="1.8"/><text x="217" y="93" fill="#f59e0b" font-size="16" text-anchor="middle" font-weight="700">D</text><text x="217" y="130" fill="#6b6e85" font-size="9" text-anchor="middle">eigenvalues</text><text x="255" y="93" fill="#a3a6bd" font-size="18" text-anchor="middle">×</text><rect x="265" y="60" width="50" height="55" rx="3" fill="none" stroke="#60a5fa" stroke-width="1.8"/><text x="290" y="93" fill="#60a5fa" font-size="13" text-anchor="middle" font-weight="700">P⁻¹</text><text x="290" y="130" fill="#6b6e85" font-size="9" text-anchor="middle">inverse</text><text x="160" y="168" fill="#a78bfa" font-size="10.5" text-anchor="middle">shortcut: Aᵏ = P Dᵏ P⁻¹  (just exponentiate the diagonal)</text></svg></div>
+        <div class="diagram-caption">A = PDP⁻¹ turns repeated matrix multiplication into simple scalar exponentiation.</div>
+      </div>
+    </div>
+    <div class="callout">
+      <span class="callout-label">Real-World Lens</span>
+      <p>Computing high powers of a transition matrix (Markov chains modeling long-run user behavior) is made tractable this way. It's also the bridge to why symmetric matrices — like covariance matrices — are so well-behaved: the Spectral Theorem guarantees they're always diagonalizable with real eigenvalues and orthogonal eigenvectors, exactly what makes PCA mathematically guaranteed to work.</p>
+    </div>
+    <div class="qa-block"><div class="qa-block-title">Interview Drill</div><div class="qa-item"><div class="qa-question"><span class="q-mark">Q1.</span> Why is it significant that symmetric matrices are always diagonalizable, and how does that relate to covariance matrices?<span class="q-chevron">&#9656;</span></div><div class="qa-answer" hidden><strong>A.</strong> The Spectral Theorem guarantees any real symmetric matrix has n real eigenvalues and an orthonormal set of eigenvectors (so $P^{-1}=P^\top$, even simpler). Covariance matrices are always symmetric, so this guarantees PCA always produces a valid orthogonal set of principal components with real, non-negative eigenvalues — no edge cases, unlike general matrices which might not be diagonalizable at all.</div></div><div class="qa-item"><div class="qa-question"><span class="q-mark">Q2.</span> Give an example of a matrix that is NOT diagonalizable.<span class="q-chevron">&#9656;</span></div><div class="qa-answer" hidden><strong>A.</strong> $A=\begin{bmatrix}1&amp;1\\0&amp;1\end{bmatrix}$ (a Jordan block) has a repeated eigenvalue $\lambda=1$ with algebraic multiplicity 2, but only one linearly independent eigenvector — you can't find 2 independent eigenvectors to form P, so it can't be diagonalized (though it has a Jordan normal form).</div></div><div class="qa-item"><div class="qa-question"><span class="q-mark">Q3.</span> Why does diagonalization make computing a large power of A so much faster?<span class="q-chevron">&#9656;</span></div><div class="qa-answer" hidden><strong>A.</strong> Direct repeated multiplication to compute $A^k$ costs O(k) matrix multiplications; via $A=PDP^{-1}$, $A^k=PD^kP^{-1}$, and $D^k$ needs only O(n) scalar exponentiations — a massive shortcut used throughout Markov-chain and linear-dynamical-system analysis.</div></div></div>
+  </div>
+</article>
+<article class="concept-card t3" id="svd">
+  <div class="concept-header">
+    <span class="concept-num">3.3</span>
+    <span class="concept-title">Singular Value Decomposition (SVD)</span>
+    <span class="reviewed-wrap">
+      <input type="checkbox" class="reviewed-check" data-id="svd" id="cb-svd">
+      <label for="cb-svd">reviewed</label>
+    </span>
+    <span class="concept-toggle-icon">&#9656;</span>
+  </div>
+  <div class="concept-body" hidden>
+    <div class="concept-grid">
+      <div class="concept-explain"><p>Any matrix $A$ ($m\times n$, need not be square) factors as $A=U\Sigma V^\top$, where $U$ and $V$ are orthogonal (columns are the left/right singular vectors) and $\Sigma$ is diagonal with non-negative singular values $\sigma_1 \ge \sigma_2 \ge \ldots \ge 0$. Geometrically: rotation ($V^\top$), then pure axis-aligned scaling ($\Sigma$), then another rotation ($U$) — this is why SVD exists for every matrix, unlike eigendecomposition, which needs a square matrix and isn't even guaranteed then.</p><p>The <strong>Eckart–Young–Mirsky theorem</strong>: truncating the SVD to the top $k$ singular values/vectors ($A_k=U_k\Sigma_kV_k^\top$) gives the best possible rank-$k$ approximation of $A$, in both Frobenius and spectral norm.</p></div>
+      <div class="diagram-wrap">
+        <div class="diagram-box"><svg viewBox="0 0 320 215" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif"><defs><marker id="arrow-t3c3-accent" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#a78bfa"/></marker></defs><circle cx="70" cy="110" r="45" fill="none" stroke="#60a5fa" stroke-width="2.2"/><text x="70" y="168" fill="#60a5fa" font-size="10" text-anchor="middle">unit circle (input)</text><line x1="128" y1="110" x2="178" y2="110" stroke="#a78bfa" stroke-width="2.4" stroke-linecap="round" marker-end="url(#arrow-t3c3-accent)"/><text x="153" y="96" fill="#a78bfa" font-size="10.5" text-anchor="middle">A = UΣVᵀ</text><ellipse cx="250" cy="110" rx="55" ry="25" fill="none" stroke="#f59e0b" stroke-width="2.2" transform="rotate(-30 250 110)"/><line x1="202.4" y1="137.5" x2="297.6" y2="82.5" stroke="#f59e0b" stroke-width="1.3" stroke-dasharray="3,2"/><text x="292" y="76" fill="#f59e0b" font-size="10.5" text-anchor="middle">σ1</text><line x1="237.5" y1="88.35" x2="262.5" y2="131.65" stroke="#f59e0b" stroke-width="1.3" stroke-dasharray="3,2"/><text x="266" y="140" fill="#f59e0b" font-size="10.5" text-anchor="middle">σ2</text><text x="250" y="168" fill="#f59e0b" font-size="10" text-anchor="middle">ellipse (output)</text><text x="160" y="200" fill="#a78bfa" font-size="10" text-anchor="middle">best rank-k approx = truncate to top-k singular values (Eckart–Young–Mirsky)</text></svg></div>
+        <div class="diagram-caption">Any matrix = rotate, then scale along orthogonal axes, then rotate again.</div>
+      </div>
+    </div>
+    <div class="callout">
+      <span class="callout-label">Real-World Lens</span>
+      <p>SVD-based matrix factorization was the core technique behind the Netflix Prize's winning recommender systems, approximating a huge sparse ratings matrix as a low-rank product of user-taste and item-taste factors. Image compression truncates a matrix's SVD to keep only the top-k singular values. LoRA is directly motivated by the Eckart–Young–Mirsky guarantee.</p>
+    </div>
+    <div class="qa-block"><div class="qa-block-title">Interview Drill</div><div class="qa-item"><div class="qa-question"><span class="q-mark">Q1.</span> State the Eckart–Young–Mirsky theorem and explain why it justifies LoRA's approach.<span class="q-chevron">&#9656;</span></div><div class="qa-answer" hidden><strong>A.</strong> The best rank-k approximation to any matrix A, minimizing Frobenius or spectral norm error, is obtained by truncating A's SVD to its top k singular values/vectors. LoRA leans on this by hypothesizing the ideal fine-tuning update $\Delta W$ has low intrinsic rank — a rank-r factorization $BA$ ($B$ is $d\times r$, $A$ is $r\times k$) can capture nearly all of the useful update, so only about $r(d+k)$ parameters need training instead of the full $d\times k$, with the theorem guaranteeing minimal accuracy loss if the true update really is close to low-rank.</div></div><div class="qa-item"><div class="qa-question"><span class="q-mark">Q2.</span> How does SVD differ from eigendecomposition, and why does it work for rectangular matrices?<span class="q-chevron">&#9656;</span></div><div class="qa-answer" hidden><strong>A.</strong> Eigendecomposition ($A=PDP^{-1}$) requires a square A with n independent eigenvectors. SVD uses two different orthonormal bases — U's columns span the output space (they're eigenvectors of $AA^\top$), V's columns span the input space (eigenvectors of $A^\top A$). Since $A^\top A$ and $AA^\top$ are always symmetric positive-semidefinite, those eigendecompositions always exist — so SVD is guaranteed for literally any m×n matrix, square or not.</div></div><div class="qa-item"><div class="qa-question"><span class="q-mark">Q3.</span> In one sentence, how does SVD connect to PCA?<span class="q-chevron">&#9656;</span></div><div class="qa-answer" hidden><strong>A.</strong> Running PCA on a centered data matrix X is mathematically equivalent to taking the SVD of X — the right singular vectors are exactly the principal components, with $\lambda_i = \sigma_i^2/(n-1)$ relating singular values to explained-variance eigenvalues, and computing PCA via SVD directly is the more numerically stable standard approach in practice.</div></div></div>
+    <div class="resource-links"><a href="https://en.wikipedia.org/wiki/Low-rank_approximation" target="_blank" rel="noopener">Eckart–Young / low-rank approximation — Wikipedia &#8599;</a><a href="https://arxiv.org/abs/2106.09685" target="_blank" rel="noopener">LoRA paper (Hu et al., 2021) &#8599;</a></div>
+  </div>
+</article>
+<article class="concept-card t3" id="pca">
+  <div class="concept-header">
+    <span class="concept-num">3.4</span>
+    <span class="concept-title">Principal Component Analysis (PCA)</span>
+    <span class="reviewed-wrap">
+      <input type="checkbox" class="reviewed-check" data-id="pca" id="cb-pca">
+      <label for="cb-pca">reviewed</label>
+    </span>
+    <span class="concept-toggle-icon">&#9656;</span>
+  </div>
+  <div class="concept-body" hidden>
+    <div class="concept-grid">
+      <div class="concept-explain"><p>PCA finds a new orthogonal basis (principal components) ordered so the first captures maximum variance, the second captures maximum remaining variance orthogonal to the first, and so on. Algorithmically: center the data, compute the covariance matrix (or take the SVD of the centered data matrix directly), and keep the top-k eigenvectors as the new basis — projecting onto them gives a k-dimensional representation preserving as much variance as possible.</p></div>
+      <div class="diagram-wrap">
+        <div class="diagram-box"><svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif"><defs><marker id="arrow-t3c4-accent" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#a78bfa"/></marker><marker id="arrow-t3c4-t3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#f59e0b"/></marker></defs><circle cx="90" cy="150" r="2.6" fill="#60a5fa"/><circle cx="110" cy="135" r="2.6" fill="#60a5fa"/><circle cx="130" cy="125" r="2.6" fill="#60a5fa"/><circle cx="140" cy="105" r="2.6" fill="#60a5fa"/><circle cx="150" cy="115" r="2.6" fill="#60a5fa"/><circle cx="160" cy="110" r="2.6" fill="#60a5fa"/><circle cx="175" cy="100" r="2.6" fill="#60a5fa"/><circle cx="180" cy="120" r="2.6" fill="#60a5fa"/><circle cx="195" cy="95" r="2.6" fill="#60a5fa"/><circle cx="215" cy="85" r="2.6" fill="#60a5fa"/><circle cx="235" cy="78" r="2.6" fill="#60a5fa"/><circle cx="250" cy="65" r="2.6" fill="#60a5fa"/><line x1="160" y1="110" x2="250" y2="65" stroke="#a78bfa" stroke-width="2.4" stroke-linecap="round" marker-end="url(#arrow-t3c4-accent)"/><line x1="160" y1="110" x2="70" y2="155" stroke="#a78bfa" stroke-width="2.4" stroke-linecap="round" marker-end="url(#arrow-t3c4-accent)"/><text x="258" y="60" fill="#a78bfa" font-size="10.5" text-anchor="middle">PC1 (max variance)</text><line x1="160" y1="110" x2="145" y2="80" stroke="#f59e0b" stroke-width="2.4" stroke-linecap="round" marker-end="url(#arrow-t3c4-t3)"/><text x="128" y="72" fill="#f59e0b" font-size="11" text-anchor="middle">PC2</text><circle cx="160" cy="110" r="3.5" fill="#e7e8f0"/><text x="160" y="190" fill="#6b6e85" font-size="10" text-anchor="middle">centroid = mean-centered data</text></svg></div>
+        <div class="diagram-caption">PC1 captures the most spread in the data; PC2 captures what's left, orthogonally.</div>
+      </div>
+    </div>
+    <div class="callout">
+      <span class="callout-label">Real-World Lens</span>
+      <p>Used for dimensionality reduction before simpler models, visualizing high-dimensional data in 2D/3D, noise reduction (low-variance components are often noise), and compression. It's the classical ancestor of learned embeddings and autoencoders — a linear autoencoder with squared-error loss provably learns the same subspace as PCA.</p>
+    </div>
+    <div class="qa-block"><div class="qa-block-title">Interview Drill</div><div class="qa-item"><div class="qa-question"><span class="q-mark">Q1.</span> Walk through the steps of PCA from raw data to a reduced-dimension representation.<span class="q-chevron">&#9656;</span></div><div class="qa-answer" hidden><strong>A.</strong> Center the data by subtracting the feature-wise mean. Compute the covariance matrix (or directly SVD the centered X). Find eigenvectors/eigenvalues (or singular vectors/values) and sort by eigenvalue descending. Keep the top-k eigenvectors as the new basis and project the centered data onto them to get the k-dimensional representation.</div></div><div class="qa-item"><div class="qa-question"><span class="q-mark">Q2.</span> Why must you center — and often scale — the data before running PCA?<span class="q-chevron">&#9656;</span></div><div class="qa-answer" hidden><strong>A.</strong> PCA finds directions of maximum variance around the mean; without centering, the first "component" would largely just point toward the data's mean rather than capturing genuine spread. Scaling matters because PCA is sensitive to units — a feature measured in larger numbers (salary in dollars vs. age in years) will dominate the variance purely due to scale, not genuine importance.</div></div><div class="qa-item"><div class="qa-question"><span class="q-mark">Q3.</span> How do you decide how many principal components to keep?<span class="q-chevron">&#9656;</span></div><div class="qa-answer" hidden><strong>A.</strong> Pick k so cumulative explained-variance ratio crosses a threshold (e.g. 90-95%), use a scree plot and look for an "elbow" where marginal variance explained drops off, or, if PCA precedes a downstream model, tune k via cross-validation on final task performance.</div></div></div>
+  </div>
+</article>
+<article class="concept-card t3" id="quadratic-forms-positive-definiteness">
+  <div class="concept-header">
+    <span class="concept-num">3.5</span>
+    <span class="concept-title">Quadratic Forms &amp; Positive-Definiteness</span>
+    <span class="reviewed-wrap">
+      <input type="checkbox" class="reviewed-check" data-id="quadratic-forms-positive-definiteness" id="cb-quadratic-forms-positive-definiteness">
+      <label for="cb-quadratic-forms-positive-definiteness">reviewed</label>
+    </span>
+    <span class="concept-toggle-icon">&#9656;</span>
+  </div>
+  <div class="concept-body" hidden>
+    <div class="concept-grid">
+      <div class="concept-explain"><p>A <strong>quadratic form</strong> is $Q(x)=x^\top Ax$ for symmetric $A$ — a scalar function generalizing $ax^2$. Symmetric $A$ is <strong>positive-definite</strong> if $x^\top Ax>0$ for every nonzero $x$ (equivalently: every eigenvalue is strictly positive; equivalently, by Sylvester's criterion, every leading principal minor has positive determinant). Positive semi-definite relaxes this to $\ge 0$. Geometrically, $x^\top Ax=c$ traces an ellipse/ellipsoid for a positive-definite form, rather than a hyperbola (indefinite, mixed-sign eigenvalues).</p></div>
+      <div class="diagram-wrap">
+        <div class="diagram-box"><svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif"><ellipse cx="85" cy="100" rx="20" ry="12" fill="none" stroke="#34d399" stroke-width="1.8"/><ellipse cx="85" cy="100" rx="35" ry="21" fill="none" stroke="#34d399" stroke-width="1.6" stroke-opacity="0.6"/><ellipse cx="85" cy="100" rx="50" ry="30" fill="none" stroke="#34d399" stroke-width="1.4" stroke-opacity="0.35"/><circle cx="85" cy="100" r="3" fill="#34d399"/><text x="85" y="122" fill="#34d399" font-size="9.5" text-anchor="middle">min</text><text x="80" y="178" fill="#34d399" font-size="9.5" text-anchor="middle">positive-definite (bowl)</text><path d="M 200,60 Q 235,100 200,140" fill="none" stroke="#f59e0b" stroke-width="1.8"/><path d="M 270,60 Q 235,100 270,140" fill="none" stroke="#f59e0b" stroke-width="1.8"/><path d="M 205,65 Q 235,100 265,65" fill="none" stroke="#f59e0b" stroke-width="1.8"/><path d="M 205,135 Q 235,100 265,135" fill="none" stroke="#f59e0b" stroke-width="1.8"/><circle cx="235" cy="100" r="3" fill="#f87171"/><text x="235" y="122" fill="#f87171" font-size="9.5" text-anchor="middle">saddle</text><text x="235" y="178" fill="#f87171" font-size="9.5" text-anchor="middle">indefinite (saddle point)</text></svg></div>
+        <div class="diagram-caption">A positive-definite Hessian means a bowl (one minimum); indefinite means a saddle.</div>
+      </div>
+    </div>
+    <div class="callout">
+      <span class="callout-label">Real-World Lens</span>
+      <p>A function's Hessian being positive-definite at a critical point is the second-derivative test confirming a local minimum — the core justification for why convex optimization (Hessian positive-semidefinite everywhere) guarantees gradient descent converges to the global minimum. Covariance matrices are always positive semi-definite by construction; a covariance estimate that isn't is a red flag for bugs. Mercer's theorem requires SVM kernel matrices to be positive-semidefinite to correspond to a valid inner product.</p>
+    </div>
+    <div class="qa-block"><div class="qa-block-title">Interview Drill</div><div class="qa-item"><div class="qa-question"><span class="q-mark">Q1.</span> How does checking the Hessian's positive-definiteness classify a critical point?<span class="q-chevron">&#9656;</span></div><div class="qa-answer" hidden><strong>A.</strong> At a zero-gradient point, the second-order Taylor term is governed by $x^\top Hx$. If H is positive-definite, loss increases in every direction — a local minimum. If negative-definite, a local maximum. If indefinite (mixed-sign eigenvalues), a saddle point — the multivariate second-derivative test.</div></div><div class="qa-item"><div class="qa-question"><span class="q-mark">Q2.</span> Why does convexity of a loss function matter so much for optimization guarantees?<span class="q-chevron">&#9656;</span></div><div class="qa-answer" hidden><strong>A.</strong> For a convex function, any local minimum is automatically the global minimum, and gradient descent is guaranteed to converge to it with an appropriate learning rate — why linear/logistic regression's convex loss behaves reliably, whereas deep networks' non-convex losses offer no such guarantee, only heuristics and empirical success.</div></div><div class="qa-item"><div class="qa-question"><span class="q-mark">Q3.</span> How would you check a 2×2 symmetric matrix for positive-definiteness without computing eigenvalues?<span class="q-chevron">&#9656;</span></div><div class="qa-answer" hidden><strong>A.</strong> Sylvester's criterion: for $A=\begin{bmatrix}a&amp;b\\b&amp;d\end{bmatrix}$, check the top-left minor $a>0$ AND the full determinant $ad-b^2>0$. Both holding confirms positive-definiteness — often faster than eigenvalues by hand for small matrices.</div></div></div>
+  </div>
+</article>
+<article class="concept-card t3" id="matrix-decompositions">
+  <div class="concept-header">
+    <span class="concept-num">3.6</span>
+    <span class="concept-title">Matrix Decompositions (LU, QR, Cholesky)</span>
+    <span class="reviewed-wrap">
+      <input type="checkbox" class="reviewed-check" data-id="matrix-decompositions" id="cb-matrix-decompositions">
+      <label for="cb-matrix-decompositions">reviewed</label>
+    </span>
+    <span class="concept-toggle-icon">&#9656;</span>
+  </div>
+  <div class="concept-body" hidden>
+    <div class="concept-grid">
+      <div class="concept-explain"><p><strong>LU</strong>: $A=LU$ (lower × upper triangular) — Gaussian elimination saved as reusable factors, ideal for solving $Ax=b$ for many different $b$'s with the same $A$. <strong>QR</strong>: $A=QR$ (orthogonal × upper triangular), via Gram-Schmidt or Householder reflections, works for any matrix including rectangular ones, and is the numerically stable way to solve least-squares problems. <strong>Cholesky</strong>: $A=LL^\top$, a "square-root"-style factorization only valid for symmetric positive-definite matrices, exploiting that structure for roughly 2x the speed of general LU.</p></div>
+      <div class="diagram-wrap">
+        <div class="diagram-box"><svg viewBox="0 0 320 220" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif"><text x="20" y="55" fill="#e7e8f0" font-size="14" text-anchor="start" font-weight="700">A</text><text x="45" y="55" fill="#a3a6bd" font-size="14" text-anchor="middle">=</text><polygon points="60,35 60,75 100,75" fill="#60a5fa" fill-opacity="0.28" stroke="#60a5fa" stroke-width="1.8"/><text x="65" y="70" fill="#60a5fa" font-size="11" text-anchor="start">L</text><text x="108" y="55" fill="#a3a6bd" font-size="14" text-anchor="middle">×</text><polygon points="120,35 160,35 160,75" fill="#f59e0b" fill-opacity="0.28" stroke="#f59e0b" stroke-width="1.8"/><text x="150" y="45" fill="#f59e0b" font-size="11" text-anchor="start">U</text><text x="180" y="58" fill="#6b6e85" font-size="10" text-anchor="start">LU — reuse the factors: solve Ax=b cheaply, many times</text><text x="20" y="120" fill="#e7e8f0" font-size="14" text-anchor="start" font-weight="700">A</text><text x="45" y="120" fill="#a3a6bd" font-size="14" text-anchor="middle">=</text><rect x="60" y="100" width="40" height="40" rx="3" fill="none" stroke="#60a5fa" stroke-width="1.8"/><circle cx="80" cy="120" r="14" fill="none" stroke="#60a5fa" stroke-width="1.3"/><text x="80" y="124" fill="#60a5fa" font-size="11" text-anchor="middle">Q</text><text x="108" y="120" fill="#a3a6bd" font-size="14" text-anchor="middle">×</text><polygon points="120,100 160,100 160,140" fill="#f59e0b" fill-opacity="0.28" stroke="#f59e0b" stroke-width="1.8"/><text x="150" y="110" fill="#f59e0b" font-size="11" text-anchor="start">R</text><text x="180" y="123" fill="#6b6e85" font-size="10" text-anchor="start">QR — numerically stable least squares, any shape</text><text x="20" y="185" fill="#e7e8f0" font-size="14" text-anchor="start" font-weight="700">A</text><text x="45" y="185" fill="#a3a6bd" font-size="14" text-anchor="middle">=</text><polygon points="60,165 60,205 100,205" fill="#a78bfa" fill-opacity="0.28" stroke="#a78bfa" stroke-width="1.8"/><text x="65" y="200" fill="#a78bfa" font-size="11" text-anchor="start">L</text><text x="108" y="185" fill="#a3a6bd" font-size="14" text-anchor="middle">×</text><polygon points="120,165 160,165 160,205" fill="#a78bfa" fill-opacity="0.16" stroke="#a78bfa" stroke-width="1.8"/><text x="150" y="175" fill="#a78bfa" font-size="11" text-anchor="start">Lᵀ</text><text x="180" y="188" fill="#6b6e85" font-size="10" text-anchor="start">Cholesky — 2x faster, symmetric positive-definite only</text></svg></div>
+        <div class="diagram-caption">Three ways to factor a matrix into simpler, reusable, numerically stable pieces.</div>
+      </div>
+    </div>
+    <div class="callout">
+      <span class="callout-label">Real-World Lens</span>
+      <p>LU underlies large sparse linear system solvers in physics/graphics simulations. Production ML libraries typically solve least-squares via QR or SVD rather than naive normal equations, for numerical stability. Cholesky is the standard way to efficiently sample from a multivariate Gaussian — core to Bayesian methods, Gaussian processes, and generative models — and to test whether a covariance matrix is valid.</p>
+    </div>
+    <div class="qa-block"><div class="qa-block-title">Interview Drill</div><div class="qa-item"><div class="qa-question"><span class="q-mark">Q1.</span> When would you choose Cholesky over general LU decomposition?<span class="q-chevron">&#9656;</span></div><div class="qa-answer" hidden><strong>A.</strong> Whenever the matrix is symmetric and positive-definite — e.g. a covariance matrix, or $X^\top X$ in normal equations. Cholesky exploits the symmetry to do roughly half the work of general LU, and it's also a fast way to test whether a matrix IS positive-definite (it fails if it isn't).</div></div><div class="qa-item"><div class="qa-question"><span class="q-mark">Q2.</span> Why is QR preferred over forming and inverting XᵀX for least squares?<span class="q-chevron">&#9656;</span></div><div class="qa-answer" hidden><strong>A.</strong> Forming $X^\top X$ squares X's condition number, amplifying numerical errors, especially with correlated features. QR decomposes X directly, and the solution reduces to solving $R\beta=Q^\top y$ via simple back-substitution — faster and dramatically more numerically stable.</div></div><div class="qa-item"><div class="qa-question"><span class="q-mark">Q3.</span> Why is LU especially valuable when solving Ax=b for many different b's but the same A?<span class="q-chevron">&#9656;</span></div><div class="qa-answer" hidden><strong>A.</strong> Computing the LU factorization costs O(n³) once; solving for any new b afterward via forward then back substitution only costs O(n²) each time — a huge saving over redoing full O(n³) elimination from scratch for every new b.</div></div></div>
+  </div>
+</article>
+<article class="concept-card t3" id="ml-applications-embeddings-attention-lora-hessians">
+  <div class="concept-header">
+    <span class="concept-num">3.7</span>
+    <span class="concept-title">ML Applications: Embeddings, Attention, LoRA &amp; Hessians</span>
+    <span class="reviewed-wrap">
+      <input type="checkbox" class="reviewed-check" data-id="ml-applications-embeddings-attention-lora-hessians" id="cb-ml-applications-embeddings-attention-lora-hessians">
+      <label for="cb-ml-applications-embeddings-attention-lora-hessians">reviewed</label>
+    </span>
+    <span class="concept-toggle-icon">&#9656;</span>
+  </div>
+  <div class="concept-body" hidden>
+    <div class="concept-grid">
+      <div class="concept-explain"><p>This tier ties everything together. <strong>Embeddings</strong>: dense vectors in $\mathbb{R}^d$ representing discrete tokens; an embedding table is literally a matrix (vocab_size × d), and looking up a token is a matrix-row selection. <strong>Attention</strong>: $\text{Attention}(Q,K,V)=\text{softmax}(QK^\top/\sqrt{d_k})V$ is built entirely from matrix multiplications — similarity scores via $QK^\top$, normalization via softmax, then a weighted combination of $V$ rows.</p><p><strong>LoRA</strong>: reparameterizes a weight update $\Delta W$ ($d\times k$) as $B\cdot A$ with $B$ ($d\times r$) and $A$ ($r\times k$), $r$ far smaller than $\min(d,k)$, motivated directly by Eckart–Young–Mirsky and the empirical finding that fine-tuning updates have low intrinsic rank. <strong>Hessians</strong>: the matrix of second-order partial derivatives of a loss; its eigenvalues characterize local curvature and inform why "flat vs. sharp minima" correlates with generalization.</p></div>
+      <div class="diagram-wrap">
+        <div class="diagram-box"><svg viewBox="0 0 320 260" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif"><defs><marker id="arrow-t3c7-accent" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#a78bfa"/></marker></defs><rect x="20" y="15" width="130" height="60" rx="3" fill="none" stroke="#a3a6bd" stroke-width="1.5"/><line x1="20" y1="30" x2="150" y2="30" stroke="#262a3d" stroke-width="1"/><line x1="20" y1="45" x2="150" y2="45" stroke="#262a3d" stroke-width="1"/><line x1="20" y1="60" x2="150" y2="60" stroke="#262a3d" stroke-width="1"/><rect x="20" y="30" width="130" height="15" rx="3" fill="#a78bfa" fill-opacity="0.35"/><line x1="160" y1="45" x2="195" y2="45" stroke="#a78bfa" stroke-width="2.4" stroke-linecap="round" marker-end="url(#arrow-t3c7-accent)"/><text x="177" y="35" fill="#a78bfa" font-size="9" text-anchor="middle">lookup</text><text x="205" y="49" fill="#6b6e85" font-size="9.5" text-anchor="start">embedding table: one row = one token</text><rect x="20" y="100" width="20" height="20" fill="#60a5fa" fill-opacity="0.7" stroke="#262a3d" stroke-width="0.6"/><rect x="40" y="100" width="20" height="20" fill="#60a5fa" fill-opacity="0.2" stroke="#262a3d" stroke-width="0.6"/><rect x="60" y="100" width="20" height="20" fill="#60a5fa" fill-opacity="0.1" stroke="#262a3d" stroke-width="0.6"/><rect x="80" y="100" width="20" height="20" fill="#60a5fa" fill-opacity="0.1" stroke="#262a3d" stroke-width="0.6"/><rect x="20" y="120" width="20" height="20" fill="#60a5fa" fill-opacity="0.2" stroke="#262a3d" stroke-width="0.6"/><rect x="40" y="120" width="20" height="20" fill="#60a5fa" fill-opacity="0.6" stroke="#262a3d" stroke-width="0.6"/><rect x="60" y="120" width="20" height="20" fill="#60a5fa" fill-opacity="0.3" stroke="#262a3d" stroke-width="0.6"/><rect x="80" y="120" width="20" height="20" fill="#60a5fa" fill-opacity="0.1" stroke="#262a3d" stroke-width="0.6"/><rect x="20" y="140" width="20" height="20" fill="#60a5fa" fill-opacity="0.1" stroke="#262a3d" stroke-width="0.6"/><rect x="40" y="140" width="20" height="20" fill="#60a5fa" fill-opacity="0.3" stroke="#262a3d" stroke-width="0.6"/><rect x="60" y="140" width="20" height="20" fill="#60a5fa" fill-opacity="0.55" stroke="#262a3d" stroke-width="0.6"/><rect x="80" y="140" width="20" height="20" fill="#60a5fa" fill-opacity="0.35" stroke="#262a3d" stroke-width="0.6"/><rect x="20" y="160" width="20" height="20" fill="#60a5fa" fill-opacity="0.05" stroke="#262a3d" stroke-width="0.6"/><rect x="40" y="160" width="20" height="20" fill="#60a5fa" fill-opacity="0.1" stroke="#262a3d" stroke-width="0.6"/><rect x="60" y="160" width="20" height="20" fill="#60a5fa" fill-opacity="0.3" stroke="#262a3d" stroke-width="0.6"/><rect x="80" y="160" width="20" height="20" fill="#60a5fa" fill-opacity="0.65" stroke="#262a3d" stroke-width="0.6"/><line x1="115" y1="145" x2="148" y2="145" stroke="#a78bfa" stroke-width="2.4" stroke-linecap="round" marker-end="url(#arrow-t3c7-accent)"/><text x="158" y="149" fill="#6b6e85" font-size="9.5" text-anchor="start">softmax(QKᵀ/√d)·V</text><rect x="20" y="195" width="55" height="45" rx="3" fill="none" stroke="#a3a6bd" stroke-width="1.6"/><text x="47" y="250" fill="#6b6e85" font-size="9" text-anchor="middle">W (frozen)</text><text x="85" y="222" fill="#a3a6bd" font-size="16" text-anchor="middle">+</text><rect x="100" y="195" width="14" height="45" rx="3" fill="#34d399" fill-opacity="0.35" stroke="#34d399" stroke-width="1.5"/><text x="107" y="250" fill="#34d399" font-size="9" text-anchor="middle">B</text><text x="122" y="222" fill="#a3a6bd" font-size="14" text-anchor="middle">×</text><rect x="135" y="216" width="55" height="14" rx="3" fill="#f59e0b" fill-opacity="0.35" stroke="#f59e0b" stroke-width="1.5"/><text x="162" y="227" fill="#f59e0b" font-size="9" text-anchor="middle">A</text><text x="198" y="222" fill="#6b6e85" font-size="9" text-anchor="start">ΔW = B·A (rank r ≪ d) → LoRA</text></svg></div>
+        <div class="diagram-caption">The linear algebra running inside every modern Transformer, end to end.</div>
+      </div>
+    </div>
+    <div class="callout">
+      <span class="callout-label">Real-World Lens</span>
+      <p>This is quite literally the linear algebra running inside GPT-style models today — every attention layer, every embedding lookup, and every LoRA/QLoRA adapter update is one of these operations at massive scale. Interviews at AI-focused companies frequently probe whether a candidate can connect "textbook" linear algebra to these specific mechanisms, not just recite definitions.</p>
+    </div>
+    <div class="qa-block"><div class="qa-block-title">Interview Drill</div><div class="qa-item"><div class="qa-question"><span class="q-mark">Q1.</span> Explain attention purely in terms of the linear algebra operations involved.<span class="q-chevron">&#9656;</span></div><div class="qa-answer" hidden><strong>A.</strong> $QK^\top$ is a matrix multiplication computing the similarity between every query and key vector, producing a raw score matrix. Dividing by $\sqrt{d_k}$ rescales those dot products to control variance. Softmax turns each row into a probability distribution (attention weights). Multiplying by V is another matrix multiplication computing a weighted average of value vectors — the entire mechanism is dot products, scaling, and matrix multiplications end to end.</div></div><div class="qa-item"><div class="qa-question"><span class="q-mark">Q2.</span> Why does LoRA freeze W and only train the low-rank factors B and A?<span class="q-chevron">&#9656;</span></div><div class="qa-answer" hidden><strong>A.</strong> Full fine-tuning requires updating and storing a full d×k gradient/optimizer state for every weight matrix in a huge model — extremely expensive. LoRA's low-rank hypothesis, backed by Eckart–Young–Mirsky, says the useful part of the update is well-approximated by a rank-r factorization; training only B and A updates O(r(d+k)) parameters instead of O(dk), often a 100-10,000x reduction, while keeping pretrained knowledge in W frozen — which also helps avoid catastrophic forgetting.</div></div><div class="qa-item"><div class="qa-question"><span class="q-mark">Q3.</span> How does the Hessian's eigenvalue spectrum relate to "flat vs. sharp minima" and generalization?<span class="q-chevron">&#9656;</span></div><div class="qa-answer" hidden><strong>A.</strong> A sharp minimum has large-magnitude Hessian eigenvalues (high curvature — loss rises quickly nearby); a flat minimum has small eigenvalues (loss changes slowly nearby). Empirically, flatter minima tend to generalize better to unseen data, motivating techniques like Sharpness-Aware Minimization (SAM) that explicitly seek flatter regions of the loss landscape.</div></div></div>
+    <div class="resource-links"><a href="https://arxiv.org/abs/2106.09685" target="_blank" rel="noopener">LoRA paper (Hu et al., 2021) &#8599;</a></div>
+  </div>
+</article>
+</section>
+
+<div class="page-footer">
+  <h3>Full resource list</h3>
+  <div class="footer-resources"><div>&#8226; Gilbert Strang — Linear Algebra and Its Applications — textbook, elementary → intermediate</div><div>&#8226; <a href="https://www.youtube.com/playlist?list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab" target="_blank" rel="noopener">3Blue1Brown — Essence of Linear Algebra</a> — visual intuition, all tiers</div><div>&#8226; <a href="https://ocw.mit.edu/courses/18-06-linear-algebra-spring-2010/" target="_blank" rel="noopener">MIT 18.06 (Strang) — OpenCourseWare</a> — full lecture course</div><div>&#8226; <a href="https://mml-book.com/" target="_blank" rel="noopener">Deisenroth, Faisal &amp; Ong — Mathematics for Machine Learning</a> — ch. 2-4, intermediate → advanced, ML-framed</div><div>&#8226; <a href="http://vmls-book.stanford.edu/" target="_blank" rel="noopener">Boyd &amp; Vandenberghe — Introduction to Applied Linear Algebra (VMLS)</a> — most beginner-friendly applied text</div><div>&#8226; <a href="https://arxiv.org/abs/2106.09685" target="_blank" rel="noopener">LoRA paper (Hu et al., 2021) + Eckart–Young–Mirsky theorem</a> — the SVD ↔ LoRA connection</div></div>
+  <p class="footer-note">Companion to the <a href="https://app.notion.com/p/396859801c1381518a52ddfce51aac77" target="_blank" rel="noopener">Linear Algebra — Elementary to Advanced Roadmap</a> card in the Interview Prep Tracker (Notion). Part 1 of the technical interview-prep series — Statistics &amp; Probability is next.
+  <br>Built 2026-07-13, revised same day (self-contained edition). Reopen this file any night to review; your checked-off progress is saved locally in this browser.</p>
+</div>
+  </main>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  // ---- Math rendering (KaTeX auto-render, $...$ inline) ----
+  if (window.renderMathInElement) {
+    renderMathInElement(document.body, {
+      delimiters: [
+        { left: '$$', right: '$$', display: true },
+        { left: '$', right: '$', display: false }
+      ],
+      throwOnError: false
+    });
+  }
+
+  // ---- Concept card open/close ----
+  function setCard(card, open) {
+    card.classList.toggle('open', open);
+    var body = card.querySelector('.concept-body');
+    if (body) body.hidden = !open;
+  }
+  document.querySelectorAll('.concept-header').forEach(function (h) {
+    h.addEventListener('click', function (e) {
+      if (e.target.closest('.reviewed-wrap')) return; // don't toggle when checking off
+      var card = h.parentElement;
+      setCard(card, !card.classList.contains('open'));
+    });
+  });
+
+  // ---- Q&A reveal ----
+  function setQA(item, open) {
+    item.classList.toggle('open', open);
+    var a = item.querySelector('.qa-answer');
+    if (a) a.hidden = !open;
+  }
+  document.querySelectorAll('.qa-question').forEach(function (q) {
+    q.addEventListener('click', function () {
+      var item = q.parentElement;
+      setQA(item, !item.classList.contains('open'));
+    });
+  });
+
+  // ---- Global controls ----
+  var expandBtn = document.getElementById('btn-expand-all');
+  var revealBtn = document.getElementById('btn-reveal-all');
+  var allExpanded = false, allRevealed = false;
+
+  expandBtn.addEventListener('click', function () {
+    allExpanded = !allExpanded;
+    document.querySelectorAll('.concept-card').forEach(function (c) { setCard(c, allExpanded); });
+    expandBtn.textContent = allExpanded ? 'Collapse all' : 'Expand all';
+  });
+
+  revealBtn.addEventListener('click', function () {
+    allRevealed = !allRevealed;
+    if (allRevealed && !allExpanded) {
+      allExpanded = true;
+      document.querySelectorAll('.concept-card').forEach(function (c) { setCard(c, true); });
+      expandBtn.textContent = 'Collapse all';
+    }
+    document.querySelectorAll('.qa-item').forEach(function (i) { setQA(i, allRevealed); });
+    revealBtn.textContent = allRevealed ? 'Hide all answers' : 'Reveal all answers';
+  });
+
+  // ---- Reviewed checkboxes + progress (persisted in localStorage) ----
+  var KEY = 'la-reviewed-v1';
+  var saved = {};
+  try { saved = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch (e) {}
+  var checks = document.querySelectorAll('.reviewed-check');
+
+  function markToc(id, on) {
+    var l = document.querySelector('.toc-link[data-id="' + id + '"]');
+    if (l) l.classList.toggle('reviewed', on);
+  }
+  function syncProgress() {
+    var n = 0;
+    checks.forEach(function (c) { if (c.checked) n++; });
+    document.getElementById('progress-count').textContent = n + ' / ' + checks.length;
+    document.getElementById('progress-fill').style.width = (100 * n / checks.length) + '%';
+  }
+  checks.forEach(function (c) {
+    var id = c.getAttribute('data-id');
+    if (saved[id]) { c.checked = true; markToc(id, true); }
+    c.addEventListener('change', function () {
+      saved[id] = c.checked;
+      try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch (e) {}
+      markToc(id, c.checked);
+      syncProgress();
+    });
+  });
+  syncProgress();
+
+  // ---- Sidebar scrollspy ----
+  var obs = new IntersectionObserver(function (entries) {
+    entries.forEach(function (en) {
+      if (en.isIntersecting) {
+        document.querySelectorAll('.toc-link.active').forEach(function (a) { a.classList.remove('active'); });
+        var l = document.querySelector('.toc-link[data-id="' + en.target.id + '"]');
+        if (l) l.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-15% 0px -70% 0px' });
+  document.querySelectorAll('.concept-card').forEach(function (c) { obs.observe(c); });
+
+  // ---- TOC click opens the target card; closes mobile sidebar ----
+  document.querySelectorAll('.toc-link').forEach(function (l) {
+    l.addEventListener('click', function () {
+      var card = document.getElementById(l.getAttribute('data-id'));
+      if (card && !card.classList.contains('open')) setCard(card, true);
+      document.querySelector('.sidebar').classList.remove('open');
+    });
+  });
+
+  // ---- Theme toggle ----
+  var themeBtn = document.getElementById('theme-toggle');
+  var themeIcon = document.getElementById('theme-icon');
+  var themeLabel = document.getElementById('theme-label');
+
+  function updateBtnUI(theme) {
+    if (themeIcon && themeLabel) {
+      if (theme === 'light') {
+        themeIcon.textContent = '☀️';
+        themeLabel.textContent = 'Light';
+      } else {
+        themeIcon.textContent = '🌙';
+        themeLabel.textContent = 'Dark';
+      }
+    }
+  }
+
+  var currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+  updateBtnUI(currentTheme);
+
+  if (themeBtn) {
+    themeBtn.addEventListener('click', function () {
+      var nextTheme = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', nextTheme);
+      localStorage.setItem('gradient_path_theme', nextTheme);
+      updateBtnUI(nextTheme);
+    });
+  }
+
+  // ---- Mobile sidebar toggle ----
+  document.getElementById('sidebar-toggle').addEventListener('click', function () {
+    document.querySelector('.sidebar').classList.toggle('open');
+  });
+});
+</script>
+</body>
+</html>

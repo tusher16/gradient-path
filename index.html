@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<<title>Gradient Path — AI/ML Technical Study Hub</title>
+<script>
+  (function() {
+    var saved = localStorage.getItem('gradient_path_theme');
+    if (saved) {
+      document.documentElement.setAttribute('data-theme', saved);
+    } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+      document.documentElement.setAttribute('data-theme', 'light');
+    } else {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    }
+  })();
+</script>
+<style>
+:root, [data-theme="dark"] {
+  --bg: #0f1117;
+  --panel: #14161f;
+  --card: #171a26;
+  --card-hover: #1a1d2e;
+  --line: #262a3d;
+  --ink: #e7e8f0;
+  --dim: #a3a6bd;
+  --mut: #6b6e85;
+  --accent: #a78bfa;
+  --accent-alpha: rgba(167, 139, 250, 0.5);
+  --t1: #34d399;
+}
+
+[data-theme="light"] {
+  --bg: #f8fafc;
+  --panel: #ffffff;
+  --card: #ffffff;
+  --card-hover: #f1f5f9;
+  --line: #e2e8f0;
+  --ink: #0f172a;
+  --dim: #475569;
+  --mut: #64748b;
+  --accent: #6d28d9;
+  --accent-alpha: rgba(109, 40, 217, 0.4);
+  --t1: #059669;
+}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.65 -apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;transition:background .2s,color .2s}
+.hub-wrap{max-width:920px;margin:0 auto;padding:40px 24px 80px}
+.hub-topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}
+.eyebrow{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:800}
+.theme-btn{background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:6px 12px;font-size:13px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:all .15s}
+.theme-btn:hover{border-color:var(--accent);background:var(--card-hover)}
+.hub-header h1{font-size:36px;margin:8px 0 6px;letter-spacing:-0.02em}
+.hub-header .subtitle{font-size:16px;color:var(--dim);margin-bottom:12px;font-weight:500}
+.hub-header p{color:var(--dim);max-width:70ch;margin:0}
+.module-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px;margin-top:36px}
+.module-card{display:flex;flex-direction:column;gap:8px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 20px;text-decoration:none;color:var(--ink);transition:all .15s}
+.module-card.live{border-color:var(--accent-alpha)}
+.module-card.live:hover{border-color:var(--accent);background:var(--card-hover);transform:translateY(-2px)}
+.module-card.placeholder{opacity:.65}
+.module-num{font-size:10.5px;letter-spacing:.1em;color:var(--mut);font-weight:800}
+.module-title{font-size:19px;font-weight:800}
+.module-desc{font-size:13px;color:var(--dim);flex:1}
+.module-status{font-size:12.5px;color:var(--t1);font-weight:700}
+.module-status.soon{color:var(--mut)}
+.hub-footer{margin-top:44px;border-top:1px solid var(--line);padding-top:20px;font-size:12.5px;color:var(--mut);line-height:1.7}
+</style>
+</head>
+<body>
+<div class="hub-wrap">
+  <div class="hub-topbar">
+    <span class="eyebrow">Your personal technical interview-prep series</span>
+    <button class="theme-btn" id="theme-toggle" aria-label="Toggle theme">
+      <span id="theme-icon">🌙</span> <span id="theme-label">Dark</span>
+    </button>
+  </div>
+  <div class="hub-header">
+    <h1>Gradient Path</h1>
+    <div class="subtitle">AI/ML Technical Interview Study Hub</div>
+    <p>One growing set of nightly-readable pages — concepts explained plainly, with diagrams, real-world ML examples, and click-to-reveal interview Q&amp;A. Linear Algebra is module 1; each new subject becomes its own module here.</p>
+  </div>
+  <div class="module-grid">
+    <a class="module-card live" href="01-linear-algebra.html">
+      <span class="module-num">MODULE 1 &middot; ML FOUNDATIONS</span>
+      <span class="module-title">Linear Algebra</span>
+      <span class="module-desc">Elementary → advanced: scalars through SVD, PCA, and the matrix ops behind embeddings, attention, and LoRA. 25 concepts across 3 tiers.</span>
+      <span class="module-status">Ready to read →</span>
+    </a>
+    <div class="module-card placeholder">
+      <span class="module-num">MODULE 2 &middot; ML FOUNDATIONS</span>
+      <span class="module-title">Statistics &amp; Probability</span>
+      <span class="module-desc">Distributions, estimation, hypothesis testing, Bayesian reasoning — the next foundation to build the same way.</span>
+      <span class="module-status soon">Next up</span>
+    </div>
+    <div class="module-card placeholder">
+      <span class="module-num">MODULE 3+</span>
+      <span class="module-title">More modules</span>
+      <span class="module-desc">Deep learning, LLM engineering, MLOps, and whatever else the interview prep tracker surfaces next — added here as they're built.</span>
+      <span class="module-status soon">Planned</span>
+    </div>
+  </div>
+  <div class="hub-footer">
+    Each module is a single self-contained HTML file — styling and interactivity are built in, no assets folder needed. Only the math rendering (KaTeX) loads from a CDN, once, then caches. Keep the module files next to this hub page so the links work. Reviewed-status checkboxes and theme preferences are saved locally in your browser per module.
+  </div>
+</div>
+
+<script>
+  (function() {
+    var themeBtn = document.getElementById('theme-toggle');
+    var themeIcon = document.getElementById('theme-icon');
+    var themeLabel = document.getElementById('theme-label');
+
+    function updateBtnUI(theme) {
+      if (theme === 'light') {
+        themeIcon.textContent = '☀️';
+        themeLabel.textContent = 'Light';
+      } else {
+        themeIcon.textContent = '🌙';
+        themeLabel.textContent = 'Dark';
+      }
+    }
+
+    var currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+    updateBtnUI(currentTheme);
+
+    themeBtn.addEventListener('click', function() {
+      var nextTheme = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', nextTheme);
+      localStorage.setItem('gradient_path_theme', nextTheme);
+      updateBtnUI(nextTheme);
+    });
+  })();
+</script>
+</body>
+</html>
