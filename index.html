@@ -1,137 +1,432 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<<title>Gradient Path — AI/ML Technical Study Hub</title>
-<script>
-  (function() {
-    var saved = localStorage.getItem('gradient_path_theme');
-    if (saved) {
-      document.documentElement.setAttribute('data-theme', saved);
-    } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
-      document.documentElement.setAttribute('data-theme', 'light');
-    } else {
-      document.documentElement.setAttribute('data-theme', 'dark');
-    }
-  })();
-</script>
+<!doctype html><html lang="en"><head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width,initial-scale=1'>
+<title>Gradient Path</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&amp;family=IBM+Plex+Mono:wght@400;600;700&amp;family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&amp;display=swap">
 <style>
-:root, [data-theme="dark"] {
-  --bg: #0f1117;
-  --panel: #14161f;
-  --card: #171a26;
-  --card-hover: #1a1d2e;
-  --line: #262a3d;
-  --ink: #e7e8f0;
-  --dim: #a3a6bd;
-  --mut: #6b6e85;
-  --accent: #a78bfa;
-  --accent-alpha: rgba(167, 139, 250, 0.5);
-  --t1: #34d399;
+
+:root{
+  --ground:#EFF3F2; --surface:#FFFFFF; --sunk:#E6ECEA;
+  --line:#D2DBD9; --line-soft:#E3E9E8;
+  --ink:#131C1A; --ink-2:#3B4B48; --muted:#687975;
+  --signal:#C11E5C; --signal-soft:#FBE6EE;
+  --memory:#0C7A70; --memory-soft:#DCF0ED;
+  --code-bg:#101A19; --code-ink:#D6E2DF; --code-mut:#7E938E;
+  --shadow:0 1px 2px rgba(19,28,26,.05), 0 10px 26px -18px rgba(19,28,26,.35);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#0C1211; --surface:#141C1B; --sunk:#101817;
+    --line:#283432; --line-soft:#1E2827;
+    --ink:#E7EEEC; --ink-2:#B6C4C1; --muted:#84948F;
+    --signal:#FF6A9C; --signal-soft:#33141F;
+    --memory:#42D3BF; --memory-soft:#0C2B28;
+    --code-bg:#080E0D; --code-ink:#D6E2DF; --code-mut:#71857F;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 14px 32px -20px rgba(0,0,0,.8);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0C1211; --surface:#141C1B; --sunk:#101817;
+  --line:#283432; --line-soft:#1E2827;
+  --ink:#E7EEEC; --ink-2:#B6C4C1; --muted:#84948F;
+  --signal:#FF6A9C; --signal-soft:#33141F;
+  --memory:#42D3BF; --memory-soft:#0C2B28;
+  --code-bg:#080E0D; --code-ink:#D6E2DF; --code-mut:#71857F;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 14px 32px -20px rgba(0,0,0,.8);
 }
 
-[data-theme="light"] {
-  --bg: #f8fafc;
-  --panel: #ffffff;
-  --card: #ffffff;
-  --card-hover: #f1f5f9;
-  --line: #e2e8f0;
-  --ink: #0f172a;
-  --dim: #475569;
-  --mut: #64748b;
-  --accent: #6d28d9;
-  --accent-alpha: rgba(109, 40, 217, 0.4);
-  --t1: #059669;
-}
 
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.65 -apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;transition:background .2s,color .2s}
-.hub-wrap{max-width:920px;margin:0 auto;padding:40px 24px 80px}
-.hub-topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}
-.eyebrow{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:800}
-.theme-btn{background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:6px 12px;font-size:13px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:all .15s}
-.theme-btn:hover{border-color:var(--accent);background:var(--card-hover)}
-.hub-header h1{font-size:36px;margin:8px 0 6px;letter-spacing:-0.02em}
-.hub-header .subtitle{font-size:16px;color:var(--dim);margin-bottom:12px;font-weight:500}
-.hub-header p{color:var(--dim);max-width:70ch;margin:0}
-.module-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px;margin-top:36px}
-.module-card{display:flex;flex-direction:column;gap:8px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 20px;text-decoration:none;color:var(--ink);transition:all .15s}
-.module-card.live{border-color:var(--accent-alpha)}
-.module-card.live:hover{border-color:var(--accent);background:var(--card-hover);transform:translateY(-2px)}
-.module-card.placeholder{opacity:.65}
-.module-num{font-size:10.5px;letter-spacing:.1em;color:var(--mut);font-weight:800}
-.module-title{font-size:19px;font-weight:800}
-.module-desc{font-size:13px;color:var(--dim);flex:1}
-.module-status{font-size:12.5px;color:var(--t1);font-weight:700}
-.module-status.soon{color:var(--mut)}
-.hub-footer{margin-top:44px;border-top:1px solid var(--line);padding-top:20px;font-size:12.5px;color:var(--mut);line-height:1.7}
-</style>
-</head>
-<body>
-<div class="hub-wrap">
-  <div class="hub-topbar">
-    <span class="eyebrow">Your personal technical interview-prep series</span>
-    <button class="theme-btn" id="theme-toggle" aria-label="Toggle theme">
-      <span id="theme-icon">🌙</span> <span id="theme-label">Dark</span>
-    </button>
-  </div>
-  <div class="hub-header">
-    <h1>Gradient Path</h1>
-    <div class="subtitle">AI/ML Technical Interview Study Hub</div>
-    <p>One growing set of nightly-readable pages — concepts explained plainly, with diagrams, real-world ML examples, and click-to-reveal interview Q&amp;A. Linear Algebra is module 1; each new subject becomes its own module here.</p>
-  </div>
-  <div class="module-grid">
-    <a class="module-card live" href="01-linear-algebra.html">
-      <span class="module-num">MODULE 1 &middot; ML FOUNDATIONS</span>
-      <span class="module-title">Linear Algebra</span>
-      <span class="module-desc">Elementary → advanced: scalars through SVD, PCA, and the matrix ops behind embeddings, attention, and LoRA. 25 concepts across 3 tiers.</span>
-      <span class="module-status">Ready to read →</span>
-    </a>
-    <div class="module-card placeholder">
-      <span class="module-num">MODULE 2 &middot; ML FOUNDATIONS</span>
-      <span class="module-title">Statistics &amp; Probability</span>
-      <span class="module-desc">Distributions, estimation, hypothesis testing, Bayesian reasoning — the next foundation to build the same way.</span>
-      <span class="module-status soon">Next up</span>
+body{margin:0; background:var(--ground); color:var(--ink);
+  font-family:"IBM Plex Sans",system-ui,-apple-system,sans-serif;
+  font-size:16px; line-height:1.62; -webkit-font-smoothing:antialiased}
+a{color:inherit}
+h1,h2,h3{font-family:"Bricolage Grotesque",system-ui,sans-serif; text-wrap:balance;
+  margin:0; font-weight:700; letter-spacing:-.015em}
+:focus-visible{outline:2px solid var(--signal); outline-offset:3px; border-radius:4px}
+
+.top{border-bottom:1px solid var(--line); background:var(--surface)}
+.top-in{max-width:1180px; margin:0 auto; padding:64px 28px 46px}
+.masthead{display:grid; grid-template-columns:minmax(0,1.35fr) minmax(0,.65fr); gap:52px; align-items:start}
+.eyebrow{font-family:"IBM Plex Mono",monospace; font-size:11px; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--muted); margin:0}
+h1{font-size:clamp(2.6rem,7vw,4.2rem); line-height:1.0; margin:14px 0 0; font-weight:800}
+.deck{max-width:56ch; color:var(--ink-2); font-size:1.08rem; margin:20px 0 0}
+.deck b{color:var(--ink); font-weight:600}
+.howto{border:1px solid var(--line); border-radius:12px; padding:20px 22px 18px; background:var(--sunk)}
+.howto ol{margin:0; padding:0; list-style:none; counter-reset:h; display:flex; flex-direction:column; gap:11px}
+.howto li{counter-increment:h; position:relative; padding-left:26px; font-size:.9rem; color:var(--ink-2); line-height:1.5}
+.howto li::before{content:counter(h); position:absolute; left:0; top:0;
+  font-family:"IBM Plex Mono",monospace; font-size:.74rem; font-weight:700; color:var(--signal)}
+.howto li b{color:var(--ink); font-weight:600}
+.lbl{font-family:"IBM Plex Mono",monospace; font-size:11px; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--muted); font-weight:600; margin:0 0 10px}
+.controls{display:flex; flex-wrap:wrap; align-items:center; gap:14px 20px; margin:30px 0 0}
+.btn{font-family:"IBM Plex Mono",monospace; font-size:.82rem; font-weight:600; letter-spacing:.02em;
+  padding:11px 18px; border-radius:999px; border:1px solid var(--line); background:transparent;
+  color:var(--ink); cursor:pointer; transition:.12s ease}
+.btn:hover{border-color:var(--ink-2)}
+.meter{font-family:"IBM Plex Mono",monospace; font-size:.82rem; color:var(--muted)}
+
+.shell{max-width:1180px; margin:0 auto; padding:52px 28px 40px}
+.sect{font-family:"IBM Plex Mono",monospace; font-size:11px; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--muted); margin:0 0 18px}
+.grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(330px,1fr)); gap:22px}
+.mod{background:var(--surface); border:1px solid var(--line); border-radius:16px;
+  padding:28px 28px 24px; box-shadow:var(--shadow); text-decoration:none; color:inherit;
+  display:flex; flex-direction:column; gap:14px; transition:transform .14s ease, border-color .14s ease}
+a.mod:hover{transform:translateY(-2px); border-color:var(--ink-2)}
+.mod-top{display:flex; align-items:center; gap:10px; flex-wrap:wrap}
+.mod-n{font-family:"IBM Plex Mono",monospace; font-size:11px; letter-spacing:.12em;
+  color:var(--ink); font-weight:700}
+.pill{font-family:"IBM Plex Mono",monospace; font-size:10px; letter-spacing:.12em;
+  text-transform:uppercase; padding:2px 9px; border-radius:999px; border:1px solid var(--line); color:var(--muted)}
+.pill.live{color:var(--memory); border-color:var(--memory)}
+.pill.soon{color:var(--muted)}
+.mod h2{font-size:1.55rem; line-height:1.12}
+.mod p{margin:0; color:var(--ink-2); font-size:.95rem; flex:1}
+.mod p b{color:var(--ink); font-weight:600}
+.facts{list-style:none; margin:0; padding:0; display:flex; flex-wrap:wrap; gap:6px}
+.facts li{font-family:"IBM Plex Mono",monospace; font-size:.72rem; padding:4px 9px;
+  border:1px solid var(--line-soft); border-radius:6px; color:var(--ink-2); background:var(--sunk)}
+.go{font-family:"IBM Plex Mono",monospace; font-size:.8rem; font-weight:600; color:var(--signal)}
+.mod.placeholder{opacity:.62; box-shadow:none; background:var(--sunk)}
+.mod.placeholder .go{color:var(--muted)}
+.bar{height:5px; border-radius:3px; background:var(--line-soft); overflow:hidden; margin-top:2px}
+.bar i{display:block; height:100%; width:0; background:var(--memory); border-radius:3px; transition:width .4s}
+.prog{font-family:"IBM Plex Mono",monospace; font-size:.74rem; color:var(--muted);
+  display:flex; justify-content:space-between; gap:10px}
+.prog b{color:var(--memory); font-weight:700}
+
+.note{max-width:1180px; margin:0 auto; padding:14px 28px 0}
+.note .card{border:1px solid var(--line); border-radius:14px; background:var(--sunk);
+  padding:24px 28px; display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:28px}
+.note h3{font-size:1.05rem; margin-bottom:8px}
+.note p{margin:0; color:var(--ink-2); font-size:.93rem}
+.note code{font-family:"IBM Plex Mono",monospace; font-size:.85em; background:var(--surface);
+  border:1px solid var(--line); padding:1px 6px; border-radius:4px}
+.foot{max-width:1180px; margin:0 auto; padding:44px 28px 90px; color:var(--muted); font-size:.88rem}
+.foot p{max-width:66ch}
+
+@media (max-width:980px){
+  .masthead{grid-template-columns:1fr; gap:30px}
+  .top-in{padding:44px 22px 34px}
+  .shell{padding:34px 22px 30px}
+  .note{padding:10px 22px 0}
+  .note .card{grid-template-columns:1fr; gap:20px}
+  .foot{padding:34px 22px 70px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none !important}}
+
+/* ---- study path ---- */
+.here{border:1px solid var(--memory); border-radius:16px; background:var(--surface);
+  box-shadow:var(--shadow); padding:26px 28px 24px; margin:0 0 26px;
+  display:grid; grid-template-columns:minmax(0,1fr) auto; gap:26px; align-items:center}
+.here .lbl{color:var(--memory)}
+.here h2{font-size:1.7rem; line-height:1.12; margin:6px 0 0}
+.here .sub{font-family:"IBM Plex Mono",monospace; font-size:.78rem; letter-spacing:.06em;
+  color:var(--muted); margin:8px 0 0; text-transform:uppercase}
+.here p.why{margin:12px 0 0; color:var(--ink-2); font-size:.97rem; max-width:62ch}
+.here .cta{display:inline-block; margin:18px 0 0; font-family:"IBM Plex Mono",monospace;
+  font-size:.82rem; font-weight:600; padding:11px 20px; border-radius:999px;
+  background:var(--memory); color:var(--surface); text-decoration:none}
+.here .cta:hover{opacity:.88}
+.ring{display:flex; flex-direction:column; align-items:center; gap:8px}
+.ring svg{display:block}
+.ring b{font-family:"IBM Plex Mono",monospace; font-size:1.5rem; color:var(--memory)}
+.ring span{font-family:"IBM Plex Mono",monospace; font-size:.7rem; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--muted)}
+.done-all{border-color:var(--signal)}
+.done-all .lbl,.done-all .ring b{color:var(--signal)}
+.done-all .cta{background:var(--signal)}
+
+ol.path{list-style:none; margin:0; padding:0; counter-reset:p}
+ol.path li{counter-increment:p; position:relative; padding:0 0 0 46px; margin:0 0 2px}
+ol.path li::before{content:counter(p,decimal-leading-zero); position:absolute; left:0; top:13px;
+  font-family:"IBM Plex Mono",monospace; font-size:.72rem; font-weight:700; color:var(--muted)}
+ol.path li::after{content:""; position:absolute; left:11px; top:32px; bottom:-2px; width:1px;
+  background:var(--line)}
+ol.path li:last-child::after{display:none}
+.stop{display:grid; grid-template-columns:auto minmax(0,1fr) auto; gap:14px; align-items:center;
+  padding:11px 14px; border-radius:10px; text-decoration:none; color:inherit;
+  border:1px solid transparent; transition:.12s ease}
+a.stop:hover{border-color:var(--line); background:var(--surface)}
+.mark{width:15px; height:15px; border-radius:50%; border:1.5px solid var(--line);
+  background:var(--ground); flex:none}
+.stop.is-done .mark{background:var(--memory); border-color:var(--memory)}
+.stop.is-part .mark{border-color:var(--memory);
+  background:linear-gradient(90deg,var(--memory) 50%,transparent 50%)}
+.stop.is-now{background:var(--memory-soft); border-color:var(--memory)}
+.stop.is-now .mark{border-color:var(--memory); border-width:4px; background:var(--surface)}
+.stop.is-late{opacity:.55}
+.stop-t{min-width:0}
+.stop-t b{font-weight:600; font-size:.98rem}
+.stop-t i{font-style:normal; color:var(--muted); font-family:"IBM Plex Mono",monospace;
+  font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; margin-left:9px}
+.stop-t span{display:block; color:var(--ink-2); font-size:.87rem; margin-top:2px}
+.stop-n{font-family:"IBM Plex Mono",monospace; font-size:.76rem; color:var(--muted);
+  white-space:nowrap; text-align:right}
+.stop.is-done .stop-n{color:var(--memory)}
+.pathwrap{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,290px); gap:34px;
+  align-items:start}
+.pathnote{border:1px solid var(--line); border-radius:12px; background:var(--sunk);
+  padding:18px 20px; font-size:.9rem; color:var(--ink-2); position:sticky; top:22px}
+.pathnote h3{font-size:.98rem; margin:0 0 8px}
+.pathnote p{margin:0 0 10px}
+.pathnote p:last-child{margin:0}
+.pathnote b{color:var(--ink)}
+@media (max-width:980px){
+  .here{grid-template-columns:1fr; gap:18px}
+  .pathwrap{grid-template-columns:1fr; gap:22px}
+  .pathnote{position:static}
+}
+</style></head><body>
+
+<div class="top"><div class="top-in">
+  <div class="masthead">
+    <div>
+      <p class="eyebrow">Personal technical interview prep</p>
+      <h1>Gradient Path</h1>
+      <p class="deck">One page per subject, built to be read in ten minutes before bed rather than
+        studied for three hours on a Saturday. Every card leads with a <b>picture</b> and plain
+        English, holds the precise version one switch away, and carries a <b>prompt you can paste
+        into any chatbot</b> so the practice keeps going when you are away from here.</p>
+      <div class="controls">
+        <button class="btn" type="button" id="theme">Dark / light</button>
+        <span class="meter" id="meter">&nbsp;</span>
+      </div>
     </div>
-    <div class="module-card placeholder">
-      <span class="module-num">MODULE 3+</span>
-      <span class="module-title">More modules</span>
-      <span class="module-desc">Deep learning, LLM engineering, MLOps, and whatever else the interview prep tracker surfaces next — added here as they're built.</span>
-      <span class="module-status soon">Planned</span>
-    </div>
+    <aside class="howto">
+      <h2 class="lbl">How to use this</h2>
+      <ol>
+        <li>Do the <b>one</b> thing the path says. Do not open three modules.</li>
+        <li>Read the picture before the words, every time.</li>
+        <li>Mark each card honestly &mdash; <b>fuzzy</b> is the useful answer, not solid.</li>
+        <li>Copy a card's <b>prompt</b> into ChatGPT or Gemini and let it quiz you while you work.</li>
+        <li>Come back to the fuzzy ones tomorrow. That is the whole method.</li>
+      </ol>
+    </aside>
   </div>
-  <div class="hub-footer">
-    Each module is a single self-contained HTML file — styling and interactivity are built in, no assets folder needed. Only the math rendering (KaTeX) loads from a CDN, once, then caches. Keep the module files next to this hub page so the links work. Reviewed-status checkboxes and theme preferences are saved locally in your browser per module.
+</div></div>
+
+<div class="shell">
+  <p class="sect">Your path</p>
+  <div id="here-slot"></div>
+  <div class="pathwrap">
+    <ol class="path" id="path"></ol>
+    <aside class="pathnote">
+      <h3>Why this order</h3>
+      <p>Nothing on the path leans on something further down it. The linear algebra comes before
+      the transformer that uses it; the classical ML floor comes before the LLM stack that sits
+      on top of it; and the production tiers come last because they are the first three pointed
+      at a system that is actually serving traffic.</p>
+      <p><b>The coding module runs alongside.</b> It shares nothing with the rest, so slot it in
+      whenever &mdash; one pattern a night is the intended pace.</p>
+      <p>A stop turns solid when <b>every</b> card in it is marked solid. The marker moves to the
+      first stop that is not finished, so it is always pointing at exactly one thing.</p>
+    </aside>
   </div>
 </div>
 
+<div class="shell" style="padding-top:34px">
+  <p class="sect">All modules</p>
+  <div class="grid">
+    <a class="mod" href="01-linear-algebra.html">
+      <div class="mod-top"><span class="mod-n">MODULE 01</span><span class="pill live">Live</span>
+        <span class="pill">ML foundations</span></div>
+      <h2>Linear Algebra, Slowly</h2>
+      <p>Scalars through <b>SVD, PCA and the math inside a transformer</b>. Every idea explained twice &mdash; plain English with an analogy, or the precise version you would say to an interviewer. Ends with the linear algebra that only shows up in production: KV cache arithmetic, quantization, LoRA and RoPE.</p>
+      <ul class="facts"><li>38 topics</li><li>4 tiers</li><li>114 drill questions</li><li>42 prompts</li></ul>
+      <div class="prog"><span>Marked solid</span><b id="p-la">0 / 38</b></div>
+      <div class="bar"><i id="b-la"></i></div>
+      <span class="go">Open module &rarr;</span>
+    </a>
+    <a class="mod" href="blind75nightlyreview.html">
+      <div class="mod-top"><span class="mod-n">MODULE 02</span><span class="pill live">Live</span>
+        <span class="pill">Coding &middot; Python</span></div>
+      <h2>Blind 75 in 18 Moves</h2>
+      <p>Seventy-five problems, eighteen ideas. Almost every one is the same bargain: <b>something moves through the data</b>, and <b>something gets remembered</b> so it never has to be worked out twice. Learn to spot which two and the problem starts telling you its own answer.</p>
+      <ul class="facts"><li>18 patterns</li><li>75 problems</li><li>18 prompts</li></ul>
+      <div class="prog"><span>Marked solid</span><b id="p-b75">0 / 18</b></div>
+      <div class="bar"><i id="b-b75"></i></div>
+      <span class="go">Open module &rarr;</span>
+    </a>
+    <a class="mod" href="03-machine-learning.html">
+      <div class="mod-top"><span class="mod-n">MODULE 03</span><span class="pill live">Live</span>
+        <span class="pill">ML foundations</span></div>
+      <h2>Machine Learning, Model by Model</h2>
+      <p>Linear regression through gradient boosting, clustering, neural networks and the production failures. Classical ML is the <b>floor</b> now, not the differentiator &mdash; nobody loses an offer for not knowing bias and variance, they lose it for knowing them only as a definition. Every card ends in a decision.</p>
+      <ul class="facts"><li>48 topics</li><li>4 tiers</li><li>144 drill questions</li><li>52 prompts</li></ul>
+      <div class="prog"><span>Marked solid</span><b id="p-ml">0 / 48</b></div>
+      <div class="bar"><i id="b-ml"></i></div>
+      <span class="go">Open module &rarr;</span>
+    </a>
+    <a class="mod" href="04-llms.html">
+      <div class="mod-top"><span class="mod-n">MODULE 04</span><span class="pill live">Live</span>
+        <span class="pill">LLM engineering</span></div>
+      <h2>LLMs, End to End</h2>
+      <p>Tokens through attention, fine-tuning, RAG, agents, evaluation and serving. The 2026 loop has moved: knowing what a transformer is still gates you, but candidates lose offers on <b>evaluation</b> and on <b>cost and latency arithmetic</b>. Every card carries the follow-up question, not just the definition.</p>
+      <ul class="facts"><li>51 topics</li><li>4 tiers</li><li>153 drill questions</li><li>55 prompts</li></ul>
+      <div class="prog"><span>Marked solid</span><b id="p-llm">0 / 51</b></div>
+      <div class="bar"><i id="b-llm"></i></div>
+      <span class="go">Open module &rarr;</span>
+    </a>
+  </div>
+</div>
+
+<div class="shell" style="padding-top:20px">
+  <p class="sect">Being built</p>
+  <div class="grid">
+    <div class="mod placeholder">
+      <div class="mod-top"><span class="mod-n">MODULE 05</span><span class="pill soon">Next up</span>
+        <span class="pill">ML foundations</span></div>
+      <h2>Statistics &amp; Probability</h2>
+      <p>Distributions, estimation, hypothesis testing, Bayesian reasoning, and the sampling
+        traps that make an offline metric lie to you.</p>
+      <span class="go">Not yet</span>
+    </div>
+    <div class="mod placeholder">
+      <div class="mod-top"><span class="mod-n">MODULE 06</span><span class="pill soon">Planned</span>
+        <span class="pill">System design</span></div>
+      <h2>ML &amp; GenAI System Design</h2>
+      <p>The recurring design prompts, worked end to end: a RAG system over ten million documents,
+        a support agent, an inference server, a fraud model.</p>
+      <span class="go">Not yet</span>
+    </div>
+    <div class="mod placeholder">
+      <div class="mod-top"><span class="mod-n">MODULE 07</span><span class="pill soon">Planned</span>
+        <span class="pill">Infrastructure</span></div>
+      <h2>Data &amp; Serving Infrastructure</h2>
+      <p>Docker, Kubernetes, the pipeline that feeds a model, and the parts of a backend an AI
+        engineer is still expected to know.</p>
+      <span class="go">Not yet</span>
+    </div>
+  </div>
+</div>
+
+<div class="note"><div class="card">
+  <div>
+    <h3>Every card has a prompt</h3>
+    <p>Each topic, and each whole tier, carries a copy button that hands you a tutor prompt for
+      ChatGPT, Gemini or Claude. It explains the concept first, makes you say it back before it
+      moves on, walks the examples, then quizzes you one question at a time and scores you.
+      Practise on a commute, in a queue, between meetings.</p>
+  </div>
+  <div>
+    <h3>Running it locally</h3>
+    <p>Keep every module file in the same folder as this page so the links resolve, then serve
+      the folder with <code>python3 -m http.server 8000</code> and open
+      <code>localhost:8000</code>. Marks, theme and your Simple/Technical choice live in your
+      browser's local storage &mdash; per browser, never uploaded anywhere.</p>
+  </div>
+</div></div>
+
+<footer class="foot">
+  <p>Nothing here is a course. It is a pile of things worth re-reading, ordered so that no card
+  leans on an idea below it, and shaped so that ten honest minutes beats an abandoned weekend.</p>
+</footer>
+
 <script>
-  (function() {
-    var themeBtn = document.getElementById('theme-toggle');
-    var themeIcon = document.getElementById('theme-icon');
-    var themeLabel = document.getElementById('theme-label');
+var MODULES = [{"id": "la", "n": "01", "key": "gp-la-status-v2", "total": 38, "title": "Linear Algebra, Slowly", "href": "01-linear-algebra.html"}, {"id": "b75", "n": "02", "key": "b75-status-v1", "total": 18, "title": "Blind 75 in 18 Moves", "href": "blind75nightlyreview.html"}, {"id": "ml", "n": "03", "key": "gp-ml-status-v1", "total": 48, "title": "Machine Learning, Model by Model", "href": "03-machine-learning.html"}, {"id": "llm", "n": "04", "key": "gp-llm-status-v1", "total": 51, "title": "LLMs, End to End", "href": "04-llms.html"}];
+var PATH = [{"m": "la", "n": "01", "mod": "Linear Algebra, Slowly", "key": "gp-la-status-v2", "href": "01-linear-algebra.html", "tier": "Foundation", "why": "The objects and the four moves. Nothing else stands up without these.", "ids": ["scalars-vectors-matrices", "vector-addition-scaling", "dot-product", "vector-norms", "cosine-similarity", "matrix-multiplication", "special-matrices", "linear-systems", "gaussian-elimination", "determinants", "matrix-inverse"], "anchor": "tier-foundation"}, {"m": "ml", "n": "03", "mod": "Machine Learning, Model by Model", "key": "gp-ml-status-v1", "href": "03-machine-learning.html", "tier": "Foundation", "why": "What learning actually is &mdash; the loss, the fit, and the honest measurement.", "ids": ["supervised-unsupervised", "the-loss-function", "gradient-descent", "bias-variance", "overfitting", "regularisation", "splits-leakage", "cross-validation", "confusion-matrix", "precision-recall", "roc-pr-auc"], "anchor": "tier-foundation"}, {"m": "la", "n": "01", "mod": "Linear Algebra, Slowly", "key": "gp-la-status-v2", "href": "01-linear-algebra.html", "tier": "Core", "why": "Span, rank and the null space. This is where the geometry starts paying.", "ids": ["vector-spaces", "span", "linear-independence", "basis-dimension", "rank", "null-space", "linear-transformations", "orthogonality-projections", "least-squares", "trace-frobenius", "covariance-gram", "pseudo-inverse"], "anchor": "tier-core"}, {"m": "ml", "n": "03", "mod": "Machine Learning, Model by Model", "key": "gp-ml-status-v1", "href": "03-machine-learning.html", "tier": "Core", "why": "The model zoo, linear through gradient boosting and clustering.", "ids": ["linear-regression", "logistic-regression", "decision-trees", "bagging-random-forest", "boosting", "gbdt-libraries", "tabular-vs-deep", "svm", "knn", "naive-bayes", "kmeans", "dbscan-hierarchical", "feature-engineering"], "anchor": "tier-core"}, {"m": "b75", "n": "02", "mod": "Blind 75 in 18 Moves", "key": "b75-status-v1", "href": "blind75nightlyreview.html", "tier": "Patterns", "why": "Eighteen coding patterns. Runs alongside the rest &mdash; do one a night.", "ids": ["arrays-hashing", "two-pointers", "stack", "binary-search", "sliding-window", "linked-list", "trees", "tries", "heap", "backtracking", "graphs", "dp-1d", "intervals", "greedy", "advanced-graphs", "dp-2d", "bit-manipulation", "math-geometry"], "anchor": ""}, {"m": "la", "n": "01", "mod": "Linear Algebra, Slowly", "key": "gp-la-status-v2", "href": "01-linear-algebra.html", "tier": "Advanced", "why": "Eigenvectors, SVD and PCA. Half the interview questions live here.", "ids": ["eigenvalues-eigenvectors", "diagonalization", "svd", "pca", "quadratic-forms", "decompositions", "matrix-calculus", "condition-number", "complexity-flops"], "anchor": "tier-advanced"}, {"m": "ml", "n": "03", "mod": "Machine Learning, Model by Model", "key": "gp-ml-status-v1", "href": "03-machine-learning.html", "tier": "Advanced", "why": "Calibration, imbalance, and a neural network built from the perceptron up.", "ids": ["class-imbalance", "calibration", "hyperparameter-tuning", "ensembling-stacking", "perceptron-mlp", "backpropagation", "activations", "optimisers", "init-schedules", "normalisation", "dropout-early-stopping", "convolutions", "rnn-lstm", "pca-tsne-umap"], "anchor": "tier-advanced"}, {"m": "llm", "n": "04", "mod": "LLMs, End to End", "key": "gp-llm-status-v1", "href": "04-llms.html", "tier": "Foundation", "why": "How a language model works at all: tokens, probabilities, sampling.", "ids": ["tokenization", "token-economics", "embeddings", "next-token", "sampling", "base-vs-instruct", "context-window", "prompting", "when-not-llm"], "anchor": "tier-foundation"}, {"m": "llm", "n": "04", "mod": "LLMs, End to End", "key": "gp-llm-status-v1", "href": "04-llms.html", "tier": "Core", "why": "Inside the transformer. Attention, masking, RoPE, the KV cache.", "ids": ["self-attention", "scaling-sqrt-dk", "multi-head", "causal-mask", "positional-encoding", "residual-norm", "feed-forward", "architectures", "quadratic-attention", "kv-cache", "gqa-mqa", "flash-attention"], "anchor": "tier-core"}, {"m": "la", "n": "01", "mod": "Linear Algebra, Slowly", "key": "gp-la-status-v2", "href": "01-linear-algebra.html", "tier": "In Production", "why": "The linear algebra that only shows up in a served model.", "ids": ["broadcasting", "attention-math", "kv-cache", "lora", "quantization", "rope"], "anchor": "tier-production"}, {"m": "llm", "n": "04", "mod": "LLMs, End to End", "key": "gp-llm-status-v1", "href": "04-llms.html", "tier": "Advanced", "why": "Training it, and bending it to your task without retraining it.", "ids": ["training-stages", "rlhf", "dpo", "finetune-vs-rag", "lora", "quantization", "quant-formats", "distillation", "moe", "long-context", "scaling-laws", "forgetting"], "anchor": "tier-advanced"}, {"m": "ml", "n": "03", "mod": "Machine Learning, Model by Model", "key": "gp-ml-status-v1", "href": "03-machine-learning.html", "tier": "In Production", "why": "Drift, skew, late labels, A/B tests that lie for four days.", "ids": ["training-serving-skew", "drift", "monitoring-without-labels", "feature-stores", "offline-vs-online", "ab-testing", "time-series-validation", "recommenders", "explainability", "ml-system-design"], "anchor": "tier-production"}, {"m": "llm", "n": "04", "mod": "LLMs, End to End", "key": "gp-llm-status-v1", "href": "04-llms.html", "tier": "In Production", "why": "The AI engineer stack. If you only have one evening, spend it here.", "ids": ["rag-pipeline", "chunking", "vector-db", "hybrid-search", "reranking", "query-transformation", "embedding-migration", "function-calling", "agents", "agent-memory", "multi-agent-mcp", "evals", "observability", "guardrails", "hallucination", "caching", "serving", "prefill-decode"], "anchor": "tier-production"}];
+var TOTAL = 155;
+(function(){
+  var TKEY='gradient_path_theme';
+  try{var st=localStorage.getItem(TKEY); if(st) document.documentElement.setAttribute('data-theme',st);}catch(e){}
+  document.getElementById('theme').addEventListener('click',function(){
+    var cur=document.documentElement.getAttribute('data-theme');
+    if(!cur){cur=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}
+    var nxt=cur==='dark'?'light':'dark';
+    document.documentElement.setAttribute('data-theme',nxt);
+    try{localStorage.setItem(TKEY,nxt);}catch(e){}
+  });
 
-    function updateBtnUI(theme) {
-      if (theme === 'light') {
-        themeIcon.textContent = '☀️';
-        themeLabel.textContent = 'Light';
-      } else {
-        themeIcon.textContent = '🌙';
-        themeLabel.textContent = 'Dark';
-      }
-    }
+  function marks(key){
+    try{ return JSON.parse(localStorage.getItem(key))||{}; }catch(e){ return {}; }
+  }
+  var state={};
+  MODULES.forEach(function(m){ state[m.key]=marks(m.key); });
 
-    var currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
-    updateBtnUI(currentTheme);
+  function solidIn(key, ids){
+    var s=state[key]||{}, n=0;
+    ids.forEach(function(i){ if(s[i]==='solid') n++; });
+    return n;
+  }
 
-    themeBtn.addEventListener('click', function() {
-      var nextTheme = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
-      document.documentElement.setAttribute('data-theme', nextTheme);
-      localStorage.setItem('gradient_path_theme', nextTheme);
-      updateBtnUI(nextTheme);
-    });
-  })();
+  /* ---- module progress bars ---- */
+  var grand=0;
+  MODULES.forEach(function(m){
+    var s=state[m.key]||{};
+    var n=Object.keys(s).filter(function(k){return s[k]==='solid';}).length;
+    n=Math.min(n,m.total); grand+=n;
+    var p=document.getElementById('p-'+m.id), b=document.getElementById('b-'+m.id);
+    if(p) p.textContent=n+' / '+m.total;
+    if(b) b.style.width=(m.total?100*n/m.total:0)+'%';
+  });
+  document.getElementById('meter').innerHTML = grand
+    ? ('<b style="color:var(--memory)">'+grand+'</b> of '+TOTAL+' cards marked solid')
+    : (TOTAL+' cards waiting');
+
+  /* ---- the path ---- */
+  var ol=document.getElementById('path'), nowIdx=-1;
+  PATH.forEach(function(st,i){
+    st.done=solidIn(st.key, st.ids);
+    st.all=st.ids.length;
+    if(nowIdx<0 && st.done<st.all) nowIdx=i;
+  });
+  var finished = nowIdx<0;
+
+  PATH.forEach(function(st,i){
+    var cls='stop';
+    if(st.done>=st.all) cls+=' is-done';
+    else if(i===nowIdx) cls+=' is-now';
+    else if(st.done>0) cls+=' is-part';
+    if(!finished && i>nowIdx) cls+=' is-late';
+    var li=document.createElement('li');
+    li.innerHTML='<a class="'+cls+'" href="'+st.href+(st.anchor?('#'+st.anchor):'')+'">'
+      +'<span class="mark"></span>'
+      +'<span class="stop-t"><b>'+st.mod+'</b><i>'+st.tier+'</i>'
+      +'<span>'+st.why+'</span></span>'
+      +'<span class="stop-n">'+st.done+' / '+st.all+'</span></a>';
+    ol.appendChild(li);
+  });
+
+  /* ---- the one thing to do next ---- */
+  var slot=document.getElementById('here-slot');
+  var st = finished ? PATH[PATH.length-1] : PATH[nowIdx];
+  var pct = st.all ? Math.round(100*st.done/st.all) : 0;
+  var R=34, C=2*Math.PI*R;
+  var ring='<div class="ring"><svg width="86" height="86" viewBox="0 0 86 86">'
+    +'<circle cx="43" cy="43" r="'+R+'" fill="none" stroke="var(--line)" stroke-width="6"/>'
+    +'<circle cx="43" cy="43" r="'+R+'" fill="none" stroke="var(--memory)" stroke-width="6"'
+    +' stroke-linecap="round" stroke-dasharray="'+C+'"'
+    +' stroke-dashoffset="'+(C*(1-pct/100))+'" transform="rotate(-90 43 43)"/>'
+    +'</svg><b>'+st.done+'<span style="color:var(--muted)">/'+st.all+'</span></b>'
+    +'<span>this stop</span></div>';
+
+  if(finished){
+    slot.innerHTML='<div class="here done-all"><div>'
+      +'<p class="lbl">Path complete</p>'
+      +'<h2>All '+TOTAL+' cards marked solid</h2>'
+      +'<p class="sub">Module '+st.n+' &middot; '+st.tier+'</p>'
+      +'<p class="why">Now go back through the ones you marked <b>fuzzy</b> at any point, and run a '
+      +'tier prompt end to end with a chatbot instead of reading. Reading it again is the weakest '
+      +'thing you can do with this page.</p>'
+      +'<a class="cta" href="'+st.href+'">Open the last module &rarr;</a>'
+      +'</div>'+ring+'</div>';
+  } else {
+    var started = st.done>0;
+    slot.innerHTML='<div class="here"><div>'
+      +'<p class="lbl">'+(started?'You are here':(nowIdx===0?'Start here':'Up next'))+'</p>'
+      +'<h2>'+st.mod+'</h2>'
+      +'<p class="sub">Module '+st.n+' &middot; '+st.tier+' &middot; '+st.all+' topics'
+      +(started?(' &middot; '+(st.all-st.done)+' left'):'')+'</p>'
+      +'<p class="why">'+st.why+'</p>'
+      +'<a class="cta" href="'+st.href+(st.anchor?('#'+st.anchor):'')+'">'
+      +(started?'Carry on':'Open this block')+' &rarr;</a>'
+      +'</div>'+ring+'</div>';
+  }
+})();
 </script>
-</body>
-</html>
+</body></html>
