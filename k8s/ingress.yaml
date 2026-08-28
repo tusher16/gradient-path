@@ -1,0 +1,37 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: gradient-path
+  namespace: apps
+  annotations:
+    # Issuer name verified against the live cluster and policypulse — correct as-is.
+    # The cert was NOT blocked by this annotation; it was blocked by the
+    # letsencrypt-prod ClusterIssuer having no dns01 solver whose
+    # selector.dnsZones matched gradientpath.site. See k8s/cluster-issuer.yaml.
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    # Matches policypulse and the homelab master-plan ingress template: Traefik
+    # serves this router on the TLS entrypoint only (web -> websecure redirect
+    # is handled globally by the Traefik HelmChartConfig).
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/name: "Gradient Path"
+    gethomepage.dev/description: "ML & linear algebra study hub"
+    gethomepage.dev/group: "Learning"
+    gethomepage.dev/href: "https://gradientpath.site"
+spec:
+  ingressClassName: traefik
+  tls:
+    - hosts:
+        - gradientpath.site
+      secretName: gradient-path-tls
+  rules:
+    - host: gradientpath.site
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: gradient-path
+                port:
+                  number: 80

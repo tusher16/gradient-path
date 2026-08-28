@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gradient-path
+  namespace: apps
+  labels:
+    app: gradient-path
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gradient-path
+  template:
+    metadata:
+      labels:
+        app: gradient-path
+    spec:
+      containers:
+        # This name MUST stay "gradient-path" — the deploy workflow runs
+        # `kubectl set image deployment/gradient-path gradient-path=...`
+        - name: gradient-path
+          image: ghcr.io/tusher16/gradient-path:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+              name: http
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            initialDelaySeconds: 2
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 30
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "64Mi"
+            limits:
+              cpu: "200m"
+              memory: "128Mi"
