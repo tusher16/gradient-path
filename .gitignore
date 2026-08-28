@@ -1,0 +1,5 @@
+# Local operator notes — contains SSH hostname, port and username.
+# The repo is public; keep this out of it. Delete this line to commit it.
+DEPLOY-RUNBOOK.md
+
+.DS_Store

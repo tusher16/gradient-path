@@ -39,6 +39,11 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
+            # k3s ships kubectl as a symlink to the k3s binary, which defaults
+            # KUBECONFIG to /etc/rancher/k3s/k3s.yaml (root:root 0600) instead of
+            # falling back to ~/.kube/config the way upstream kubectl does.
+            # Point it at tusher16's own readable copy explicitly.
+            export KUBECONFIG=$HOME/.kube/config
             kubectl set image deployment/gradient-path \
               gradient-path=ghcr.io/tusher16/gradient-path:${{ github.sha }} \
               -n apps
