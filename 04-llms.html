@@ -1,6 +1,7 @@
 <!doctype html><html lang="en"><head><meta charset='utf-8'>
 <meta name='viewport' content='width=device-width,initial-scale=1'>
 <title>LLMs, End to End</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%221%22%20x2%3D%221%22%20y2%3D%220%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23C11E5C%22%2F%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%230C7A70%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%23131C1A%22%2F%3E%3Cpath%20d%3D%22M8%2025C8%2015%2024%2017%2024%207%22%20fill%3D%22none%22%20stroke%3D%22url%28%23g%29%22%20stroke-width%3D%224.5%22%20stroke-linecap%3D%22round%22%2F%3E%3C%2Fsvg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
@@ -275,6 +276,100 @@ pre .n{color:var(--memory)}
 }
 @media (prefers-reduced-motion:reduce){
   *{scroll-behavior:auto !important; transition:none !important; animation:none !important}
+}
+
+/* ============================================================ *
+ *  THE TWO-LAYER SWITCH                                        *
+ *  Simple is the default and it is a real mode, not a swapped  *
+ *  paragraph: anything marked .tech-only is absent from the    *
+ *  DOM flow entirely, math slab and code block included.       *
+ * ============================================================ */
+body:not(.mode-tech) .tech-only{display:none !important}
+body.mode-tech .simple-only{display:none !important}
+
+/* the mode switch, repeated in the sticky rail so it is reachable
+   from card 38 and not only from the top of the page */
+.rail-mode{margin:0 0 18px; padding:0 0 16px; border-bottom:1px solid var(--line-soft)}
+.rail-mode .lbl{margin:0 0 8px}
+.rail-mode .modeswitch{display:flex; width:100%}
+.rail-mode .modeswitch button{flex:1; padding:8px 6px; font-size:.72rem; white-space:nowrap}
+.rail-mode .depth{font-family:"IBM Plex Mono",monospace; font-size:.68rem; color:var(--muted);
+  margin:8px 0 0; line-height:1.5; display:block}
+
+/* the line that tells a Simple reader exactly what is being withheld,
+   and hands them the one control that reveals it */
+.upshift{display:flex; align-items:center; gap:12px; flex-wrap:wrap;
+  border-top:1px dashed var(--line); padding-top:16px; margin-top:2px}
+.upshift p{margin:0; font-size:.86rem; color:var(--muted); max-width:52ch}
+.upshift b{color:var(--ink-2); font-weight:600}
+.tolevel{font-family:"IBM Plex Mono",monospace; font-size:.74rem; font-weight:600;
+  letter-spacing:.02em; padding:7px 14px; border-radius:999px; border:1px solid var(--line);
+  background:transparent; color:var(--ink-2); cursor:pointer; flex:none; transition:.12s ease}
+.tolevel:hover{border-color:var(--ink-2); color:var(--ink)}
+
+/* simple mode gets a plainer memory anchor and plainer drill answers */
+.anchor-plain{font-family:"IBM Plex Sans",system-ui,sans-serif; font-size:.95rem;
+  font-weight:600; letter-spacing:0}
+.drill .ans.ans-simple b{color:var(--memory)}
+.say-simple .prose+.prose{margin-top:14px}
+
+/* a "the number that matters" strip -- used by the system-design cards */
+.nums{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:10px;
+  margin:0; padding:0; list-style:none}
+.nums li{border:1px solid var(--line); border-radius:10px; background:var(--sunk);
+  padding:12px 14px; display:flex; flex-direction:column; gap:3px}
+.nums .n-v{font-family:"IBM Plex Mono",monospace; font-size:1.02rem; font-weight:700;
+  color:var(--memory); letter-spacing:-.01em}
+.nums .n-k{font-family:"IBM Plex Mono",monospace; font-size:10px; letter-spacing:.12em;
+  text-transform:uppercase; color:var(--muted)}
+.nums .n-s{font-size:.82rem; color:var(--ink-2); line-height:1.45}
+
+/* the clarify-first block on a worked design card */
+.ask{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:11px}
+.ask li{border-left:2px solid var(--signal); padding-left:15px}
+.ask q{display:block; font-size:.94rem; color:var(--ink); font-style:normal; quotes:none}
+.ask q::before,.ask q::after{content:""}
+.ask span{display:block; font-size:.87rem; color:var(--muted); margin-top:2px}
+
+/* tradeoff rows: the choice, and the sentence you say about it */
+.tradeoffs{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:12px}
+.tradeoffs li{display:grid; grid-template-columns:minmax(0,190px) minmax(0,1fr); gap:6px 20px;
+  align-items:baseline; padding-bottom:12px; border-bottom:1px solid var(--line-soft)}
+.tradeoffs li:last-child{border-bottom:none; padding-bottom:0}
+.tradeoffs .t-k{font-family:"IBM Plex Mono",monospace; font-size:.8rem; font-weight:600;
+  color:var(--signal); line-height:1.5}
+.tradeoffs .t-v{font-size:.92rem; color:var(--ink-2)}
+.tradeoffs .t-v b{color:var(--ink); font-weight:600}
+@media (max-width:640px){ .tradeoffs li{grid-template-columns:1fr} }
+
+/* the estimate worked out loud */
+.estimate{background:var(--sunk); border:1px solid var(--line); border-radius:12px;
+  padding:4px 0; overflow-x:auto}
+.estimate table{border-collapse:collapse; width:100%; font-size:.86rem}
+.estimate td{padding:9px 20px; border-bottom:1px solid var(--line-soft); vertical-align:baseline}
+.estimate tr:last-child td{border-bottom:none}
+.estimate tr.tot td{font-weight:700; color:var(--ink)}
+.estimate .e-l{color:var(--ink-2); white-space:nowrap}
+.estimate .e-w{font-family:"IBM Plex Mono",monospace; color:var(--muted); font-size:.8rem}
+.estimate .e-r{font-family:"IBM Plex Mono",monospace; color:var(--memory); font-weight:600;
+  text-align:right; white-space:nowrap}
+.estimate tr.tot .e-r{color:var(--signal)}
+
+/* no-hire vs strong answer */
+.verdicts{display:grid; grid-template-columns:1fr 1fr; gap:20px}
+.verdicts>div{border-radius:12px; padding:16px 18px; border:1px solid var(--line)}
+.verdicts .vno{background:var(--signal-soft); border-color:var(--signal)}
+.verdicts .vyes{background:var(--memory-soft); border-color:var(--memory)}
+.verdicts h4{margin:0 0 8px; font-family:"IBM Plex Mono",monospace; font-size:10px;
+  letter-spacing:.14em; text-transform:uppercase; font-weight:600}
+.verdicts .vno h4{color:var(--signal)}
+.verdicts .vyes h4{color:var(--memory)}
+.verdicts p{margin:0; font-size:.9rem; color:var(--ink-2)}
+@media (max-width:760px){ .verdicts{grid-template-columns:1fr} }
+
+@media (max-width:980px){
+  .rail-mode{border-bottom:none; padding-bottom:0; margin-bottom:10px}
+  .rail-mode .depth{display:none}
 }
 </style></head><body>
 <svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute;color:var(--ink)">
@@ -3634,5 +3729,85 @@ Start with Stage 1 now.</pre></details></section><div class="statusbar" data-for
 
   paint(); setMode(saved);
   window.__setMode=setMode; window.__mode=function(){return saved;};
+})();
+</script><script>
+/* ---- retrofit: make Simple mode a real mode on this page ---------------
+   Written by the module 05/06 build. The page's own script owns the state;
+   this only adds what the two-layer contract needs and was not built in. */
+(function(){
+  var MKEY='gp-explain-mode';
+
+  /* 1. the two blocks that made simple mode pointless */
+  var hidden=0;
+  document.querySelectorAll('.card > .blk').forEach(function(b){
+    var kid=b.firstElementChild, has=false;
+    for(var n=b.children.length-1;n>=0;n--){
+      var c=b.children[n];
+      if(c.classList && (c.classList.contains('slab')||c.classList.contains('codewrap'))) has=true;
+    }
+    if(has){ b.classList.add('tech-only'); hidden++; }
+  });
+
+  /* 2. a switch in the sticky rail */
+  var rail=document.querySelector('.rail');
+  if(rail){
+    var d=document.createElement('div');
+    d.className='rail-mode';
+    d.innerHTML='<h2 class="lbl">Reading at</h2>'
+      +'<div class="modeswitch" role="group" aria-label="Explanation depth">'
+      +'<button type="button" data-mode="simple">Simple</button>'
+      +'<button type="button" data-mode="tech">Technical</button></div>'
+      +'<span class="depth" id="depth"></span>';
+    rail.insertBefore(d, rail.firstChild);
+  }
+
+  /* 3. tell a simple reader what is being withheld, and hand them the control */
+  document.querySelectorAll('.card').forEach(function(card){
+    var hasMath = !!card.querySelector('.slab');
+    var hasCode = !!card.querySelector('.codewrap');
+    if(!hasMath && !hasCode) return;
+    var bits=[];
+    if(hasMath) bits.push('the formula');
+    if(hasCode) bits.push('the code');
+    var listed = bits.length>1 ? (bits.slice(0,-1).join(', ')+' and '+bits[bits.length-1]) : bits[0];
+    listed = listed.charAt(0).toUpperCase()+listed.slice(1);
+    var u=document.createElement('div');
+    u.className='upshift simple-only';
+    u.innerHTML='<p>You are reading the plain version. <b>'+listed+'</b>, and the precise '
+      +'wording of this card, are one switch away.</p>'
+      +'<button type="button" class="tolevel" data-to="tech">Show the precise version</button>';
+    var practice=card.querySelector('.practice');
+    if(practice) card.insertBefore(u, practice); else card.appendChild(u);
+  });
+
+  /* 4. wire the new controls through the page's own setMode, keeping the card
+        you are reading pinned -- switching changes the height of everything
+        above you, so without this the page jumps somewhere else entirely */
+  function apply(m, keep){
+    var before = keep ? keep.getBoundingClientRect().top : 0;
+    if(window.__setMode) window.__setMode(m);
+    document.querySelectorAll('.modeswitch button').forEach(function(b){
+      b.setAttribute('aria-pressed', b.dataset.mode===m ? 'true':'false');
+    });
+    var dep=document.getElementById('depth');
+    if(dep) dep.textContent = m==='tech'
+      ? 'Showing the notation and the code.'
+      : 'Plain English first. The math and code are hidden until you switch.';
+    try{localStorage.setItem(MKEY,m);}catch(e){}
+    if(keep) window.scrollBy(0, keep.getBoundingClientRect().top - before);
+  }
+  document.querySelectorAll('.modeswitch button').forEach(function(b){
+    b.addEventListener('click', function(){ apply(b.dataset.mode, b.closest('.card')); });
+  });
+  document.querySelectorAll('.tolevel').forEach(function(b){
+    b.addEventListener('click', function(){
+      var card=b.closest('.card');
+      apply(b.dataset.to||'tech', card);
+      if(card) card.scrollIntoView({behavior:'smooth',block:'start'});
+    });
+  });
+
+  var saved='simple'; try{saved=localStorage.getItem(MKEY)||'simple';}catch(e){}
+  apply(saved, null);
 })();
 </script></body></html>

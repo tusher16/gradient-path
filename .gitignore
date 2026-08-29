@@ -1,5 +1,13 @@
-# Local operator notes — contains SSH hostname, port and username.
-# The repo is public; keep this out of it. Delete this line to commit it.
+# Local operator notes — contain the SSH hostname, port, username and LAN IPs.
+# The repo is PUBLIC; keep these out of it. Delete a line to commit that file.
 DEPLOY-RUNBOOK.md
+docs/
 
 .DS_Store
+SESSION-CONTEXT.md
+
+# generator working files
+generator/node_modules/
+generator/_to_delete/
+generator/**/__pycache__/
+generator/*.pyc
