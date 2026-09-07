@@ -33,18 +33,18 @@ CFG = dict(
                                'prompt into a measurable one, size it in numbers, spend a latency '
                                'budget, price a request, and decide what the system does when it '
                                'is wrong. Every worked design later in this module reuses all '
-                               'five, so learn them as moves rather than as topics.')),
+                               '{n_word}, so learn them as moves rather than as topics.')),
         core=dict(name='Core', title='The components every design reuses',
                   blurb=('Retrieval, serving, caching, evaluation, guardrails, observability and '
                          'the loop that keeps offline and online the same system. Know the '
                          'binding constraint inside each one &mdash; that is the difference '
                          'between naming a component and designing with it.')),
-        advanced=dict(name='Advanced', title='Five designs, worked end to end',
+        advanced=dict(name='Advanced', title='{N} designs, worked end to end',
                       blurb=('The prompts you are most likely to get, done properly: requirements, '
                              'arithmetic, architecture, tradeoffs, failure modes, and the '
                              'follow-ups. Read the estimate before the diagram &mdash; in a real '
                              'round the numbers come first and the boxes follow from them.')),
-        production=dict(name='In Production', title='Five more, where the constraint is not the model',
+        production=dict(name='In Production', title='{N} more, where the constraint is not the model',
                         blurb=('Fraud inside a payment authorisation, a home feed, an eval harness, '
                                'moderation at fifty million posts a day, and a platform serving '
                                'every team in the company. These are the designs where latency, '

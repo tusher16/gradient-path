@@ -241,14 +241,47 @@ def card_html(c, n, cfg, nxt):
     return f'<article class="card" id="{c["id"]}">' + ''.join(parts) + '</article>'
 
 
+NUM_WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight',
+             'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen',
+             'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty', 'twenty-one',
+             'twenty-two', 'twenty-three', 'twenty-four', 'twenty-five']
+
+# A tier blurb that counts its block out loud must count it from the same list the
+# badge does. Module 01 shipped "Nine ideas" under a badge reading 11 topics, and
+# that is what this exists to make impossible: write {N} / {n_word} / {n} and the
+# number is filled from len(cards); hard-code one that disagrees and the build stops.
+COUNTED = re.compile(r'\b([a-z-]+|\d+)\s+(ideas|topics|cards|designs|moves|patterns)\b', re.I)
+
+
+def _numword(n, cap=False):
+    w = NUM_WORDS[n] if n < len(NUM_WORDS) else str(n)
+    return w[0].upper() + w[1:] if cap else w
+
+
+def _counts(text, n):
+    text = (text.replace('{n}', str(n))
+                .replace('{N}', _numword(n, True))
+                .replace('{n_word}', _numword(n)))
+    for m in COUNTED.finditer(text):
+        word = m.group(1).lower()
+        if word in NUM_WORDS or word.isdigit():
+            said = int(word) if word.isdigit() else NUM_WORDS.index(word)
+            if said != n:
+                raise SystemExit(
+                    f'tier narrative says "{m.group(0)}" but the block holds {n}. '
+                    'Write {N} / {n_word} / {n} instead of a literal count.')
+    return text
+
+
 def tierhead_html(key, cards, cfg):
     t = cfg['tiers'][key]
     p = prompts.tier_prompt(key, cards, cfg)
     pid = f'p-tier-{key}'
+    n = len(cards)
     return (f'<section class="tierhead" id="tier-{key}">'
             f'<p class="eyebrow"><span class="tier {TIER_CLASS[key]}">{t["name"].upper()}</span> '
-            f'&middot; {len(cards)} topics</p><h2>{t["title"]}</h2>'
-            f'<p class="prose">{t["blurb"]}</p>'
+            f'&middot; {n} topics</p><h2>{_counts(t["title"], n)}</h2>'
+            f'<p class="prose">{_counts(t["blurb"], n)}</p>'
             '<div class="practice" style="background:var(--surface)"><div class="practice-head">'
             f'{_lbl("Practise this whole block with a chatbot")}'
             f'<button type="button" class="copy" data-target="{pid}">Copy the block prompt</button></div>'
@@ -325,7 +358,7 @@ def page(cards, cfg):
         '<div class="top"><div class="top-in">'
         '<a class="backlink" href="index.html">&larr; Gradient Path</a>'
         f'<div class="masthead"><div><p class="eyebrow">Module {cfg["num"]} &middot; Nightly review</p>'
-        f'<h1>{cfg["h1"]}</h1><p class="deck">{cfg["deck"]}</p></div>'
+        f'<h1>{cfg["h1"]}</h1><p class="deck">{_counts(cfg["deck"], len(cards))}</p></div>'
         '<aside class="howto"><h2 class="lbl">Ten minutes before bed</h2><ol>'
         + ''.join(f'<li>{x}</li>' for x in cfg['howto']) +
         '</ol></aside></div>'

@@ -182,6 +182,17 @@ a.stop:hover{border-color:var(--line); background:var(--surface)}
   .pathwrap{grid-template-columns:1fr; gap:22px}
   .pathnote{position:static}
 }
+
+/* ---- 2026-09-07 content audit: source links + checked dates ---- */
+a.src{color:var(--memory); text-decoration:underline; text-underline-offset:2px;
+  text-decoration-thickness:1px; text-decoration-color:var(--line)}
+a.src:hover{text-decoration-color:var(--memory)}
+.checked{display:block; margin-top:10px; font-family:"IBM Plex Mono",monospace;
+  font-size:.72rem; letter-spacing:.02em; color:var(--muted)}
+.pathdeps{margin:10px 0 14px; padding-left:18px; display:flex; flex-direction:column; gap:7px}
+.pathdeps a{color:var(--memory); text-decoration:underline; text-underline-offset:2px;
+  text-decoration-thickness:1px; text-decoration-color:var(--line)}
+.pathdeps a:hover{text-decoration-color:var(--memory)}
 </style></head><body>
 
 <div class="top"><div class="top-in">
@@ -218,10 +229,25 @@ a.stop:hover{border-color:var(--line); background:var(--surface)}
     <ol class="path" id="path"></ol>
     <aside class="pathnote">
       <h3>Why this order</h3>
-      <p>Nothing on the path leans on something further down it. The linear algebra comes before
-      the transformer that uses it; the classical ML floor comes before the LLM stack that sits
-      on top of it; and the production tiers come last because they are the first three pointed
-      at a system that is actually serving traffic.</p>
+      <p><b>This is a suggested order, not a dependency graph.</b> It runs the way the material
+      leans: the linear algebra comes before the transformer that uses it; the classical ML floor
+      comes before the LLM stack that sits on top of it; and the production tiers come last
+      because they are the first three pointed at a system that is actually serving traffic.</p>
+      <p>Some cards do reach forward, so treat the order as a default and follow the link when one
+      does. Three you will hit early:</p>
+      <ul class="pathdeps">
+        <li><a href="01-linear-algebra.html#dot-product">Dot Product</a> (card 3) scores itself
+        against softmax and attention, which
+        <a href="01-linear-algebra.html#attention-math">Attention Math</a> only builds at card 34.</li>
+        <li><a href="01-linear-algebra.html#vector-spaces">Vector Spaces</a> and
+        <a href="01-linear-algebra.html#rank">Rank</a> lean on PCA before
+        <a href="01-linear-algebra.html#pca">PCA</a> arrives at card 27.</li>
+        <li>The first linear algebra cards use RAG retrieval as their running example, and RAG is
+        taught two modules later in <a href="04-llms.html">LLMs</a>.</li>
+      </ul>
+      <p>Each is a forward reference for motivation, not a prerequisite &mdash; you can read the
+      card without the one it points at. Where a card genuinely needs earlier machinery, its own
+      <b>Unlocks</b> row names it.</p>
       <p><b>The coding module runs alongside.</b> It shares nothing with the rest, so slot it in
       whenever &mdash; one pattern a night is the intended pace.</p>
       <p>A stop turns solid when <b>every</b> card in it is marked solid. The marker moves to the
