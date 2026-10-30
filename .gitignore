@@ -1,10 +1,18 @@
 # Local operator notes — contain the SSH hostname, port, username and LAN IPs.
 # The repo is PUBLIC; keep these out of it. Delete a line to commit that file.
 DEPLOY-RUNBOOK.md
-docs/
+SESSION-CONTEXT.md
+
+# Keep product docs committed; only exclude session logs with secrets
+docs/2026-08-28-gradientpath-tls-dns.md
+# Lists the homelab's open weaknesses; kept local by decision 2026-10-30 (DECISIONS.md)
+docs/SECURITY.md
+
+# impeccable review captures and question logs are local build evidence
+.impeccable/review/
+.impeccable/questions/
 
 .DS_Store
-SESSION-CONTEXT.md
 
 # generator working files
 generator/node_modules/

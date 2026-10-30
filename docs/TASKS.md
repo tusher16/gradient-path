@@ -1,0 +1,63 @@
+# Gradient Path — Tasks
+
+_Last verified: 2026-10-30 · against: working tree (HEAD 57245e8 + uncommitted docs)_
+
+Statuses: `Todo` → `In Progress` → `In Review` → `Done`, plus **`Rework`** for a task that failed the gate. A task moves to **Done only after the review gate below has run and passed.** A failed gate never silently returns to `In Progress` — it is logged as `Rework` with the failure reason in the evidence cell.
+
+## Review Gate (run before any task moves to Done)
+
+**Pick the strongest reviewer available, in this order.** The reviewer must not be the author with a fresh coat of optimism.
+
+1. **A subagent given only the diff, the acceptance criteria, and `RULES.md`** — not the authoring rationale and not the reasoning that produced the change. Isolation is the point: shared context reproduces the original blind spot.
+2. **Failing that, a deterministic check** — the validator, a build, a `grep` assertion that the criterion is literally satisfied. Machine verdicts do not rationalise.
+3. **Self re-reading is the weakest form** and is *never sufficient on its own for a High-priority task*.
+
+Check against:
+
+1. The task's acceptance criteria in this file
+2. `docs/RULES.md` conventions
+3. `docs/TEST_PLAN.md` — did the relevant checks actually run and pass?
+4. If the task touched UI: `docs/DESIGN.md` anti-patterns list
+
+**What counts as evidence.** The Verification evidence cell holds **a command and its observed output** — `python3 generator/check.py mod05 → 40 cards, 0 errors` or `pytest -q → 128 passed`. A sentence of prose is not evidence. An empty cell means the task is not Done, whatever the status column says. A task authored and reviewed by the identical unexamined pass is not verified.
+
+**Reviewer tier is recorded too.** Write `[tier 1]`, `[tier 2]` or `[tier 3]` in the evidence cell so a reader can see how hard the claim was tested.
+
+## Open Tasks
+
+| # | Task | Priority | Status | Acceptance criteria | Verification evidence |
+|---|---|---|---|---|---|
+| 1 | Confirm automated deploy works end-to-end (push empty commit, watch rollout step go green) | High | Todo | `deploy.yml` run completes; `kubectl rollout status` succeeds; site unchanged and serving | — |
+| 2 | Verify `blind75nightlyreview.html` provenance (generated vs hand-edited) and record in ARCHITECTURE.md | High | **Done** 2026-09-21 | ARCHITECTURE.md no longer lists it as Unknown; editing boundary stated in RULES.md | `[tier 2]` `grep -i blind75 docs/ARCHITECTURE.md \| grep -ci Unknown` → `0`; `grep -c 'is hand-edited' docs/RULES.md` → `2`. Provenance established by marker diff: `simple-only` 0 vs 109, `tech-only` 0 vs 119, `katex` 0 vs 131 against `05-statistics.html` |
+| 3 | SEO P1: meta description + OG + Twitter tags via generator | High | Todo | All 7 pages pass the SEO.md verification checklist; per-page descriptions generated from module CFG | — |
+| 4 | SEO P2: robots.txt + sitemap.xml + Dockerfile COPY | High | Todo | `curl https://gradientpath.site/robots.txt` and `/sitemap.xml` return 200; sitemap submitted to Search Console | — |
+| 5 | Create OG/Twitter images (7 pages × 1200×630) | Med | Todo | Images committed; referenced by meta tags from task 3 | — |
+| 6 | Accessibility: switch KaTeX to `htmlAndMathml` output | Med | Todo | aria-hidden KaTeX span count → 0 across all 5 math modules; verified in a screen reader or accessibility tree | — |
+| 7 | Module 07 / 08 source content → built pages. Mod07 = Data & Serving Infrastructure (1 card, CFG present); mod08 = SQL & Data Manipulation (23 cards, **`generator/mod08.py` CFG does not exist and must be written first**) | Med | Todo | `mod08.py` CFG authored; both modules pass `check.py`, assemble, katexify, index; hub gains a Module 08 card (07 already has a `soon` card, 08 has none) | Validation half already observed 2026-09-21: `check.py mod07` → `1 cards, 0 errors`; `check.py mod08` → `23 cards, 0 errors`. Build half unproven |
+| 8 | SEO P3: llms.txt for agent discovery | Med | Todo | `curl /llms.txt` returns 200; card counts match live pages | — |
+| 9 | SEO P4: JSON-LD (WebSite on hub, LearningResource per module) | Med | Todo | Rich Results test passes on hub + one module | — |
+| 10 | Citation sweep: source links + checked dates on remaining cards (audit says only 2 cards anchored) | Med | Todo | No unnamed production claims in the 5 math modules; sweeping "always/never/every" reviewed corpus-wide | — |
+| 11 | Analytics decision: install privacy-friendly analytics or stay zero-tracking (record in DECISIONS.md) | Med | Todo | DECISIONS.md entry either way; if installing, MARKETING.md metrics table gets a live source | — |
+| 12 | Per-card "Copy link" share button | Low | Todo | Button on every card; copied URL lands mid-scroll on that card | — |
+| 13 | Self-host Google Fonts (drop fonts.googleapis.com dependency) | Low | Todo | Zero external requests on a cold load; fonts render identically both themes | — |
+| 14 | Resolve the open security item from docs/2026-08-28-gradientpath-tls-dns.md | High | Todo | Item identified, remediated or accepted with a DECISIONS.md entry | — |
+| 15 | Scoped ServiceAccount for deploys (replace cluster-admin kubeconfig on Node-1) — ADR-0008 | Med | Todo | Deploy works with get/list/patch-only credentials on `apps` namespace | — |
+| 16 | Move k8s/ manifests to tusher16/homelab repo when created; delete stopgap copies | Low | Todo | Repo exists; manifests applied from homelab; this repo holds no shared infra | — |
+| 17 | Confirm whether fail2ban (or equivalent) guards the internet-exposed SSH port on Node-1 — SECURITY.md lists this as **Unknown** | Med | Todo | `ssh` to Node-1 and run `systemctl status fail2ban` and `fail2ban-client status sshd`; record the observed output in SECURITY.md, replacing the Unknown. If absent, either install it or log an accepted-risk entry in DECISIONS.md | — |
+| 18 | Fix the invalid escape sequence in `generator/check.py` line 9 (`&mdash\;` inside the module docstring) | Low | Todo | `python3 -W error::SyntaxWarning generator/check.py mod05` exits 0 with no SyntaxWarning; card count still `40 cards \| 0 errors`. Fix by making the docstring raw (`r"""`), not by deleting the documentation | — |
+| 19 | Commit the documentation suite — `AGENTS.md` and `docs/*.md` are **untracked**, so the operating manual exists only on this laptop | High | Todo | `git status --short` shows no `??` for `AGENTS.md` or `docs/`; every committed doc has passed the RULES.md secrets screening; `docs/2026-08-28-gradientpath-tls-dns.md` still ignored. **Note: a push to main is a production deploy** — `Dockerfile` does `COPY *.html` only, so docs do not enter the image, but the rollout still runs | — |
+| 20 | Add a token-drift check for the palette declared in three places (`index.html`, `generator/gpkit/page.css`, `blind75nightlyreview.html`) | Low | Todo | A script extracts the `:root` token block from all three and exits non-zero when they disagree; wired into the RULES.md build-safety list. Today drift is silent | — |
+| 21 | Link `roadmap.html` from the hub. **It must go in `generator/templates/index-base.html`, not `index.html`** — `build_index.py:102,167` rewrites the hub wholesale from the template, so a hand-edit to `index.html` is wiped at the next rebuild | Med | Todo | `python3 generator/build_index.py` run twice leaves the roadmap link in place; hub links to `/roadmap.html`; no `git diff` churn on rerun | — |
+| 22 | Regenerate `roadmap.html` when modules 07/08 ship — it is currently a one-off artefact, not pipeline output | Med | Todo | A script under `generator/` rebuilds the plan from the `PATH` array and the card sources; rerunning it on unchanged input produces a byte-identical file | Current build verified 2026-09-22: 217 of 217 deep links resolve, 0 broken |
+| 23 | Build `glossary.html` from `generator/glossary/terms.json` (116 entries, written 2026-10-30) and move it to the repo root to publish | Med | Todo | Page groups by section, searchable, every entry links to the cards that name the term; all card links resolve (the `roadmap.html` check is the pattern); linked from the hub template | Data ready and verified: 116 entries, 106 with card links, covering 106 of the 107 terms named by 2+ cards |
+| 24 | Review the 116 glossary definitions against RULES.md § The Grounding Rule before publishing | High | Todo | Each entry either carries a source or is rewritten as a definition rather than a claim; anything asserting a number gets a citation or is cut | — Written from general knowledge, not cited. This is the gate on #23 |
+| 25 | Design the interactive daily revise/practice surface (spaced repetition over the 217 cards + 116 terms) | Med | Todo | A design brief exists before any code: what a session is, how items are chosen, what state persists in localStorage, how it degrades with no history | — Not started |
+| 26 | AWS AI Practitioner (AIF-C01) prep page at `/aws-ai-practitioner`: 14-day plan, 30 topics (plain + exam layer, hook, trap, 2 copy prompts each), 160 original questions (30 practice + two 65-Q mocks split 13/16/18/9/9), timed mock with review, look-alike table, 5 voice prompts. Sources in `generator/cert/aif-c01/`, built by `node generator/cert/aif-c01/build.js` (never hand-edit the output). Hub card in `index.html` + `build_index.py`; nginx `try_files $uri.html` for the clean URL | High | In Review | Build exits 0 with the mock split asserted; inline JS parses; page works at 1440 and 390 with no horizontal overflow and no console errors; mock submit → result → review works; scope matches exam guide v1.2 (2026-10-29); content facts spot-checked by a reviewer who did not write them | `node generator/cert/aif-c01/build.js` → `30 topics · practice 30 · Mock A 13/16/18/9/9 · Mock B 13/16/18/9/9 · 185 KB`, inline JS `new Function` parse OK [tier 2]. Browser at 1440 and 390 (localhost:8765): answer → explanation, Mock A start → answer → submit → result + 64 misses listed, `scrollWidth 390 = innerWidth`, 0 console errors [tier 2]. Design finish review by a separate agent (impeccable-finish-reviewer, captures in `.impeccable/review/`) → verdict "fix", 8 material fixes; all applied, rebuilt (188 KB), re-verified at 1440 and 390: `h1 19.2px < .stem 34.4px`, `#why.inert` true before answering, `main.inert` true while the exam is open and false after, partial pick labelled "1 of 2 chosen", 0 console errors [tier 1 design review + tier 2 recheck]. Independent fact-check, 2026-10-30, by a subagent that did not author the content (160 questions, 30 topics, 25 look-alike rows): 0 wrong answer keys; 2 ambiguous items (a42 distractor, b38 dated JSONL format) and 5 dated or loose topic lines (custom models no longer require Provisioned Throughput, DeepRacer console retired 2025-12-15, DocumentDB not in guide v1.2's vector-store list, a24/a35 explanation wording, Bedrock-vs-JumpStart row); all fixed, rebuilt, grep confirms old wording gone [tier 1]. Domains 1 and 4 guide pages were checked from knowledge, not fetched. Level 4, 2026-10-30, local `docker build` + `docker run -p 8099:80`: `/healthz` 200, `/` 200 with the hub card, `/aws-ai-practitioner` 200 (193 KB, 61 KB gzipped), `/aws-ai-practitioner.html` 200, `/nope` 404, `nginx -t` ok [tier 2]. (The 01–06 module pages 403 in a *local* build only: they are mode 600 on this laptop but 100644 in git, so CI's checkout serves them.) **Not yet done:** post-deploy check on gradientpath.site |
+| 27 | `generator/templates/index-base.html` has drifted behind the committed `index.html`: it lacks the 2026-09-07 audit block (source-link CSS, the "suggested order, not a dependency graph" path note and its three forward references). Running `build_index.py` today deletes ~30 lines of committed content — observed 2026-10-30 and reverted with `git checkout -- index.html`. Backport the audit content into the template before anyone rebuilds the hub, then do #21 | High | Todo | `python3 generator/build_index.py` then `git diff index.html` shows no change other than intended edits; running it twice is idempotent | — |
+
+## Completed (recent, evidence recorded)
+
+| # | Task | Completed | Evidence |
+|---|---|---|---|
+| C1 | Project-local claude-obsidian vault adopted | 2026-09-20 | `adopt` transaction complete, operation `project-vault-adopt`, 13 files written |
+| C2 | Documentation suite created (PRD, ARCHITECTURE, RULES, DESIGN, MARKETING, SEO + this set) | 2026-09-20 | Files in `docs/`; .gitignore updated so product docs are committed while secret-bearing logs stay excluded |

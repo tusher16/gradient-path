@@ -1,0 +1,837 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AWS AI Practitioner in 14 Days &mdash; Gradient Path</title>
+<meta name="description" content="Free AWS Certified AI Practitioner (AIF-C01) prep: a 14-day plan, 30 plain-language topics, 30 practice questions and two timed 65-question mock exams (160 original questions in all), and a copy-paste AI study prompt for every topic. No signup.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%221%22%20x2%3D%221%22%20y2%3D%220%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23C11E5C%22%2F%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%230C7A70%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%23131C1A%22%2F%3E%3Cpath%20d%3D%22M8%2025C8%2015%2024%2017%2024%207%22%20fill%3D%22none%22%20stroke%3D%22url%28%23g%29%22%20stroke-width%3D%224.5%22%20stroke-linecap%3D%22round%22%2F%3E%3C%2Fsvg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<script>try{var t=localStorage.getItem('gradient_path_theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<style>
+:root{
+  --ground:#EFF3F2; --surface:#FFFFFF; --sunk:#E6ECEA;
+  --line:#D2DBD9; --line-soft:#E3E9E8;
+  --ink:#131C1A; --ink-2:#3B4B48; --muted:#687975;
+  /* --muted is 3.8-4.1:1 off white; --meta clears 4.5:1 on ground, sunk and both tints */
+  --meta:#586864;
+  --signal:#C11E5C; --signal-soft:#FBE6EE;
+  --memory:#0C7A70; --memory-soft:#DCF0ED;
+  --shadow:0 1px 2px rgba(19,28,26,.05), 0 10px 26px -18px rgba(19,28,26,.35);
+  --display:"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif;
+  --body:"IBM Plex Sans",ui-sans-serif,system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --ground:#0C1211; --surface:#141C1B; --sunk:#101817;
+  --line:#283432; --line-soft:#1E2827;
+  --ink:#E7EEEC; --ink-2:#B6C4C1; --muted:#84948F; --meta:#84948F;
+  --signal:#FF6A9C; --signal-soft:#33141F;
+  --memory:#42D3BF; --memory-soft:#0C2B28;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 14px 32px -20px rgba(0,0,0,.8);
+  color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --ground:#0C1211; --surface:#141C1B; --sunk:#101817;
+  --line:#283432; --line-soft:#1E2827;
+  --ink:#E7EEEC; --ink-2:#B6C4C1; --muted:#84948F; --meta:#84948F;
+  --signal:#FF6A9C; --signal-soft:#33141F;
+  --memory:#42D3BF; --memory-soft:#0C2B28;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 14px 32px -20px rgba(0,0,0,.8);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none !important}
+html{scrollbar-color:var(--line) var(--ground); scroll-padding-top:72px}
+body{margin:0; background:var(--ground); color:var(--ink); font-family:var(--body);
+  font-size:16px; line-height:1.62; -webkit-font-smoothing:antialiased; caret-color:var(--signal)}
+::selection{background:var(--signal-soft); color:var(--ink)}
+a{color:inherit; text-underline-offset:3px; text-decoration-color:var(--line)}
+a:hover{text-decoration-color:var(--signal)}
+h1,h2,h3{font-family:var(--display); margin:0; letter-spacing:-.015em; text-wrap:balance; font-weight:700}
+button{font:inherit; color:inherit; cursor:pointer}
+:focus-visible{outline:2px solid var(--signal); outline-offset:3px; border-radius:6px}
+.num{font-family:var(--mono); font-variant-numeric:tabular-nums}
+
+.bar{position:sticky; top:0; z-index:5; background:var(--surface); border-bottom:1px solid var(--line)}
+.bar-in{max-width:1180px; margin:0 auto; padding:10px 28px; display:flex; align-items:center; gap:18px}
+.home{font-family:var(--display); font-weight:700; text-decoration:none; font-size:1.02rem}
+.home span{color:var(--meta); font-weight:500}
+.jump{display:flex; gap:16px; margin-left:auto; font-size:.88rem; white-space:nowrap}
+.jump a{text-decoration:none; color:var(--ink-2)}
+.jump a:hover{color:var(--ink)}
+.tog{font-family:var(--mono); font-size:.76rem; border:1px solid var(--line); background:transparent;
+  border-radius:999px; padding:5px 12px; transition:border-color .14s ease}
+.tog:hover{border-color:var(--ink-2)}
+.tog[aria-pressed="true"]{border-color:var(--memory); color:var(--memory)}
+
+.shell{max-width:1180px; margin:0 auto; padding:0 28px}
+
+.lead{padding:34px 0 52px}
+.title{display:flex; flex-wrap:wrap; align-items:baseline; gap:4px 18px; margin-bottom:14px}
+/* deliberately small: the question below is the page's headline, not the course title */
+h1{font-size:1.2rem; font-weight:700; line-height:1.2}
+.facts{color:var(--meta); font-size:.86rem; margin:0}
+.facts b{color:var(--ink-2); font-weight:600}
+.stage{display:grid; grid-template-columns:minmax(0,1.9fr) minmax(0,1fr); gap:22px 40px; align-items:start}
+
+.console{background:var(--surface); border:1px solid var(--line); border-radius:16px; box-shadow:var(--shadow); padding:30px 30px 20px}
+.stem{font-size:clamp(1.45rem,2.9vw,2.15rem); line-height:1.2; font-weight:700; max-width:34ch}
+.opts{list-style:none; margin:22px 0 0; padding:0; display:flex; flex-direction:column; gap:8px}
+.opt{width:100%; text-align:left; display:grid; grid-template-columns:30px minmax(0,1fr); gap:12px; align-items:start;
+  background:var(--ground); border:1px solid var(--line-soft); border-radius:12px; padding:13px 16px;
+  font-size:.98rem; line-height:1.45; transition:border-color .14s ease, background-color .14s ease}
+.opt:hover:not(:disabled){border-color:var(--ink-2)}
+.opt .k{font-family:var(--mono); font-size:.76rem; font-weight:600; color:var(--meta); border:1px solid var(--line);
+  border-radius:6px; height:24px; display:grid; place-items:center; margin-top:1px}
+.opt[aria-pressed="true"]{border-color:var(--signal); background:var(--signal-soft)}
+.opt[aria-pressed="true"] .k{border-color:var(--signal); color:var(--signal)}
+.opt:disabled{cursor:default; color:var(--ink)}
+.opt.is-right{border-color:var(--memory); background:var(--memory-soft)}
+.opt.is-right .k{background:var(--memory); border-color:var(--memory); color:var(--surface)}
+.opt.is-wrong{border-color:var(--signal); background:var(--signal-soft)}
+.opt.is-wrong .k{background:var(--signal); border-color:var(--signal); color:var(--surface)}
+.opt.is-dim{color:var(--ink-2); border-color:transparent}
+.exam .opt{background:var(--surface); border-color:var(--line)}
+.why{display:grid; grid-template-rows:0fr; transition:grid-template-rows .32s cubic-bezier(.16,1,.3,1)}
+.why.open{grid-template-rows:1fr}
+.why > div{overflow:hidden}
+.why-in{padding-top:18px}
+.verdict{font-family:var(--display); font-weight:700; font-size:1.1rem; margin:0}
+.verdict.ok{color:var(--memory)} .verdict.no{color:var(--signal)}
+.why p{margin:6px 0 0; color:var(--ink-2); max-width:68ch}
+.why a{font-weight:600; color:var(--ink)}
+.row{display:flex; flex-wrap:wrap; align-items:center; gap:10px 14px; margin-top:20px}
+.btn{font-family:var(--mono); font-size:.82rem; font-weight:600; border-radius:999px; border:1px solid var(--line);
+  background:transparent; padding:9px 16px; transition:border-color .14s ease, opacity .14s ease}
+.btn:hover{border-color:var(--ink-2)}
+.btn.go{background:var(--memory); border-color:var(--memory); color:var(--surface)}
+.btn.go:hover{opacity:.88}
+.btn:disabled{opacity:.45; cursor:not-allowed}
+.btn.done{border-color:var(--memory); color:var(--memory)}
+.btn.go.done{color:var(--surface)}
+.cfoot{display:flex; flex-wrap:wrap; align-items:center; gap:8px 16px; margin-top:22px; padding-top:14px;
+  border-top:1px solid var(--line-soft); font-size:.82rem; color:var(--meta)}
+.cfoot .meta{margin-right:auto}
+select,input[type=date]{font:inherit; font-size:.82rem; color:var(--ink); background:var(--ground);
+  border:1px solid var(--line); border-radius:8px; padding:5px 8px}
+.hint{font-size:.8rem; color:var(--meta)}
+kbd{font-family:var(--mono); font-size:.72rem; border:1px solid var(--line); border-radius:4px; padding:0 4px}
+
+.today{padding:6px 2px 0}
+.today h2{font-size:1.32rem; line-height:1.2}
+.dayn{font-family:var(--mono); color:var(--memory); font-weight:600}
+.today .sub{color:var(--ink-2); margin:4px 0 0; font-size:.95rem}
+.tasks{list-style:none; padding:0; margin:16px 0 0; display:flex; flex-direction:column; gap:9px}
+.tasks label{display:grid; grid-template-columns:20px minmax(0,1fr); gap:10px; font-size:.92rem; color:var(--ink-2); cursor:pointer}
+input[type=checkbox]{appearance:none; width:18px; height:18px; margin:2px 0 0; border:1.5px solid var(--ink-2); border-radius:5px;
+  background:var(--surface); display:grid; place-items:center; cursor:pointer}
+input[type=checkbox]::after{content:""; width:9px; height:5px; border:2px solid var(--surface); border-top:0; border-right:0;
+  transform:rotate(-45deg) translate(1px,-1px); opacity:0}
+input[type=checkbox]:checked{background:var(--memory); border-color:var(--memory)}
+input[type=checkbox]:checked::after{opacity:1}
+.tasks input:checked + span{color:var(--ink-2); text-decoration:line-through; text-decoration-color:var(--memory)}
+.dates{margin-top:14px; font-size:.82rem; color:var(--meta); display:flex; flex-wrap:wrap; gap:6px 10px; align-items:center}
+.weights{margin-top:28px}
+.weights h3{font-size:.98rem; margin-bottom:4px}
+.weights p{margin:0 0 12px; font-size:.82rem; color:var(--meta)}
+.w{display:grid; grid-template-columns:minmax(0,1fr) auto; gap:2px 10px; margin-bottom:11px; font-size:.84rem}
+.w .nm{color:var(--ink-2)}
+.w .sc{font-family:var(--mono); font-size:.76rem; color:var(--meta); font-variant-numeric:tabular-nums}
+.w .track{grid-column:1 / -1; height:9px; background:transparent; border-radius:999px; position:relative; overflow:hidden}
+.w .track i{position:absolute; inset:0 auto 0 0; background:var(--sunk); border:1px solid var(--line); border-radius:999px}
+.w .track b{position:absolute; inset:0 auto 0 0; background:var(--memory); border-radius:999px; transition:width .4s ease-out}
+
+section.block{padding:52px 0 0}
+.block > h2{font-size:clamp(1.5rem,2.6vw,1.9rem)}
+.lede{color:var(--ink-2); max-width:68ch; margin:8px 0 22px}
+
+.ledger{list-style:none; margin:0; padding:0}
+.ledger li{display:grid; grid-template-columns:44px minmax(0,1fr) auto; gap:2px 16px; align-items:baseline;
+  padding:13px 10px; border-bottom:1px solid var(--line-soft)}
+.ledger .n{font-family:var(--mono); font-weight:600; color:var(--meta)}
+.ledger .t{font-weight:600}
+.ledger .tp{grid-column:2; font-size:.86rem; color:var(--meta)}
+.ledger .tp a{color:var(--ink-2)}
+.ledger .st{font-family:var(--mono); font-size:.74rem; color:var(--meta)}
+.ledger li.is-now{background:var(--memory-soft); border-radius:10px; border-bottom-color:transparent}
+.ledger li.is-now .n, .ledger li.is-now .tp, .ledger li.is-now .st{color:var(--ink-2)}
+.ledger li.is-mock .t{color:var(--ink)}
+.ledger li.is-done .n, .ledger li.is-done .st{color:var(--memory)}
+.ledger li.wk{display:block; padding:26px 10px 8px; border-bottom:1px solid var(--line); font-family:var(--display); font-weight:700; font-size:1.05rem}
+
+.dom{margin-top:34px}
+.dom-h{display:flex; align-items:baseline; gap:12px; margin-bottom:8px}
+.dom-h h3{font-size:1.18rem}
+.dom-h .pc{font-family:var(--mono); color:var(--ink-2); font-weight:600; font-size:.9rem}
+.topic{border-bottom:1px solid var(--line-soft)}
+.topic:first-of-type{border-top:1px solid var(--line)}
+.topic > summary{list-style:none; cursor:pointer; display:grid; grid-template-columns:minmax(0,1fr) auto; gap:12px; align-items:center; padding:13px 6px}
+.topic > summary::-webkit-details-marker{display:none}
+.topic > summary .tt{font-weight:600}
+.topic > summary .tt small{font-family:var(--mono); font-size:.72rem; color:var(--meta); font-weight:400; margin-left:8px}
+.topic > summary:hover .tt{text-decoration:underline; text-decoration-color:var(--line); text-underline-offset:4px}
+.topic[open] > summary .tt{font-weight:700}
+.dot{width:12px; height:12px; border-radius:50%; border:1.5px solid var(--ink-2)}
+.dot.fuzzy{background:linear-gradient(90deg,var(--memory) 50%,transparent 50%); border-color:var(--memory)}
+.dot.solid{background:var(--memory); border-color:var(--memory)}
+.tbody{padding:4px 6px 28px; display:grid; grid-template-columns:minmax(0,1.25fr) minmax(0,1fr); gap:10px 44px}
+.tbody .simple p{margin:0 0 12px; max-width:66ch}
+.hook{font-family:var(--display); font-weight:700; font-size:1.06rem; line-height:1.35; margin:4px 0 14px; color:var(--memory)}
+.trap{margin:0; font-size:.92rem; color:var(--ink-2)}
+.trap b{color:var(--signal)}
+.detail h4{font-family:var(--display); font-size:.98rem; margin:0 0 8px}
+.detail ul{margin:0; padding-left:18px; font-size:.92rem; color:var(--ink-2)}
+.detail li{margin-bottom:6px}
+.detail b{color:var(--ink); font-weight:600}
+body.plain .detail{display:none}
+body.plain .tbody{grid-template-columns:minmax(0,1fr)}
+.tacts{grid-column:1 / -1; display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-top:8px}
+.picker{display:inline-flex; border:1px solid var(--line); border-radius:999px; overflow:hidden; margin-left:auto}
+.picker button{border:0; background:transparent; font-family:var(--mono); font-size:.74rem; padding:7px 12px}
+.picker button[aria-pressed="true"]{background:var(--memory); color:var(--surface)}
+.ptext{grid-column:1 / -1}
+.ptext summary{cursor:pointer; font-size:.84rem; color:var(--meta)}
+pre.prompt{white-space:pre-wrap; font-family:var(--body); font-size:.9rem; line-height:1.6; color:var(--ink-2);
+  background:var(--sunk); border-radius:10px; padding:14px 16px; margin:8px 0 0; max-height:300px; overflow:auto}
+
+.la{width:100%; border-collapse:collapse; font-size:.93rem}
+.la th{text-align:left; font-family:var(--mono); font-size:.74rem; font-weight:600; color:var(--meta); padding:8px 10px; border-bottom:1px solid var(--line)}
+.la td{padding:10px; border-bottom:1px solid var(--line-soft); vertical-align:top}
+.la td:nth-child(1), .la td:nth-child(2){font-weight:600; white-space:nowrap}
+.la td:nth-child(2), .la td:nth-child(3){color:var(--ink-2)}
+.la.covered td:nth-child(3){filter:blur(5px); transition:filter .2s ease-out; cursor:pointer; user-select:none}
+.la.covered td:nth-child(3):hover, .la.covered td:nth-child(3):focus-visible, .la.covered td.peek{filter:none}
+
+.mocks{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:22px}
+.mock{background:var(--surface); border:1px solid var(--line); border-radius:16px; box-shadow:var(--shadow); padding:24px 26px}
+.mock h3{font-size:1.3rem}
+.mock .when{color:var(--meta); font-size:.88rem; margin:2px 0 14px}
+.mock .best{font-family:var(--mono); font-size:.86rem; color:var(--ink-2); margin:0 0 14px}
+.mock .best b{font-size:1.5rem; color:var(--ink); font-family:var(--display)}
+.mock .best b.pass{color:var(--memory)}
+.note{font-size:.88rem; color:var(--meta); max-width:72ch; margin-top:18px}
+
+.plist{display:grid; grid-template-columns:repeat(auto-fill,minmax(330px,1fr)); gap:10px 34px}
+.pcard{padding:16px 0; border-top:1px solid var(--line)}
+.pcard h3{font-size:1.05rem}
+.pcard p{margin:2px 0 10px; font-size:.88rem; color:var(--meta)}
+
+footer{margin-top:70px; border-top:1px solid var(--line); background:var(--surface)}
+footer .shell{padding-top:26px; padding-bottom:60px; font-size:.86rem; color:var(--ink-2)}
+footer p{max-width:78ch; margin:0 0 10px}
+
+.exam{position:fixed; inset:0; z-index:20; background:var(--ground); display:none; flex-direction:column}
+.exam.on{display:flex}
+.exam-top{background:var(--surface); border-bottom:1px solid var(--line)}
+.exam-top .in{max-width:1000px; margin:0 auto; padding:10px 24px; display:flex; flex-wrap:wrap; align-items:center; gap:10px 18px}
+.exam-top h2{font-size:1.05rem}
+.clock{font-family:var(--mono); font-weight:600; font-size:1.05rem; font-variant-numeric:tabular-nums}
+.clock.low{color:var(--signal)}
+.exam-top .sp{margin-left:auto}
+.exam-body{flex:1; overflow:auto}
+.exam-body .in{max-width:1000px; margin:0 auto; padding:28px 24px 60px}
+.qcount{font-family:var(--mono); font-size:.8rem; color:var(--meta); margin:0 0 10px}
+.navgrid{display:grid; grid-template-columns:repeat(auto-fill,minmax(38px,1fr)); gap:6px; margin-top:28px}
+.navgrid button{font-family:var(--mono); font-size:.74rem; border:1px solid var(--line); background:var(--surface); border-radius:7px; padding:6px 0}
+.navgrid button.ans{background:var(--sunk); border-color:var(--ink-2)}
+.navgrid button.flag{border-color:var(--signal); color:var(--signal)}
+.navgrid button.part{border-style:dashed; border-color:var(--ink-2)}
+.navgrid button.cur{outline:2px solid var(--memory); outline-offset:1px}
+.result h2{font-size:clamp(2.2rem,6vw,3.4rem); font-weight:800}
+.result .sub{color:var(--ink-2); margin:4px 0 22px; max-width:68ch}
+.rev{margin-top:30px}
+.rev article{padding:18px 0; border-top:1px solid var(--line-soft)}
+.rev h4{font-family:var(--display); font-size:1.02rem; margin:0 0 8px; line-height:1.35}
+.rev .ans{font-size:.9rem; margin:3px 0}
+.rev .ans.r{color:var(--memory)} .rev .ans.x{color:var(--signal)}
+.rev .ex{font-size:.9rem; color:var(--ink-2); margin:8px 0 0; max-width:70ch}
+
+.toast{position:fixed; left:50%; bottom:22px; transform:translate(-50%,12px); opacity:0; z-index:30; background:var(--ink); color:var(--surface);
+  font-size:.86rem; padding:9px 16px; border-radius:999px; transition:opacity .18s ease-out, transform .18s ease-out; pointer-events:none}
+.toast.on{opacity:1; transform:translate(-50%,0)}
+
+@media (max-width:980px){
+  .stage{grid-template-columns:minmax(0,1fr)}
+  .tbody{grid-template-columns:minmax(0,1fr)}
+  .mocks{grid-template-columns:minmax(0,1fr)}
+  /* the sections stay reachable on small screens: a scrollable second row */
+  .bar-in{flex-wrap:wrap}
+  .jump{order:3; flex-basis:100%; margin-left:0; overflow-x:auto; padding:2px 0 2px; gap:18px}
+  .home{margin-right:auto}
+}
+@media (max-width:640px){
+  .shell, .bar-in{padding-left:16px; padding-right:16px}
+  .bar-in{gap:8px}
+  .home span{display:none}
+  .console{padding:22px 18px 16px}
+  .la thead{display:none}
+  .la tr{display:grid; grid-template-columns:1fr 1fr; border-bottom:1px solid var(--line-soft); padding:6px 0}
+  .la td{border:0; padding:4px 6px; white-space:normal !important}
+  .la td:nth-child(3){grid-column:1 / -1}
+  .ledger li{grid-template-columns:34px minmax(0,1fr); padding:12px 6px}
+  .ledger .st{grid-column:2}
+  .picker{margin-left:0}
+  .plist{grid-template-columns:minmax(0,1fr)}
+  .exam-top .in, .exam-body .in{padding-left:16px; padding-right:16px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none !important}}
+</style></head>
+<body>
+
+<header class="bar"><div class="bar-in">
+  <a class="home" href="/">Gradient Path <span>/ AWS AI Practitioner</span></a>
+  <nav class="jump" aria-label="Sections">
+    <a href="#plan">14 days</a><a href="#topics">Topics</a><a href="#lookalikes">Look-alikes</a><a href="#mocks">Mock exams</a><a href="#prompts">Prompts</a>
+  </nav>
+  <button class="tog" type="button" id="mode" aria-pressed="false" title="Hide or show the exam-level detail in every topic">Plain only</button>
+  <button class="tog" type="button" id="theme">Dark / light</button>
+</div></header>
+
+<main class="shell">
+  <div class="lead">
+    <div class="title">
+      <h1>AWS AI Practitioner in 14 days</h1>
+      <p class="facts">AIF-C01 &middot; <b class="num">65</b> questions (<span class="num">50</span> scored) &middot; <b class="num">90</b> min &middot; pass <b class="num">700</b>/1000 &middot; guide v1.2</p>
+    </div>
+    <div class="stage">
+      <div class="console" id="console">
+        <h2 class="stem" id="stem" aria-live="polite">Loading the first question&hellip;</h2>
+        <ol class="opts" id="opts"></ol>
+        <div class="row" id="mrrow" hidden><button class="btn go" type="button" id="check">Check answer</button><span class="hint" id="mrhint"></span></div>
+        <div class="why" id="why"><div><div class="why-in" aria-live="polite">
+          <p class="verdict" id="verdict"></p>
+          <p id="explain"></p>
+          <p id="readlink"></p>
+          <div class="row"><button class="btn go" type="button" id="next">Next question</button><span class="hint">or press <kbd>Enter</kbd></span></div>
+        </div></div></div>
+        <div class="cfoot">
+          <span class="meta" id="qmeta"></span>
+          <label>Draw from <select id="pool">
+            <option value="today">Today&rsquo;s topics</option>
+            <option value="all">Everything unlocked</option>
+            <option value="weak">My weakest domain</option>
+            <option value="missed">Ones I got wrong</option>
+          </select></label>
+        </div>
+      </div>
+
+      <aside class="today" aria-labelledby="today-h">
+        <h2 id="today-h"><span class="dayn" id="dayn">Day 1</span> of 14</h2>
+        <p class="sub" id="daytitle"></p>
+        <ul class="tasks" id="tasks"></ul>
+        <div class="dates">
+          <label for="start">Started</label><input type="date" id="start">
+          <span id="examday"></span>
+        </div>
+        <div class="weights">
+          <h3>Where the marks are</h3>
+          <p>Bar length is each domain&rsquo;s share of the exam. The teal fill is your accuracy in it.</p>
+          <div id="weights"></div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <section class="block" id="plan" aria-labelledby="plan-h">
+    <h2 id="plan-h">The 14 days</h2>
+    <p class="lede">Week 1 teaches all five domains and ends on Mock A. Week 2 drills them in order of weight and ends on a second, unseen mock; day 14 is the exam. Change the start date beside today&rsquo;s plan if you begin later.</p>
+    <ol class="ledger" id="ledger"></ol>
+  </section>
+
+  <section class="block" id="topics" aria-labelledby="topics-h">
+    <h2 id="topics-h">Thirty topics, by domain</h2>
+    <p class="lede">Each topic reads plainly first, with one line to remember and the trap the exam sets. The exam-level facts sit beside it; <b>Plain only</b> at the top hides them. <b>Listen</b> reads the plain version aloud. The two prompts turn any chatbot into a study partner, written for voice mode so you can practise while doing something else.</p>
+    <div id="domains"></div>
+  </section>
+
+  <section class="block" id="lookalikes" aria-labelledby="la-h">
+    <h2 id="la-h">Look-alikes the exam uses as distractors</h2>
+    <p class="lede">Most wrong options on this exam are a real AWS service that does the neighbouring job. Cover the right-hand column and say the difference before you peek.</p>
+    <div class="row" style="margin:0 0 14px"><button class="tog" type="button" id="cover" aria-pressed="false">Cover the differences</button></div>
+    <table class="la" id="la"><thead><tr><th>This</th><th>versus this</th><th>The tell</th></tr></thead><tbody></tbody></table>
+  </section>
+
+  <section class="block" id="mocks" aria-labelledby="mocks-h">
+    <h2 id="mocks-h">Two mock exams</h2>
+    <p class="lede">Each mock is 65 original questions in the exam&rsquo;s own proportions (13, 16, 18, 9 and 9 across the five domains), timed at 90 minutes, with no feedback until you submit. The two mocks share no questions. Once you sit one, its questions join the practice console.</p>
+    <div class="mocks" id="mocklist"></div>
+    <p class="note">The real exam reports a scaled score from 100 to 1,000 and passes at 700. AWS does not publish how raw answers convert to that scale, and 15 of its 65 questions are unscored, so the percentages here are not a score prediction. A working rule: clear 80% on both mocks, then sit the real one.</p>
+  </section>
+
+  <section class="block" id="prompts" aria-labelledby="pr-h">
+    <h2 id="pr-h">Prompts for practising away from the page</h2>
+    <p class="lede">Paste one into Claude, ChatGPT or any chatbot, then switch to voice mode. They keep the AI to short turns and one question at a time, and tell it to say so rather than invent an AWS feature.</p>
+    <div class="row" style="margin:0 0 6px"><label>Domain for the prompts that need one <select id="pdomain"></select></label></div>
+    <div class="plist" id="plist"></div>
+  </section>
+</main>
+
+<footer><div class="shell">
+  <p>Scope and weights follow the official <a href="https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01.html">AIF-C01 exam guide</a>, version 1.2 (29 October 2026). AWS says guide updates reach the live exam about a month after they are published, so the newest items may not appear on an exam booked this month. Learn them anyway.</p>
+  <p>Every question here is original. Gradient Path is not affiliated with AWS. Your progress is stored only in this browser; nothing is sent anywhere.</p>
+  <p><button class="btn" type="button" id="reset">Reset my progress</button> <a href="/" style="margin-left:12px">Back to Gradient Path</a></p>
+</div></footer>
+
+<div class="exam" id="exam" role="dialog" aria-modal="true" aria-labelledby="exam-h">
+  <div class="exam-top"><div class="in">
+    <h2 id="exam-h">Mock A</h2>
+    <span class="clock" id="clock" role="timer" aria-label="Time left">90:00</span>
+    <span class="sp"></span>
+    <button class="btn" type="button" id="flag">Flag</button>
+    <button class="btn go" type="button" id="submit">Submit</button>
+    <button class="btn" type="button" id="leave">Save and leave</button>
+  </div></div>
+  <div class="exam-body"><div class="in" id="examin"></div></div>
+</div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+const DATA = /*__DATA__*/null;
+(function(){
+'use strict';
+const $ = (s, r=document) => r.querySelector(s);
+const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
+const esc = (s) => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const strip = (s) => String(s).replace(/<[^>]+>/g, '');
+const DOMS = {1:['Fundamentals of AI and ML',20],2:['Fundamentals of generative AI',24],3:['Applications of foundation models',28],4:['Guidelines for responsible AI',14],5:['Security, compliance and governance',14]};
+const TOP = new Map(DATA.topics.map(t => [t.id, t]));
+const QS = new Map(DATA.questions.map(q => [q.id, q]));
+const DAY_MS = 864e5, KEYS = 'ABCDEF';
+const reduced = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// ---------- state: this browser only ----------
+const KEY = 'aif-v1-state', MKEY = 'aif-v1-mock';
+const today0 = () => { const d = new Date(); d.setHours(0,0,0,0); return d; };
+const iso = (d) => d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const parseIso = (s) => { const [y,m,d] = s.split('-').map(Number); return new Date(y, m-1, d); };
+const addDays = (s, n) => { const d = parseIso(s); d.setDate(d.getDate() + n); return d; };
+let S = null;
+try { S = JSON.parse(localStorage.getItem(KEY)); } catch(e) {}
+if (!S || typeof S !== 'object') S = {};
+if (!/^\d{4}-\d{2}-\d{2}$/.test(S.start || '')) S.start = iso(today0());
+S.topics = S.topics || {}; S.tasks = S.tasks || {}; S.answers = S.answers || {}; S.mocks = S.mocks || {};
+S.pool = S.pool || 'today';
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch(e) {} };
+save();
+const loadM = () => { try { return JSON.parse(localStorage.getItem(MKEY)); } catch(e) { return null; } };
+
+const dayNum = () => Math.min(14, Math.max(1, Math.round((today0() - parseIso(S.start)) / DAY_MS) + 1));
+const fmtDate = (d) => d.toLocaleDateString(undefined, {weekday:'short', day:'numeric', month:'short'});
+function toast(msg){ const t = $('#toast'); t.textContent = msg; t.classList.add('on'); clearTimeout(toast.h); toast.h = setTimeout(() => t.classList.remove('on'), 1800); }
+
+// answers[qid] = [timesRight, timesSeen, lastWasRight]
+function record(q, ok){ const a = S.answers[q.id] || [0,0,0]; a[0] += ok?1:0; a[1] += 1; a[2] = ok?1:0; S.answers[q.id] = a; save(); }
+function domainStats(){
+  const st = {1:[0,0],2:[0,0],3:[0,0],4:[0,0],5:[0,0]};
+  for (const [id, a] of Object.entries(S.answers)) { const q = QS.get(id); if (q) { st[q.d][0] += a[0]; st[q.d][1] += a[1]; } }
+  return st;
+}
+// lowest accuracy wins; an untried domain counts as weakest; ties go to the heavier domain
+function weakest(){
+  const st = domainStats(); let best = null;
+  for (const d of [3,2,1,4,5]) { const [r,n] = st[d]; const acc = n ? r/n : -1; if (best === null || acc < best[1]) best = [d, acc]; }
+  return best[0];
+}
+const unlocked = () => DATA.questions.filter(q => q.set === 'P' || S.mocks[q.set]);
+function shuffle(a){ for (let i = a.length-1; i > 0; i--) { const j = Math.floor(Math.random()*(i+1)); [a[i],a[j]] = [a[j],a[i]]; } return a; }
+
+// ---------- the console ----------
+let cur = null, order = [], picked = new Set(), answered = false;
+function poolList(){
+  const p = S.pool, u = unlocked();
+  if (p === 'weak') { const w = weakest(); return u.filter(q => q.d === w); }
+  if (p === 'missed') return u.filter(q => S.answers[q.id] && !S.answers[q.id][2]);
+  if (p === 'today') { const ids = DATA.days[dayNum()-1].topics; if (ids.length) return u.filter(q => ids.includes(q.t)); }
+  return u;
+}
+function nextQ(){
+  let list = poolList();
+  if (!list.length) { list = unlocked(); if (S.pool === 'missed') toast('Nothing missed yet, so drawing from everything.'); }
+  // unseen first, then last-time-wrong, then the rest; never the same question twice running
+  const rank = (q) => { const a = S.answers[q.id]; return !a ? 0 : (!a[2] ? 1 : 2); };
+  const others = list.filter(q => !cur || q.id !== cur.id);
+  const from = others.length ? others : list;
+  const minR = Math.min(...from.map(rank));
+  const top = from.filter(q => rank(q) === minR);
+  cur = top[Math.floor(Math.random()*top.length)];
+  renderQ();
+}
+function renderQ(){
+  const q = cur, multi = q.right.length > 1;
+  order = shuffle([...q.right.map(t => [t,1]), ...q.wrong.map(t => [t,0])]);
+  picked = new Set(); answered = false;
+  $('#stem').textContent = q.q;
+  $('#opts').innerHTML = order.map((o,i) => `<li><button class="opt" type="button" data-i="${i}" aria-pressed="false"><span class="k">${KEYS[i]}</span><span>${esc(o[0])}</span></button></li>`).join('');
+  $('#mrrow').hidden = !multi;
+  $('#check').disabled = true;
+  $('#mrhint').textContent = multi ? `Choose ${q.right.length}` : '';
+  $('#why').classList.remove('open');
+  $('#why').inert = true;   // collapsed: keep Next and the link out of the tab order
+  const t = TOP.get(q.t), a = S.answers[q.id];
+  $('#qmeta').innerHTML = `Domain ${q.d} &middot; ${esc(t.title.split(':')[0])} &middot; ${a ? 'seen ' + a[1] + '&times;' : 'new to you'} <span class="hint">&middot; keys <kbd>A</kbd>&ndash;<kbd>${KEYS[order.length-1]}</kbd></span>`;
+}
+function choose(i){
+  if (answered || i >= order.length) return;
+  if (cur.right.length === 1) { picked = new Set([i]); reveal(); return; }
+  if (picked.has(i)) picked.delete(i);
+  else if (picked.size < cur.right.length) picked.add(i);
+  else { toast(`${cur.right.length} chosen. Untick one to change.`); return; }
+  $$('#opts .opt').forEach(x => x.setAttribute('aria-pressed', picked.has(+x.dataset.i)));
+  $('#check').disabled = picked.size !== cur.right.length;
+}
+function reveal(){
+  answered = true;
+  const ok = order.every((o,i) => !!o[1] === picked.has(i));
+  $$('#opts .opt').forEach(x => {
+    const i = +x.dataset.i, right = !!order[i][1];
+    x.disabled = true;
+    x.classList.toggle('is-right', right);
+    x.classList.toggle('is-wrong', picked.has(i) && !right);
+    x.classList.toggle('is-dim', !right && !picked.has(i));
+  });
+  record(cur, ok);
+  const rights = cur.right.join(' and ');
+  $('#verdict').className = 'verdict ' + (ok ? 'ok' : 'no');
+  $('#verdict').textContent = ok ? 'Right.' : 'Not this time. The answer is ' + rights + '.';
+  $('#explain').textContent = cur.x;
+  const t = TOP.get(cur.t);
+  $('#readlink').innerHTML = `<a href="#t-${t.id}" data-open="${t.id}">Read the topic: ${esc(t.title)}</a>`;
+  $('#mrrow').hidden = true;
+  $('#why').inert = false;
+  $('#why').classList.add('open');
+  $('#next').focus({preventScroll:true});
+  // on a phone the verdict unfolds below the fold; bring it up once the unfold ends
+  setTimeout(() => $('#why').scrollIntoView({block:'nearest', behavior: reduced() ? 'auto' : 'smooth'}), 330);
+  renderWeights(); renderTopicsMeta();
+}
+$('#opts').addEventListener('click', e => { const b = e.target.closest('.opt'); if (b) choose(+b.dataset.i); });
+$('#check').addEventListener('click', () => { if (picked.size === cur.right.length) reveal(); });
+$('#next').addEventListener('click', nextQ);
+$('#pool').addEventListener('change', e => { S.pool = e.target.value; save(); nextQ(); });
+document.addEventListener('keydown', e => {
+  if ($('#exam').classList.contains('on') || e.metaKey || e.ctrlKey || e.altKey) return;
+  if (/^(INPUT|SELECT|TEXTAREA|SUMMARY)$/.test(e.target.tagName)) return;
+  const r = $('#console').getBoundingClientRect(); if (r.bottom < 80 || r.top > innerHeight - 80) return;
+  const i = KEYS.indexOf(e.key.toUpperCase());
+  if (e.key.length === 1 && i >= 0) { choose(i); e.preventDefault(); return; }
+  if (/^[1-6]$/.test(e.key)) { choose(+e.key - 1); e.preventDefault(); return; }
+  if (e.key === 'Enter' && !/^(BUTTON|A)$/.test(e.target.tagName)) {
+    if (answered) nextQ(); else if (cur.right.length > 1 && picked.size === cur.right.length) reveal();
+  }
+});
+
+// ---------- today ----------
+function renderToday(){
+  const n = dayNum(), d = DATA.days[n-1];
+  $('#dayn').textContent = 'Day ' + n;
+  $('#daytitle').textContent = n === 12 ? d.title + ': ' + DOMS[weakest()][0] : d.title;
+  const tasks = d.kind === 'mock' ? ['Open Mock ' + d.mock + ' in the mock exams section', ...d.tasks] : d.tasks;
+  $('#tasks').innerHTML = tasks.map((t,i) => { const k = n + ':' + i;
+    return `<li><label><input type="checkbox" data-k="${k}" ${S.tasks[k] ? 'checked' : ''}><span>${esc(t)}</span></label></li>`; }).join('');
+  $('#start').value = S.start;
+  $('#examday').textContent = 'Exam day: ' + fmtDate(addDays(S.start, 13));
+}
+$('#tasks').addEventListener('change', e => { const k = e.target.dataset.k; if (!k) return; if (e.target.checked) S.tasks[k] = 1; else delete S.tasks[k]; save(); renderLedger(); });
+$('#start').addEventListener('change', e => { if (!e.target.value) return; S.start = e.target.value; save(); renderToday(); renderLedger(); if (S.pool === 'today') nextQ(); });
+
+function bars(per){
+  return [1,2,3,4,5].map(d => {
+    const [r,n] = per[d], len = DOMS[d][1] / 28 * 100, acc = n ? r/n : 0;
+    return `<div class="w"><span class="nm">${d}. ${DOMS[d][0]}</span><span class="sc">${DOMS[d][1]}% &middot; ${n ? Math.round(acc*100) + '% of ' + n : 'not tried'}</span>
+      <span class="track" role="img" aria-label="Domain ${d}: ${DOMS[d][1]} percent of the exam, ${n ? Math.round(acc*100) + ' percent accuracy' : 'not tried'}"><i style="width:${len.toFixed(1)}%"></i><b style="width:${(len*acc).toFixed(1)}%"></b></span></div>`;
+  }).join('');
+}
+const renderWeights = () => { $('#weights').innerHTML = bars(domainStats()); };
+
+// ---------- the 14 days ----------
+function renderLedger(){
+  const n = dayNum(); let html = '';
+  for (const d of DATA.days) {
+    if (d.n === 1) html += '<li class="wk">Week 1: learn every domain</li>';
+    if (d.n === 8) html += '<li class="wk">Week 2: drill by weight, then sit it</li>';
+    const done = (d.kind === 'mock' && S.mocks[d.mock]) || d.tasks.every((_,i) => S.tasks[d.n + ':' + i]);
+    const cls = [d.n === n ? 'is-now' : '', d.kind === 'mock' ? 'is-mock' : '', done ? 'is-done' : ''].join(' ');
+    const tp = d.topics.length ? d.topics.map(id => `<a href="#t-${id}" data-open="${id}">${esc(TOP.get(id).title.split(':')[0])}</a>`).join(', ')
+      : d.kind === 'mock' ? `<a href="#mocks">Mock ${d.mock}</a>, 65 questions, 90 minutes`
+      : d.n === 12 ? 'Picked from your accuracy: ' + esc(DOMS[weakest()][0]) : 'Memory hooks and the look-alike table only';
+    html += `<li class="${cls}"${d.n === n ? ' aria-current="date"' : ''}><span class="n">${String(d.n).padStart(2,'0')}</span><span class="t">${esc(d.title)}</span>
+      <span class="st">${done ? 'done' : fmtDate(addDays(S.start, d.n - 1))}</span><span class="tp">${tp}</span></li>`;
+  }
+  $('#ledger').innerHTML = html;
+}
+
+// ---------- topics ----------
+function quizPrompt(t){
+  return `You are my study partner for the AWS Certified AI Practitioner exam (AIF-C01). Topic: ${t.title}.
+I may be walking or doing chores, so keep each reply under 70 words, with no tables or markdown, and ask one question at a time.
+1. Ask me to explain "${t.title}" in my own words.
+2. Check my answer against these facts. Plainly correct anything wrong or missing:
+${t.detail.map(f => '- ' + strip(f)).join('\n')}
+3. Give me one exam-style scenario question with four options, written the way AWS writes them. Wait for my answer, then tell me if I am right and why each wrong option is wrong.
+4. Do two more scenarios, each a little harder. Then give me a one-line memory hook and stop.
+Do not invent AWS features or limits. If you are unsure, say so.`;
+}
+function simplePrompt(t){
+  return `Explain "${t.title}" for the AWS Certified AI Practitioner exam as if I am completely new to tech. Use one everyday analogy, no jargon, under 150 words. Then tell me the mistake people make about it on the exam (usually this: ${t.trap}). Give me a memory trick, then ask me one simple question to check I understood. Keep it conversational; I may be listening rather than reading.`;
+}
+function renderTopics(){
+  let html = '';
+  for (const d of [1,2,3,4,5]) {
+    html += `<div class="dom"><div class="dom-h"><h3>Domain ${d}: ${DOMS[d][0]}</h3><span class="pc">${DOMS[d][1]}%</span></div>`;
+    for (const t of DATA.topics.filter(x => x.d === d)) {
+      html += `<details class="topic" id="t-${t.id}"><summary><span class="tt">${esc(t.title)}<small data-acc="${t.id}"></small></span><span class="dot" data-dot="${t.id}" aria-hidden="true"></span></summary>
+      <div class="tbody">
+        <div class="simple">${t.simple.map(p => `<p>${esc(p)}</p>`).join('')}
+          <p class="hook">${esc(t.hook)}</p>
+          <p class="trap"><b>The trap:</b> ${esc(t.trap)}</p></div>
+        <div class="detail"><h4>For the exam <span class="num" style="font-weight:400;color:var(--meta);font-size:.78rem">task ${esc(t.task)}</span></h4><ul>${t.detail.map(f => `<li>${f}</li>`).join('')}</ul></div>
+        <div class="tacts">
+          <button class="btn" type="button" data-say="${t.id}">Listen</button>
+          <button class="btn" type="button" data-copy="quiz" data-t="${t.id}">Copy &ldquo;Quiz me&rdquo; prompt</button>
+          <button class="btn" type="button" data-copy="simple" data-t="${t.id}">Copy &ldquo;Explain simply&rdquo; prompt</button>
+          <button class="btn" type="button" data-drill="${t.id}">Drill this topic</button>
+          <span class="picker" role="group" aria-label="How well do you know this topic?">${['new','fuzzy','solid'].map(s => `<button type="button" data-mark="${s}" data-t="${t.id}">${s}</button>`).join('')}</span>
+        </div>
+        <details class="ptext"><summary>Read the Quiz me prompt before copying</summary><pre class="prompt">${esc(quizPrompt(t))}</pre></details>
+      </div></details>`;
+    }
+    html += '</div>';
+  }
+  $('#domains').innerHTML = html;
+  renderTopicsMeta();
+}
+function renderTopicsMeta(){
+  for (const t of DATA.topics) {
+    const mark = S.topics[t.id] || 'new';
+    const dot = $(`[data-dot="${t.id}"]`); if (dot) dot.className = 'dot ' + mark;
+    $$(`[data-mark][data-t="${t.id}"]`).forEach(b => b.setAttribute('aria-pressed', b.dataset.mark === mark));
+    let r = 0, n = 0;
+    for (const q of DATA.questions) if (q.t === t.id && S.answers[q.id]) { r += S.answers[q.id][0]; n += S.answers[q.id][1]; }
+    const s = $(`[data-acc="${t.id}"]`); if (s) s.textContent = n ? `${r}/${n} right` : '';
+  }
+}
+async function copy(text, btn){
+  let ok = true;
+  try { await navigator.clipboard.writeText(text); }
+  catch(e) { const ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select(); try { ok = document.execCommand('copy'); } catch(_) { ok = false; } ta.remove(); }
+  if (!ok) { toast('Copy was blocked. Open the prompt text and copy it by hand.'); return; }
+  if (btn) { const old = btn.innerHTML; btn.classList.add('done'); btn.textContent = 'Copied'; setTimeout(() => { btn.innerHTML = old; btn.classList.remove('done'); }, 1600); }
+  toast('Prompt copied. Paste it into any chatbot.');
+}
+let speaking = null;
+function say(id, btn){
+  if (!('speechSynthesis' in window)) { toast('This browser cannot read aloud.'); return; }
+  const was = speaking; speechSynthesis.cancel(); speaking = null;
+  $$('[data-say]').forEach(b => b.textContent = 'Listen');
+  if (was === id) return;
+  const t = TOP.get(id);
+  const u = new SpeechSynthesisUtterance([t.title + '.', ...t.simple, 'Remember: ' + t.hook, 'The trap: ' + t.trap].join(' '));
+  u.rate = 0.98; u.onend = () => { if (speaking === id) { speaking = null; btn.textContent = 'Listen'; } };
+  speaking = id; btn.textContent = 'Stop'; speechSynthesis.speak(u);
+}
+function openTopic(id){
+  const el = document.getElementById('t-' + id); if (!el) return;
+  el.open = true;
+  el.scrollIntoView({behavior: reduced() ? 'auto' : 'smooth', block:'start'});
+}
+document.addEventListener('click', e => {
+  const o = e.target.closest('[data-open]'); if (o) { e.preventDefault(); openTopic(o.dataset.open); history.replaceState(null, '', '#t-' + o.dataset.open); return; }
+  const c = e.target.closest('[data-copy]');
+  if (c) { const t = TOP.get(c.dataset.t); copy(c.dataset.copy === 'quiz' ? quizPrompt(t) : simplePrompt(t), c); return; }
+  const s = e.target.closest('[data-say]'); if (s) { say(s.dataset.say, s); return; }
+  const m = e.target.closest('[data-mark]'); if (m) { S.topics[m.dataset.t] = m.dataset.mark; save(); renderTopicsMeta(); return; }
+  const dr = e.target.closest('[data-drill]');
+  if (dr) {
+    const list = unlocked().filter(q => q.t === dr.dataset.drill);
+    const fresh = list.filter(q => !S.answers[q.id]);
+    const from = fresh.length ? fresh : list;
+    cur = from[Math.floor(Math.random()*from.length)]; renderQ();
+    $('#console').scrollIntoView({behavior:'smooth', block:'center'});
+    return;
+  }
+  const g = e.target.closest('[data-pcopy]');
+  if (g) { const p = DATA.prompts.find(x => x.id === g.dataset.pcopy); copy(fillDomain(p.text), g); }
+});
+
+// ---------- look-alikes ----------
+$('#la tbody').innerHTML = DATA.confusables.map(r => `<tr><td>${esc(r[0])}</td><td>${esc(r[1])}</td><td tabindex="0">${esc(r[2])}</td></tr>`).join('');
+$('#la').addEventListener('keydown', e => {
+  const td = e.target.closest('td:nth-child(3)');
+  if (td && (e.key === 'Enter' || e.key === ' ') && $('#la').classList.contains('covered')) { td.classList.toggle('peek'); e.preventDefault(); }
+});
+$('#cover').addEventListener('click', e => {
+  const b = e.currentTarget, on = b.getAttribute('aria-pressed') !== 'true';
+  b.setAttribute('aria-pressed', on); b.textContent = on ? 'Show the differences' : 'Cover the differences';
+  $('#la').classList.toggle('covered', on);
+  $$('#la td.peek').forEach(td => td.classList.remove('peek'));
+});
+$('#la').addEventListener('click', e => { const td = e.target.closest('td:nth-child(3)'); if (td && $('#la').classList.contains('covered')) td.classList.toggle('peek'); });
+
+// ---------- general prompts ----------
+$('#pdomain').innerHTML = [1,2,3,4,5].map(d => `<option value="${d}">Domain ${d}: ${DOMS[d][0]}</option>`).join('');
+const fillDomain = (s) => { const d = $('#pdomain').value; return s.replace(/\{domain\}/g, 'Domain ' + d + ' (' + DOMS[d][0] + ')'); };
+function renderPrompts(){
+  $('#plist').innerHTML = DATA.prompts.map(p => `<div class="pcard"><h3>${esc(p.title)}</h3><p>${esc(p.use)}</p>
+    <button class="btn go" type="button" data-pcopy="${p.id}">Copy prompt</button><pre class="prompt">${esc(fillDomain(p.text))}</pre></div>`).join('');
+}
+$('#pdomain').addEventListener('change', renderPrompts);
+
+// ---------- mock exams ----------
+let M = null, tick = null;
+function renderMocks(){
+  const saved = loadM();
+  $('#mocklist').innerHTML = ['A','B'].map(set => {
+    const r = S.mocks[set], resume = saved && saved.set === set, expired = resume && saved.ends <= Date.now();
+    const best = expired ? '<p class="best">Time ran out on your saved attempt</p>'
+      : r ? `<p class="best">Best <b class="${r.best >= 80 ? 'pass' : ''}">${r.best}%</b> &middot; last ${r.last}% on ${esc(r.date)} &middot; ${r.tries} attempt${r.tries > 1 ? 's' : ''}</p>`
+      : resume ? '<p class="best">In progress, saved on this device</p>' : '<p class="best">Not sat yet</p>';
+    return `<div class="mock"><h3>Mock ${set}</h3><p class="when">Planned for day ${set === 'A' ? 7 : 13} &middot; 65 questions &middot; 90 minutes</p>${best}
+      <div class="row" style="margin-top:0"><button class="btn go" type="button" data-mock="${set}">${expired ? 'See the result' : resume ? 'Resume Mock ' + set : r ? 'Sit it again' : 'Start Mock ' + set}</button>
+      ${r ? `<button class="btn" type="button" data-review="${set}">Review last attempt</button>` : ''}</div></div>`;
+  }).join('');
+}
+$('#mocklist').addEventListener('click', e => {
+  const b = e.target.closest('[data-mock]'); if (b) { startMock(b.dataset.mock); return; }
+  const v = e.target.closest('[data-review]'); if (v) { M = {done:true, set:v.dataset.review}; openExam(); showResult(S.mocks[v.dataset.review].lastRun); }
+});
+function startMock(set){
+  const saved = loadM();
+  // a saved attempt whose 90 minutes ran out is scored as it stood, never silently discarded
+  if (saved && saved.set === set && saved.ends <= Date.now()) { M = saved; openExam(); finish(); return; }
+  if (saved && saved.set === set) M = saved;
+  else {
+    if (saved && saved.set !== set && !confirm(`Mock ${saved.set} is still in progress. Starting Mock ${set} discards it. Continue?`)) return;
+    const qs = shuffle(DATA.questions.filter(q => q.set === set).map(q => q.id));
+    const opts = {}; for (const id of qs) { const q = QS.get(id); opts[id] = shuffle([...q.right, ...q.wrong]); }
+    M = {set, qs, opts, ans:{}, flags:{}, i:0, ends: Date.now() + 90*60*1000};
+    saveM();
+  }
+  openExam(); renderExamQ(); clearInterval(tick); tick = setInterval(clock, 1000); clock();
+}
+let lastFocus = null;
+// aria-modal alone does not stop Tab reaching the page behind, so the page goes inert
+const behind = (on) => ['.bar', 'main', 'footer'].forEach(s => { $(s).inert = on; });
+function openExam(){ lastFocus = document.activeElement; behind(true); $('#exam').classList.add('on'); document.body.style.overflow = 'hidden'; $('#exam-h').textContent = 'Mock ' + M.set; $('#leave').focus(); }
+function closeExam(){ $('#exam').classList.remove('on'); behind(false); document.body.style.overflow = ''; clearInterval(tick); renderMocks(); if (lastFocus) lastFocus.focus(); }
+const saveM = () => { try { localStorage.setItem(MKEY, JSON.stringify(M)); } catch(e) {} };
+function clock(){
+  if (!M || M.done) return;
+  const left = Math.max(0, M.ends - Date.now()), m = Math.floor(left/60000), s = Math.floor(left/1000) % 60;
+  $('#clock').textContent = String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+  $('#clock').classList.toggle('low', left < 5*60000);
+  if (left === 0) { toast('Time is up. Submitting.'); finish(); }
+}
+function renderExamQ(){
+  ['#flag','#submit','#clock'].forEach(s => $(s).hidden = false);
+  $('#leave').textContent = 'Save and leave';
+  const id = M.qs[M.i], q = QS.get(id), multi = q.right.length > 1, mine = new Set(M.ans[id] || []);
+  $('#flag').textContent = M.flags[id] ? 'Unflag' : 'Flag';
+  // one definition of "answered", shared with Submit: a Select TWO with one pick is partial, not answered
+  const picks = (x) => (M.ans[x] || []).length, full = (x) => picks(x) === QS.get(x).right.length;
+  const answeredN = M.qs.filter(full).length;
+  $('#examin').innerHTML = `<h2 class="stem">${esc(q.q)}</h2>
+    <ol class="opts">${M.opts[id].map((o,i) => `<li><button class="opt" type="button" data-e="${i}" aria-pressed="${mine.has(o)}"><span class="k">${KEYS[i]}</span><span>${esc(o)}</span></button></li>`).join('')}</ol>
+    <div class="row"><button class="btn" type="button" id="prev" ${M.i === 0 ? 'disabled' : ''}>Previous</button><button class="btn go" type="button" id="enext">${M.i === 64 ? 'Review and submit' : 'Next'}</button>
+      <span class="hint">Question ${M.i+1} of 65${multi ? ', choose ' + q.right.length : ''} &middot; ${answeredN} answered &middot; <kbd>A</kbd>&ndash;<kbd>${KEYS[M.opts[id].length-1]}</kbd> to answer, arrow keys to move</span></div>
+    <div class="navgrid" aria-label="Jump to a question">${M.qs.map((x,i) => { const st = full(x) ? 'ans' : picks(x) ? 'part' : '';
+      return `<button type="button" data-j="${i}" class="${st} ${M.flags[x] ? 'flag' : ''} ${i === M.i ? 'cur' : ''}" aria-label="Question ${i+1}${M.flags[x] ? ', flagged' : ''}${st === 'ans' ? ', answered' : st === 'part' ? ', ' + picks(x) + ' of ' + QS.get(x).right.length + ' chosen' : ''}">${i+1}</button>`; }).join('')}</div>`;
+}
+const go = (i) => { M.i = i; saveM(); renderExamQ(); $('#exam .exam-body').scrollTop = 0; };
+$('#examin').addEventListener('click', e => {
+  if (!M || M.done) return;
+  const o = e.target.closest('[data-e]');
+  if (o) {
+    const id = M.qs[M.i], q = QS.get(id), val = M.opts[id][+o.dataset.e];
+    let sel = M.ans[id] || [];
+    if (q.right.length > 1) {
+      if (sel.includes(val)) sel = sel.filter(x => x !== val);
+      else if (sel.length < q.right.length) sel = [...sel, val];
+      else { toast(`${q.right.length} chosen. Untick one to change.`); return; }
+    } else sel = [val];
+    M.ans[id] = sel; saveM(); renderExamQ();
+    // the re-render replaces the buttons, so put keyboard focus back where it was
+    $(`[data-e="${o.dataset.e}"]`).focus(); return;
+  }
+  if (e.target.id === 'prev') { go(M.i - 1); ($('#prev:not(:disabled)') || $('#enext')).focus(); }
+  if (e.target.id === 'enext') { if (M.i < 64) { go(M.i + 1); $('#enext').focus(); } else $('#submit').click(); }
+  const j = e.target.closest('[data-j]'); if (j) { go(+j.dataset.j); $(`[data-j="${j.dataset.j}"]`).focus(); }
+});
+$('#flag').addEventListener('click', () => { const id = M.qs[M.i]; M.flags[id] = !M.flags[id]; saveM(); renderExamQ(); });
+$('#leave').addEventListener('click', () => { if (M && !M.done) { saveM(); toast('Saved. The 90-minute clock keeps running.'); } closeExam(); });
+$('#submit').addEventListener('click', () => {
+  const blank = M.qs.filter(id => !(M.ans[id] && M.ans[id].length === QS.get(id).right.length)).length;
+  const flagged = M.qs.filter(id => M.flags[id]).length;
+  if ((blank || flagged) && !confirm(`${blank} unanswered and ${flagged} flagged. Unanswered questions score zero. Submit anyway?`)) return;
+  finish();
+});
+function finish(){
+  clearInterval(tick);
+  const per = {1:[0,0],2:[0,0],3:[0,0],4:[0,0],5:[0,0]}; let right = 0; const items = [];
+  for (const id of M.qs) {
+    const q = QS.get(id), mine = M.ans[id] || [];
+    const ok = mine.length === q.right.length && q.right.every(r => mine.includes(r));
+    right += ok ? 1 : 0; per[q.d][0] += ok ? 1 : 0; per[q.d][1]++; items.push([id, mine, ok]);
+    record(q, ok);
+  }
+  const pct = Math.round(right / 65 * 100), prev = S.mocks[M.set] || {best:0, tries:0};
+  const run = {set:M.set, pct, right, per, items};
+  S.mocks[M.set] = {best: Math.max(prev.best, pct), last: pct, tries: prev.tries + 1, date: new Date().toLocaleDateString(), lastRun: run};
+  save(); try { localStorage.removeItem(MKEY); } catch(e) {}
+  M = {done:true, set:run.set};
+  showResult(run); renderWeights(); renderTopicsMeta(); renderLedger(); renderToday();
+}
+function showResult(run){
+  ['#flag','#submit','#clock'].forEach(s => $(s).hidden = true);
+  $('#leave').textContent = 'Close';
+  $('#exam-h').textContent = 'Mock ' + run.set + ' result';
+  const weak = [1,2,3,4,5].map(d => [d, run.per[d][0] / run.per[d][1]]).sort((a,b) => a[1] - b[1])[0][0];
+  $('#examin').innerHTML = `<div class="result"><h2 class="num">${run.pct}%</h2>
+    <p class="sub">${run.right} of 65 right. ${run.pct >= 80 ? 'That clears the 80% working rule.' : 'Below the 80% working rule, so spend the next study session on the weakest domain.'} Weakest here: Domain ${weak}, ${DOMS[weak][0]}. These 65 questions are now in the practice console.</p>
+    <div style="max-width:520px">${bars(run.per)}</div>
+    <div class="row"><button class="tog" type="button" id="onlymiss" aria-pressed="true">Showing misses only</button></div>
+    <div class="rev" id="rev"></div></div>`;
+  const draw = (missOnly) => {
+    $('#rev').innerHTML = run.items.filter(it => !missOnly || !it[2]).map(([id, mine, ok]) => { const q = QS.get(id), t = TOP.get(q.t);
+      return `<article><h4>${esc(q.q)}</h4>
+        ${ok ? `<p class="ans r">Right: ${esc(q.right.join(' / '))}</p>` : `<p class="ans x">You chose: ${mine.length ? esc(mine.join(' / ')) : 'nothing'}</p><p class="ans r">Answer: ${esc(q.right.join(' / '))}</p>`}
+        <p class="ex">${esc(q.x)} <a href="#t-${t.id}" data-close-open="${t.id}">Read the topic</a></p></article>`; }).join('') || '<p>No misses. Sit the other mock.</p>';
+  };
+  draw(true);
+  $('#onlymiss').addEventListener('click', e => { const b = e.currentTarget, on = b.getAttribute('aria-pressed') !== 'true';
+    b.setAttribute('aria-pressed', on); b.textContent = on ? 'Showing misses only' : 'Showing all 65'; draw(on); });
+  $('#rev').addEventListener('click', e => { const a = e.target.closest('[data-close-open]'); if (a) { e.preventDefault(); closeExam(); openTopic(a.dataset.closeOpen); } });
+}
+document.addEventListener('keydown', e => {
+  if (!$('#exam').classList.contains('on')) return;
+  if (e.key === 'Escape') { $('#leave').click(); return; }
+  if (!M || M.done || /^(INPUT|SELECT)$/.test(e.target.tagName) || e.metaKey || e.ctrlKey) return;
+  const i = KEYS.indexOf(e.key.toUpperCase());
+  if (e.key.length === 1 && i >= 0) { const b = $(`[data-e="${i}"]`); if (b) { b.click(); e.preventDefault(); } }
+  const refocus = () => ($('[data-e="0"]') || $('#enext')).focus();
+  if (e.key === 'ArrowRight' && M.i < 64) { go(M.i + 1); refocus(); }
+  if (e.key === 'ArrowLeft' && M.i > 0) { go(M.i - 1); refocus(); }
+});
+
+// ---------- chrome ----------
+const applyMode = () => { document.body.classList.toggle('plain', !!S.plain); $('#mode').setAttribute('aria-pressed', !!S.plain); };
+$('#mode').addEventListener('click', () => { S.plain = !S.plain; save(); applyMode(); });
+$('#theme').addEventListener('click', () => {
+  let c = document.documentElement.getAttribute('data-theme');
+  if (!c) c = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  const n = c === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', n);
+  try { localStorage.setItem('gradient_path_theme', n); } catch(e) {}
+});
+$('#reset').addEventListener('click', () => {
+  if (!confirm('Erase your start date, answers, topic marks and mock scores on this device?')) return;
+  try { localStorage.removeItem(KEY); localStorage.removeItem(MKEY); } catch(e) {}
+  location.reload();
+});
+
+$('#pool').value = S.pool;
+applyMode(); renderToday(); renderWeights(); renderLedger(); renderTopics(); renderPrompts(); renderMocks(); nextQ();
+if (location.hash.startsWith('#t-')) openTopic(location.hash.slice(3));
+})();
+</script>
+</body></html>

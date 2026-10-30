@@ -122,6 +122,14 @@ def main():
       <div class="bar"><i id="b-sd"></i></div>
       <span class="go">Open module &rarr;</span>
     </a>
+    <a class="mod" href="/aws-ai-practitioner">
+      <div class="mod-top"><span class="mod-n">CERT PREP</span><span class="pill live">Live</span>
+        <span class="pill">AWS AIF-C01</span></div>
+      <h2>AWS AI Practitioner in 14 Days</h2>
+      <p>The free version of the prep the paid plans sell: a day-by-day plan, thirty topics in plain language, and two timed 65-question mock exams in the exam&rsquo;s own domain weights. It opens on a scenario question, because the exam&rsquo;s real skill is <b>matching a business problem to the right AWS service</b>.</p>
+      <ul class="facts"><li>30 topics</li><li>160 questions</li><li>2 mock exams</li><li>65 prompts</li></ul>
+      <span class="go">Open the plan &rarr;</span>
+    </a>
 '''
     anchor = '''      <span class="go">Open module &rarr;</span>
     </a>

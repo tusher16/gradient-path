@@ -1,0 +1,101 @@
+// The 14-day plan, the look-alike table, and the general prompts.
+// Week 1 covers all five domains and ends on Mock A; week 2 re-drills by
+// weight (Domain 3 first, 28%), ends on Mock B, and day 14 is the exam.
+
+const DAYS = [
+  { n:1, kind:'learn', title:'What AI is, how it learns, how it runs',
+    topics:['ai-nesting','learning-types','data-types','inference-types'],
+    tasks:['Read the four topics in plain mode first','Listen to them again on a walk','Paste the “Quiz me” prompt for learning types into a chatbot'] },
+  { n:2, kind:'learn', title:'AI on AWS: which service, which pipeline, which metric',
+    topics:['use-cases','aws-ai-services','trad-ml-vs-fm','ml-lifecycle','mlops','metrics'],
+    tasks:['Read the six topics','Say the managed services out loud: what goes in, what comes out','Answer every drill until Domain 1 shows 80%'] },
+  { n:3, kind:'learn', title:'How generative AI works',
+    topics:['tokens-embeddings','model-types','fm-lifecycle','genai-tradeoffs'],
+    tasks:['Read the four topics','Explain embeddings to a chatbot in your own words (Quiz me prompt)','Drill until Domain 2 questions feel easy'] },
+  { n:4, kind:'learn', title:'GenAI on AWS: cost, the stack, agents, settings',
+    topics:['token-pricing','aws-genai-stack','agentic-ai','fm-selection-params'],
+    tasks:['Read the four topics; the newer services (Quick, Kiro, Strands, AgentCore) are from the 2026 guide','Learn the three pricing modes by their analogy','Paste the agents prompt and do three scenarios'] },
+  { n:5, kind:'learn', title:'Building with foundation models',
+    topics:['rag','customization-ladder','fine-tuning-data','prompt-techniques','prompt-risks','fm-evaluation'],
+    tasks:['This is the 28% domain: read all six slowly','Recite the customisation ladder bottom to top','Learn ROUGE vs BLEU from the look-alike table'] },
+  { n:6, kind:'learn', title:'Responsible AI, security and governance',
+    topics:['responsible-ai','bias-variance','transparency','securing-ai','data-lineage','governance'],
+    tasks:['Read the six topics','Learn the governance services from the look-alike table','Mark every topic solid or fuzzy before tomorrow'] },
+  { n:7, kind:'mock', mock:'A', title:'Mock A: 65 questions, 90 minutes',
+    topics:[],
+    tasks:['Sit Mock A in one go, phone away, no notes','Do not check answers until the end','Write down the three domains that felt weakest'] },
+  { n:8, kind:'review', title:'Mock A review, then Domain 3 (28%)',
+    topics:['rag','customization-ladder','fine-tuning-data','prompt-techniques','prompt-risks','fm-evaluation','fm-selection-params'],
+    tasks:['Read the explanation for every Mock A question you missed','Re-read the Domain 3 topics you marked fuzzy','Drill Domain 3 only'] },
+  { n:9, kind:'review', title:'Domain 2 (24%) and the 2026 additions',
+    topics:['tokens-embeddings','model-types','fm-lifecycle','genai-tradeoffs','token-pricing','aws-genai-stack','agentic-ai'],
+    tasks:['Re-read fuzzy Domain 2 topics','Paste the oral-exam prompt and do Domain 2 out loud','Drill Domain 2 only'] },
+  { n:10, kind:'review', title:'Domain 1 (20%) and the look-alike table',
+    topics:['ai-nesting','learning-types','data-types','inference-types','use-cases','aws-ai-services','trad-ml-vs-fm','ml-lifecycle','mlops','metrics'],
+    tasks:['Cover the right column of the look-alike table and say the difference','Re-read fuzzy Domain 1 topics','Drill Domain 1 only'] },
+  { n:11, kind:'review', title:'Domains 4 and 5 (28% together)',
+    topics:['responsible-ai','bias-variance','transparency','securing-ai','data-lineage','governance'],
+    tasks:['Re-read fuzzy Domain 4 and 5 topics','Name the AWS service for each auditor question in the governance topic','Drill Domains 4 and 5'] },
+  { n:12, kind:'review', title:'Your weakest domain',
+    topics:[],
+    tasks:['The page picks the domain with your lowest accuracy','Paste the weak-area coach prompt for that domain','Get it above 80% before stopping'] },
+  { n:13, kind:'mock', mock:'B', title:'Mock B: 65 new questions, 90 minutes',
+    topics:[],
+    tasks:['Sit Mock B under exam conditions','Review every miss straight after','If you are under 75%, spend tonight on that domain’s topics'] },
+  { n:14, kind:'exam', title:'Exam day',
+    topics:[],
+    tasks:['Read only the memory hooks and the look-alike table','Check your ID and test-centre or online-proctoring setup','Flag hard questions and come back; an unanswered question scores zero'] },
+];
+
+// [left, right, the one-line tell]
+const CONFUSABLES = [
+  ['Amazon Transcribe','Amazon Polly','Speech → text, versus text → speech.'],
+  ['Amazon Textract','Amazon Comprehend','Reads text and tables off scanned paper, versus understands text you already have.'],
+  ['Amazon Rekognition','Amazon Textract','Faces, objects and unsafe content in images, versus document text, forms and tables.'],
+  ['Amazon Lex','Amazon Polly','Understands what the user wants (intents), versus only speaks.'],
+  ['Amazon Bedrock','Amazon SageMaker AI','Ready FMs behind a serverless API, versus build, train and host your own model.'],
+  ['Amazon Bedrock','SageMaker JumpStart','A serverless FM API (usually pay per token), versus deploy a pre-trained model to a SageMaker endpoint in your own account.'],
+  ['Strands Agents','Bedrock AgentCore','The SDK you write an agent with, versus the managed platform you run it on.'],
+  ['SageMaker Clarify','SageMaker Model Monitor','Measures bias and explains predictions, versus watches a live model for drift.'],
+  ['SageMaker Model Cards','AWS AI Service Cards','Documents your model, versus AWS documenting its own AI services.'],
+  ['SageMaker Ground Truth','Amazon A2I','Humans label training data, versus humans review live low-confidence predictions.'],
+  ['AWS CloudTrail','AWS Config','Who called which API and when, versus how resources are configured and whether that complies.'],
+  ['AWS Config','Amazon Inspector','Configuration compliance, versus software vulnerabilities.'],
+  ['Amazon Macie','Amazon Inspector','Sensitive data in S3, versus vulnerabilities in EC2, containers and Lambda.'],
+  ['AWS Artifact','AWS Trusted Advisor','AWS’s own compliance reports, versus best-practice checks on your account.'],
+  ['AWS KMS','AWS Secrets Manager','Encryption keys, versus stored and rotated credentials.'],
+  ['IAM','Bedrock Guardrails','Who may call the model, versus what the model may say.'],
+  ['Guardrails denied topics','Guardrails word filters','Blocks a subject (investment advice), versus blocks exact words (a competitor’s name).'],
+  ['Fine-tuning','Continued pre-training','Labelled prompt-response pairs, versus a mountain of unlabelled domain text.'],
+  ['RAG','Fine-tuning','Facts that change, versus behaviour, tone and format.'],
+  ['Temperature','Top-p','Turns randomness up or down, versus cuts off the unlikely tail by cumulative probability.'],
+  ['ROUGE','BLEU','Summaries (how much of the reference is covered), versus translation (how much of the output matches).'],
+  ['Precision','Recall','Penalises false alarms, versus penalises misses.'],
+  ['Overfitting','Underfitting','High variance: great on training, bad on new data, versus high bias: bad on both.'],
+  ['Batch inference','Asynchronous inference','A whole dataset offline with no endpoint, versus a queue of single large requests with a notification.'],
+  ['Prompt injection','Data poisoning','Attacks the live input, versus attacks the training or retrieval data.'],
+];
+
+// General prompts. {domain} is filled in by the page when relevant.
+const PROMPTS = [
+  { id:'partner', title:'Study partner while you do something else',
+    use:'Voice mode, walking, cooking, commuting.',
+    text:`You are my study partner for the AWS Certified AI Practitioner exam (AIF-C01, exam guide version 1.2). I am practising by voice while doing something else, so:
+- Keep every reply under 60 words. No lists, tables or markdown.
+- Ask one question at a time and wait for my answer.
+Run a loop: give me a short business scenario and ask which AWS service or AI concept fits. After I answer, say right or wrong in one sentence and give the one-line reason. Rotate across all five domains, weighting Domain 3 (Applications of Foundation Models) most. Every fifth question, ask me to explain a concept in my own words instead. If you are not sure an AWS feature exists, say so instead of guessing. Start now.` },
+  { id:'oral', title:'Oral exam on one domain',
+    use:'Day 9–11, out loud, 20 minutes.',
+    text:`Act as an examiner for AWS Certified AI Practitioner (AIF-C01), focusing on {domain}. Ask me 10 exam-style multiple-choice questions, one at a time, each with four options labelled A to D, written the way AWS writes them (a short business scenario, then “Which solution meets these requirements?”). Wait for my answer each time. Then tell me whether I am right, why the correct option is right, and why my choice was wrong, in under 80 words. After 10 questions, give my score and the two concepts I should revisit. Do not invent AWS features.` },
+  { id:'coach', title:'Weak-area coach',
+    use:'Day 12, after your mocks.',
+    text:`I am preparing for AWS Certified AI Practitioner (AIF-C01) and my weakest area is {domain}. First ask me three quick questions to find exactly which concepts I am confusing. Then teach the confused concepts using one everyday analogy each, in plain language with no jargon. Then test me with five scenario questions on just those concepts, one at a time, waiting for my answer. Finish with a three-line cheat sheet I can read on exam morning.` },
+  { id:'flash', title:'Flashcards out loud',
+    use:'Any time you have 10 minutes.',
+    text:`Run rapid flashcards for AWS Certified AI Practitioner (AIF-C01). Say one term (an AWS service, a Bedrock or SageMaker feature, or a concept such as RAG, ROUGE, top-p or overfitting). I answer with what it does in one sentence. Tell me right or wrong in at most 15 words, then give the next term. Mix easy and hard. After 20 cards, list the ones I missed. Keep replies short; I am using voice.` },
+  { id:'teach', title:'Teach it back',
+    use:'When a topic feels fuzzy.',
+    text:`I will explain a concept from the AWS Certified AI Practitioner exam as if teaching a new colleague. Listen, then: (1) say what I got right, (2) correct anything wrong or missing, plainly, (3) ask me one follow-up question an examiner would ask. Keep it under 100 words. Ask me which concept I want to teach.` },
+];
+
+module.exports = { DAYS, CONFUSABLES, PROMPTS };
