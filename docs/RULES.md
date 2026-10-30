@@ -51,6 +51,7 @@ The repo is **public**. Before a new or changed file under `docs/` — or any Ma
 3. Only after zero errors, run the full pipeline: assemble → katexify → build_index.
 4. Verify the built page in browser (both Simple and Technical mode, dark and light theme).
 5. `git diff --stat` the HTML. A 2 MB diff is expected for a full module; a 200 KB diff on an unchanged module is a bug.
+6. **A copy needs its check in the same change.** When the same content lives in two artefacts written by different processes (a template and the page built from it, a token block pasted into a new page), the change that creates or edits the second copy also adds the check that fails when they disagree: an equality assertion in the build, or a rebuild-then-`git diff` that must come back empty. Until TASKS.md #27 lands, `python3 generator/build_index.py` must be followed by `git diff --stat index.html`; any deletion of committed lines means the template is behind, so restore with `git restore index.html` and fix the template instead. Promoted from LEARNINGS.md on its second occurrence (DECISIONS.md, 2026-10-30).
 
 ## Publishing Boundary
 

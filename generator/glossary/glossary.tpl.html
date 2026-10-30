@@ -1,0 +1,170 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Glossary &mdash; Gradient Path</title>
+<meta name="description" content="{{N_TERMS}} terms the Gradient Path cards use without teaching, each with a one-line meaning, when it comes up in an interview, and links to every card that names it.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<script>try{var st=localStorage.getItem('gradient_path_theme');if(st)document.documentElement.setAttribute('data-theme',st);}catch(e){}</script>
+<style>
+:root{
+  --ground:#EFF3F2; --surface:#FFFFFF; --sunk:#E6ECEA;
+  --line:#D2DBD9; --line-soft:#E3E9E8;
+  --ink:#131C1A; --ink-2:#3B4B48; --muted:#687975;
+  --signal:#C11E5C; --signal-soft:#FBE6EE;
+  --memory:#0C7A70; --memory-soft:#DCF0ED;
+  --m01:#0C7A70; --m02:#A8670B; --m03:#1E6E8C; --m04:#C11E5C;
+  --m05:#5F7A1E; --m06:#9C4221;
+  --display:"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif;
+  --body:"IBM Plex Sans",ui-sans-serif,system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --ground:#0C1211; --surface:#141C1B; --sunk:#101817;
+  --line:#283432; --line-soft:#1E2827;
+  --ink:#E7EEEC; --ink-2:#B6C4C1; --muted:#84948F;
+  --signal:#FF6A9C; --signal-soft:#33141F;
+  --memory:#42D3BF; --memory-soft:#0C2B28;
+  --m01:#42D3BF; --m02:#E0A33C; --m03:#5BB8D6; --m04:#FF6A9C;
+  --m05:#A8C94A; --m06:#E08A5F;
+}}
+:root[data-theme="dark"]{
+  --ground:#0C1211; --surface:#141C1B; --sunk:#101817;
+  --line:#283432; --line-soft:#1E2827;
+  --ink:#E7EEEC; --ink-2:#B6C4C1; --muted:#84948F;
+  --signal:#FF6A9C; --signal-soft:#33141F;
+  --memory:#42D3BF; --memory-soft:#0C2B28;
+  --m01:#42D3BF; --m02:#E0A33C; --m03:#5BB8D6; --m04:#FF6A9C;
+  --m05:#A8C94A; --m06:#E08A5F;
+}
+*{box-sizing:border-box}
+html{scroll-padding-top:120px}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--body);
+  font-size:16px;line-height:1.62;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1040px;margin:0 auto;padding-inline:20px;padding-block:52px 80px}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--muted);margin:0 0 14px}
+.eyebrow a{color:inherit;text-decoration:none;border-bottom:1px dotted currentColor}
+.eyebrow a:hover{color:var(--ink)}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(2.1rem,6vw,3.4rem);
+  letter-spacing:-.018em;line-height:1.04;margin:0 0 16px;text-wrap:balance}
+.lede{font-size:1.08rem;color:var(--ink-2);max-width:64ch;margin:0 0 10px}
+.lede b{color:var(--ink)}
+.facts{display:flex;flex-wrap:wrap;gap:0 32px;margin:32px 0 0;padding-block:18px;
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.fact b{display:block;font-family:var(--mono);font-size:1.45rem;font-weight:600;
+  font-variant-numeric:tabular-nums;letter-spacing:-.02em;line-height:1.25}
+.fact span{font-family:var(--mono);font-size:10.5px;letter-spacing:.11em;
+  text-transform:uppercase;color:var(--muted)}
+/* finder */
+.finder{position:sticky;top:0;z-index:2;background:var(--ground);
+  margin:0 -20px;padding:16px 20px 12px;border-bottom:1px solid var(--line)}
+.search{display:flex;align-items:center;gap:12px}
+.search input{flex:1;min-width:0;font:inherit;font-size:1rem;color:var(--ink);
+  background:var(--surface);border:1px solid var(--line);border-radius:999px;
+  padding:10px 18px;transition:border-color .14s ease}
+.search input:focus{border-color:var(--ink-2);outline:none}
+.search input::placeholder{color:var(--muted)}
+.hits{font-family:var(--mono);font-size:12px;color:var(--muted);
+  font-variant-numeric:tabular-nums;white-space:nowrap}
+.jump{display:flex;flex-wrap:wrap;gap:4px 18px;margin-top:10px}
+.jump a{font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:var(--ink-2);
+  text-decoration:none;border-bottom:1px solid transparent}
+.jump a:hover{color:var(--ink);border-bottom-color:currentColor}
+.jump a span{color:var(--muted)}
+/* sections */
+.sec{padding-top:40px}
+.sec h2{font-family:var(--display);font-weight:800;font-size:1.7rem;letter-spacing:-.015em;
+  margin:0;padding-bottom:12px;border-bottom:2px solid var(--ink)}
+.sec h2 .c{font-family:var(--mono);font-size:.8rem;font-weight:400;color:var(--muted);
+  letter-spacing:0;margin-left:6px;vertical-align:4px}
+.term{display:grid;grid-template-columns:minmax(0,230px) minmax(0,1fr);gap:8px 32px;
+  padding-block:20px;border-bottom:1px solid var(--line)}
+.term h3{font-family:var(--display);font-weight:600;font-size:1.18rem;line-height:1.3;
+  letter-spacing:-.005em;margin:0}
+.term h3 a{color:var(--ink);text-decoration:none}
+.term h3 a:hover{color:var(--signal)}
+.term:target h3 a{color:var(--signal)}
+.body p{margin:0}
+.m{color:var(--ink);max-width:66ch}
+.w{color:var(--ink-2);font-size:.95rem;margin-top:6px!important;max-width:66ch}
+.lab{display:inline-block;font-family:var(--mono);font-size:10px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--muted);margin-right:10px;vertical-align:1px}
+.named{margin-top:10px;font-size:.88rem}
+.named ul{display:inline;list-style:none;margin:0;padding:0}
+.named li{display:inline}
+.named li+li::before{content:"\00B7";color:var(--muted);margin:0 8px}
+.named a{color:var(--ink-2);text-decoration:none;border-bottom:1px solid var(--line)}
+.named a:hover{color:var(--ink);border-bottom-color:currentColor}
+.mn{font-family:var(--mono);font-size:10.5px;font-weight:600;margin-right:5px}
+.named.none{color:var(--muted)}
+.src{margin-top:8px!important;font-size:.82rem;color:var(--ink-2);line-height:1.5}
+.src a{color:var(--ink-2);text-decoration:none;border-bottom:1px dotted currentColor}
+.src a:hover{color:var(--ink)}
+.empty{display:none;padding:48px 0;color:var(--ink-2)}
+.empty b{color:var(--ink)}
+[hidden]{display:none!important}
+a:focus-visible,input:focus-visible{outline:2px solid var(--signal);outline-offset:3px}
+footer{margin-top:60px;padding-top:22px;border-top:1px solid var(--line);
+  font-family:var(--mono);font-size:11px;color:var(--muted);line-height:1.85}
+footer a{color:var(--muted)}
+@media (max-width:760px){
+  .term{grid-template-columns:1fr}
+  .sec h2{font-size:1.4rem}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head><body>
+<div class="wrap">
+  <p class="eyebrow"><a href="index.html">Gradient Path</a> &middot; glossary</p>
+  <h1>The words the cards assume</h1>
+  <p class="lede">Terms the cards lean on <b>without stopping to teach them</b>. Each gets one line on what it means and one on when it comes up in an interview, then links to the published cards that name it.</p>
+
+  <div class="facts">
+    <div class="fact"><b>{{N_TERMS}}</b><span>terms</span></div>
+    <div class="fact"><b>{{N_SECTIONS}}</b><span>sections</span></div>
+    <div class="fact"><b>{{N_LINKS}}</b><span>card links</span></div>
+    <div class="fact"><b>{{N_CITED}}</b><span>with a source</span></div>
+  </div>
+
+  <div class="finder">
+    <div class="search">
+      <input id="q" type="search" placeholder="Filter terms (press / to focus)" autocomplete="off" spellcheck="false" aria-label="Filter glossary terms">
+      <span class="hits" id="hits" aria-live="polite">{{N_TERMS}} terms</span>
+    </div>
+    <nav class="jump" aria-label="Sections">{{NAV}}</nav>
+  </div>
+
+  <main>{{BODY}}</main>
+  <p class="empty" id="empty">Nothing matches <b id="eq"></b>. The glossary only covers terms two or more cards rely on; a term only one card uses is explained on that card.</p>
+
+  <footer>
+    Scope: the terms named by two or more cards, published or still in draft, that no card teaches. A term only one card uses is explained where it appears; a term whose cards are all unpublished says so.<br>
+    These are definitions, written for this site. Where an entry reports a number, a measured result or what a named system does, it cites its source; the sourced production failures live in the cards themselves.<br>
+    Numbers checked against their sources on 30 October 2026. <a href="index.html">Back to Gradient Path</a>
+  </footer>
+</div>
+<script>
+(function(){
+  var q=document.getElementById('q'), hits=document.getElementById('hits'),
+      empty=document.getElementById('empty'), eq=document.getElementById('eq'),
+      terms=[].slice.call(document.querySelectorAll('.term')),
+      secs=[].slice.call(document.querySelectorAll('.sec')), total=terms.length;
+  function run(){
+    var words=q.value.toLowerCase().trim().split(/\s+/).filter(Boolean), n=0;
+    terms.forEach(function(t){
+      var d=t.getAttribute('data-q'), ok=words.every(function(w){return d.indexOf(w)>-1;});
+      t.hidden=!ok; if(ok) n++;
+    });
+    secs.forEach(function(s){ s.hidden=!s.querySelector('.term:not([hidden])'); });
+    hits.textContent=words.length ? n+' of '+total : total+' terms';
+    empty.style.display=n ? 'none' : 'block'; eq.textContent=q.value;
+  }
+  q.addEventListener('input',run);
+  q.addEventListener('keydown',function(e){ if(e.key==='Escape'){ q.value=''; run(); q.blur(); } });
+  document.addEventListener('keydown',function(e){
+    if(e.key==='/' && document.activeElement!==q && !e.metaKey && !e.ctrlKey){ e.preventDefault(); q.focus(); }
+  });
+})();
+</script>
+</body></html>

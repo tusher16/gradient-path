@@ -1,6 +1,6 @@
 # Practice — design brief (TASKS.md #25)
 
-_Written 2026-10-30 · shape only, no code · structure chosen by the user: **The Ledger**_
+_Written 2026-10-30 · shape only, no code · structure chosen by the user: **The Ledger** · **approved by the owner 2026-10-30**_
 
 Tags: **Fact** (file that proves it) · **Proposed** (a design decision for the builder) · **Unknown** (filed as a task).
 
@@ -100,8 +100,8 @@ Storage blocked (private mode): the sitting still works for the session, and one
 ## 7. Constraints and open decisions
 
 - Static only, and published on push (docs/RULES.md § Publishing Boundary). KaTeX inside drill answers needs the KaTeX CSS the module pages already load.
-- **Unknown → TASKS.md #27:** roadmap stores bare card ids, and some ids appear in two modules (`kv-cache`, `lora`, `quantization` in 01 and 04). How does a ticked roadmap row map to one card? The builder must not guess.
-- **Unknown → TASKS.md #28:** whether extracting drill answers from built HTML survives a module rebuild unchanged. That needs a check like the glossary's link check.
+- **Unknown → TASKS.md #28:** roadmap stores bare card ids, and some ids appear in two modules (`kv-cache`, `lora`, `quantization` in 01 and 04). How does a ticked roadmap row map to one card? The builder must not guess.
+- **Unknown → TASKS.md #29:** whether extracting drill answers from built HTML survives a module rebuild unchanged. That needs a check like the glossary's link check.
 - **Not decided here:** export/import of `gp-practice-v1` (cross-device). Left out of v1 unless the user asks.
 
 **Next step after confirmation:** impeccable's new-work flow records the direction contract in a surface brief, then a code-led build, then the finish review and the detector run.

@@ -1,0 +1,350 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Chips and Gaps &mdash; the concept map behind Gradient Path</title>
+<meta name="description" content="Every concept on Gradient Path and how the cards connect: a prerequisite map of 241 cards, the convergence points worth studying first, and the terms still waiting for a card of their own.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<style>
+:root{
+  --ground:#EFF3F2; --surface:#FFFFFF; --sunk:#E6ECEA;
+  --line:#D2DBD9; --line-soft:#E3E9E8;
+  --ink:#131C1A; --ink-2:#3B4B48; --muted:#687975;
+  --signal:#C11E5C; --signal-soft:#FBE6EE;
+  --memory:#0C7A70; --memory-soft:#DCF0ED;
+  --m01:#0C7A70; --m02:#A8670B; --m03:#1E6E8C; --m04:#C11E5C;
+  --m05:#5F7A1E; --m06:#9C4221; --m07:#4A6B66; --m08:#7B3A63;
+  --edge:rgba(19,28,26,.18); --edge-hot:#C11E5C;
+  --display:"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif;
+  --body:"IBM Plex Sans",ui-sans-serif,system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --ground:#0C1211; --surface:#141C1B; --sunk:#101817;
+  --line:#283432; --line-soft:#1E2827;
+  --ink:#E7EEEC; --ink-2:#B6C4C1; --muted:#84948F;
+  --signal:#FF6A9C; --signal-soft:#33141F;
+  --memory:#42D3BF; --memory-soft:#0C2B28;
+  --m01:#42D3BF; --m02:#E0A33C; --m03:#5BB8D6; --m04:#FF6A9C;
+  --m05:#A8C94A; --m06:#E08A5F; --m07:#8FB3AD; --m08:#D089B5;
+  --edge:rgba(231,238,236,.16); --edge-hot:#FF6A9C;
+}}
+:root[data-theme="dark"]{
+  --ground:#0C1211; --surface:#141C1B; --sunk:#101817;
+  --line:#283432; --line-soft:#1E2827;
+  --ink:#E7EEEC; --ink-2:#B6C4C1; --muted:#84948F;
+  --signal:#FF6A9C; --signal-soft:#33141F;
+  --memory:#42D3BF; --memory-soft:#0C2B28;
+  --m01:#42D3BF; --m02:#E0A33C; --m03:#5BB8D6; --m04:#FF6A9C;
+  --m05:#A8C94A; --m06:#E08A5F; --m07:#8FB3AD; --m08:#D089B5;
+  --edge:rgba(231,238,236,.16); --edge-hot:#FF6A9C;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--body);
+  font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;padding-inline:20px;padding-block:44px 72px}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(2rem,5vw,3rem);
+  letter-spacing:-.02em;line-height:1.05;margin:0 0 14px;text-wrap:balance}
+h2{font-family:var(--display);font-weight:600;font-size:1.3rem;letter-spacing:-.01em;margin:0 0 4px}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--muted);margin:0 0 12px}
+.lede{font-size:1.06rem;color:var(--ink-2);max-width:66ch;margin:0 0 8px}
+.lede b{color:var(--ink)}
+.finding{border-left:3px solid var(--signal);padding:2px 0 2px 16px;margin:26px 0 0;
+  max-width:70ch;color:var(--ink-2)}
+.finding b{color:var(--ink)}
+/* stat strip — a rule-separated row, not tiles */
+.stats{display:flex;flex-wrap:wrap;gap:0 34px;margin:34px 0 0;padding-block:18px;
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.stat{padding-block:4px}
+.stat b{display:block;font-family:var(--mono);font-size:1.5rem;font-weight:600;
+  font-variant-numeric:tabular-nums;letter-spacing:-.02em;line-height:1.2}
+.stat span{font-family:var(--mono);font-size:10.5px;letter-spacing:.11em;
+  text-transform:uppercase;color:var(--muted)}
+.stat.hot b{color:var(--signal)}
+.stat.good b{color:var(--memory)}
+section{margin-top:52px}
+.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:0 0 14px}
+.chip{font-family:var(--mono);font-size:11px;letter-spacing:.04em;padding:5px 11px;
+  border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink-2);
+  cursor:pointer;transition:border-color .14s ease,color .14s ease,background .14s ease}
+.chip:hover{border-color:var(--ink-2);color:var(--ink)}
+.chip[aria-pressed="true"]{border-color:currentColor}
+.chip .dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:7px;
+  vertical-align:-1px;background:currentColor}
+.chip.off{opacity:.42}
+input[type=search]{font-family:var(--mono);font-size:12px;padding:6px 12px;border-radius:999px;
+  border:1px solid var(--line);background:var(--surface);color:var(--ink);min-width:180px}
+input[type=search]:focus-visible,.chip:focus-visible,button:focus-visible,
+canvas:focus-visible,a:focus-visible{outline:2px solid var(--signal);outline-offset:3px}
+.stage{display:grid;grid-template-columns:minmax(0,1fr) 296px;gap:20px;align-items:start}
+.canvaswrap{position:relative;background:var(--surface);border:1px solid var(--line);
+  border-radius:14px;overflow:hidden;aspect-ratio:4/3;max-width:100%}
+canvas{display:block;width:100%;height:100%;touch-action:none}
+.hint{position:absolute;left:14px;bottom:12px;font-family:var(--mono);font-size:10.5px;
+  letter-spacing:.06em;color:var(--muted);pointer-events:none;text-transform:uppercase}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;
+  padding:20px 20px 22px;min-height:260px}
+.panel .ptitle{font-family:var(--display);font-weight:600;font-size:1.12rem;
+  line-height:1.25;margin:0 0 6px;text-wrap:balance}
+.meta{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted);margin:0 0 14px}
+.panel h4{font-family:var(--mono);font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--muted);font-weight:600;margin:16px 0 7px}
+.panel ul{margin:0;padding-left:16px;font-size:13.5px;color:var(--ink-2)}
+.panel li{margin-bottom:3px}
+.panel li b{color:var(--ink);font-weight:500}
+.empty{color:var(--muted);font-size:13.5px;font-style:italic}
+.pill{display:inline-block;font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;
+  text-transform:uppercase;padding:2px 8px;border-radius:999px;border:1px solid currentColor}
+.pill.unbuilt{color:var(--signal)}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:20px 38px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{text-align:left;font-family:var(--mono);font-size:10.5px;letter-spacing:.11em;
+  text-transform:uppercase;color:var(--muted);font-weight:600;
+  padding:0 0 8px;border-bottom:1px solid var(--line)}
+td{padding:9px 0;border-bottom:1px solid var(--line-soft);vertical-align:top}
+td.n{font-family:var(--mono);font-variant-numeric:tabular-nums;color:var(--signal);
+  width:2.6em;font-size:13px}
+td.src{font-family:var(--mono);font-size:11px;color:var(--muted);line-height:1.5}
+.note{font-size:13.5px;color:var(--muted);max-width:64ch;margin:10px 0 0}
+footer{margin-top:56px;padding-top:20px;border-top:1px solid var(--line);
+  font-family:var(--mono);font-size:11px;color:var(--muted);line-height:1.8}
+@media (max-width:900px){
+  .stage{grid-template-columns:1fr}
+  .cols{grid-template-columns:1fr}
+  .canvaswrap{aspect-ratio:1/1}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head><body>
+<div class="wrap">
+  <p class="eyebrow">Gradient Path · 241 cards · built from <code>chips</code> + the study path</p>
+  <h1>Chips and Gaps</h1>
+  <p class="lede">Every card ends with <b>chips</b> &mdash; the concepts it claims to unlock. Resolve each chip against the card that teaches it and you get a map of how the material actually connects. Resolve the ones that match <i>nothing</i> and you get an honest list of what is not written yet.</p>
+
+  <div class="finding">
+    <p style="margin:0"><b>Read this before the picture.</b> Of 1,274 chips, 182 name another card &mdash; 14%. The other 1,033 are vocabulary: terms a card expects you to recognise, and 825 of them appear exactly once in the whole corpus. So the map below is real but deliberately sparse, and the table of uncovered terms is the more interesting half.</p>
+  </div>
+
+  <div class="stats" id="stats"></div>
+
+  <section>
+    <h2>The prerequisite graph</h2>
+    <p class="note" style="margin-bottom:16px">Each arrow runs from a card to a card it unlocks. Eight module clusters sit on a ring; inside each one the most-unlocked cards are packed at the centre. Node size is how many cards point at it, and hollow rings are the two unbuilt modules. Hover to trace a card&rsquo;s links, click to pin it.</p>
+    <div class="bar" id="filters"></div>
+    <div class="bar">
+      <input type="search" id="q" placeholder="find a card…" aria-label="Search cards">
+      <button class="chip" id="crossonly" aria-pressed="false">Cross-module links only</button>
+      <button class="chip" id="reset">Reset view</button>
+    </div>
+    <div class="stage">
+      <div class="canvaswrap">
+        <canvas id="cv" tabindex="0" aria-label="Card prerequisite graph"></canvas>
+        <div class="hint" id="hint">hover a node</div>
+      </div>
+      <aside class="panel" id="panel"></aside>
+    </div>
+  </section>
+
+  <section>
+    <div class="cols">
+      <div>
+        <h2>Not written yet</h2>
+        <p class="note" style="margin-bottom:16px">Named by three or more cards, explained by none of them. These are the next cards to be written &mdash; until then, they are the terms worth looking up elsewhere.</p>
+        <table><thead><tr><th class="n">×</th><th>Concept</th><th>Promised by</th></tr></thead>
+        <tbody id="gaps"></tbody></table>
+      </div>
+      <div>
+        <h2>Most-unlocked cards</h2>
+        <p class="note" style="margin-bottom:16px">Where the most other cards send you. If your time is short, these are the ones that pay for themselves twice.</p>
+        <table><thead><tr><th class="n">in</th><th>Card</th><th>Module</th></tr></thead>
+        <tbody id="hubs"></tbody></table>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    Sources — 217 built cards parsed from <code>01/02/03/04/05/06</code> pages; 24 unbuilt from <code>generator/content/mod07</code> and <code>mod08</code>.
+    Path order from the <code>PATH</code> array in <code>index.html</code>.<br>
+    Chip→card resolution is exact match on card id or title, then singularised, then a guarded single-candidate substring. Unmatched chips are counted as gaps, not forced.<br>
+    Generated from the card sources on 2026-10-30. Nothing on this page is tracked; it reads no data about you.
+  </footer>
+</div>
+<script>const DATA={"nodes":[["scalars-vectors-matrices","Scalars, Vectors & Matrices","01","foundation",1,5],["vector-addition-scaling","Vector Addition & Scaling","01","foundation",1,5],["dot-product","Dot Product","01","foundation",1,5],["vector-norms","Vector Norms (L1, L2)","01","foundation",1,5],["cosine-similarity","Cosine Similarity & Distance","01","foundation",1,5],["matrix-multiplication","Matrix Multiplication & Transpose","01","foundation",1,6],["special-matrices","Identity, Diagonal & Orthogonal Matrices","01","foundation",1,6],["linear-systems","Systems of Linear Equations","01","foundation",1,6],["gaussian-elimination","Gaussian Elimination","01","foundation",1,6],["determinants","Determinants","01","foundation",1,6],["matrix-inverse","Matrix Inverse","01","foundation",1,6],["vector-spaces","Vector Spaces & Subspaces","01","core",1,6],["span","Span","01","core",1,5],["linear-independence","Linear Independence","01","core",1,6],["basis-dimension","Basis & Dimension","01","core",1,6],["rank","Rank","01","core",1,8],["null-space","Null Space","01","core",1,7],["linear-transformations","Linear Transformations","01","core",1,5],["orthogonality-projections","Orthogonality & Projections","01","core",1,5],["least-squares","Least Squares","01","core",1,5],["trace-frobenius","Trace & Frobenius Norm","01","core",1,5],["covariance-gram","Covariance & Gram Matrices","01","core",1,6],["pseudo-inverse","The Pseudo-inverse","01","core",1,6],["eigenvalues-eigenvectors","Eigenvalues & Eigenvectors","01","advanced",1,6],["diagonalization","Diagonalization","01","advanced",1,7],["svd","Singular Value Decomposition","01","advanced",1,7],["pca","Principal Component Analysis","01","advanced",1,8],["quadratic-forms","Quadratic Forms & Positive-Definiteness","01","advanced",1,8],["decompositions","LU, QR & Cholesky","01","advanced",1,6],["matrix-calculus","Matrix Calculus: Gradients, Jacobians & Hessians","01","advanced",1,7],["condition-number","Condition Number & Numerical Stability","01","advanced",1,6],["complexity-flops","Complexity & FLOPs","01","advanced",1,6],["broadcasting","Tensor Shapes & Broadcasting","01","production",1,7],["attention-math","Attention as Matrix Math","01","production",1,7],["kv-cache","KV Cache Memory Math","01","production",1,7],["lora","LoRA & Low-Rank Adaptation","01","production",1,7],["quantization","Quantization Math","01","production",1,8],["rope","RoPE: Rotations Inside Attention","01","production",1,7],["arrays-hashing","Arrays & Hashing","02","foundation",1,8],["two-pointers","Two Pointers","02","foundation",1,5],["stack","Stack","02","foundation",1,7],["binary-search","Binary Search","02","foundation",1,7],["sliding-window","Sliding Window","02","foundation",1,6],["linked-list","Linked List","02","foundation",1,11],["trees","Trees","02","core",1,15],["tries","Tries","02","core",1,3],["heap","Heap / Priority Queue","02","core",1,7],["backtracking","Backtracking","02","core",1,9],["graphs","Graphs","02","core",1,13],["dp-1d","1-D Dynamic Programming","02","core",1,12],["intervals","Intervals","02","core",1,6],["greedy","Greedy","02","core",1,8],["advanced-graphs","Advanced Graphs","02","advanced",1,6],["dp-2d","2-D Dynamic Programming","02","advanced",1,11],["bit-manipulation","Bit Manipulation","02","advanced",1,6],["math-geometry","Math & Geometry","02","advanced",1,8],["supervised-unsupervised","Supervised, Unsupervised & Self-Supervised","03","foundation",1,5],["the-loss-function","The Loss Function","03","foundation",1,5],["gradient-descent","Gradient Descent & Its Batch Sizes","03","foundation",1,5],["bias-variance","Bias & Variance","03","foundation",1,5],["overfitting","Overfitting, Underfitting & Learning Curves","03","foundation",1,5],["regularisation","Regularisation: L1, L2 & Elastic Net","03","foundation",1,5],["splits-leakage","Train / Validation / Test \u2014 and Data Leakage","03","foundation",1,5],["cross-validation","Cross-Validation, and When k-Fold Is Wrong","03","foundation",1,5],["confusion-matrix","The Confusion Matrix & the Threshold","03","foundation",1,5],["precision-recall","Precision, Recall, F1 & F-beta","03","foundation",1,5],["roc-pr-auc","ROC-AUC vs PR-AUC, and Why Accuracy Lies","03","foundation",1,5],["linear-regression","Linear Regression & Its Assumptions","03","core",1,5],["logistic-regression","Logistic Regression & the Log-Odds","03","core",1,5],["decision-trees","Decision Trees: Entropy & Gini","03","core",1,5],["bagging-random-forest","Bagging & Random Forests","03","core",1,5],["boosting","Boosting: AdaBoost, GBM & XGBoost","03","core",1,5],["gbdt-libraries","LightGBM & CatBoost: Which One and Why","03","core",1,5],["tabular-vs-deep","Why Boosting Still Beats Deep Learning on Tables","03","core",1,5],["svm","Support Vector Machines & the Kernel Trick","03","core",1,5],["knn","k-Nearest Neighbours & the Curse of Dimensionality","03","core",1,5],["naive-bayes","Naive Bayes","03","core",1,5],["kmeans","k-Means & Its Failure Modes","03","core",1,5],["dbscan-hierarchical","DBSCAN & Hierarchical Clustering","03","core",1,5],["feature-engineering","Feature Engineering: Scaling, Encoding & Missing Values","03","core",1,5],["class-imbalance","Class Imbalance in Practice","03","advanced",1,5],["calibration","Calibration","03","advanced",1,5],["hyperparameter-tuning","Hyperparameter Tuning & Nested CV","03","advanced",1,5],["ensembling-stacking","Ensembling & Stacking","03","advanced",1,5],["perceptron-mlp","The Perceptron & the Multilayer Perceptron","03","advanced",1,5],["backpropagation","Backpropagation","03","advanced",1,5],["activations","Activation Functions & Vanishing Gradients","03","advanced",1,5],["optimisers","Optimisers: SGD, Momentum, Adam & AdamW","03","advanced",1,5],["init-schedules","Initialisation & Learning-Rate Schedules","03","advanced",1,5],["normalisation","Batch Norm vs Layer Norm","03","advanced",1,5],["dropout-early-stopping","Dropout & Early Stopping","03","advanced",1,5],["convolutions","Convolutions, Pooling & the Receptive Field","03","advanced",1,5],["rnn-lstm","RNNs, LSTMs & Why They Lost","03","advanced",1,5],["pca-tsne-umap","PCA, t-SNE & UMAP","03","advanced",1,5],["training-serving-skew","Training\u2013Serving Skew","03","production",1,5],["drift","Data Drift & Concept Drift","03","production",1,5],["monitoring-without-labels","Monitoring When the Labels Arrive Late","03","production",1,5],["feature-stores","Feature Stores & Point-in-Time Correctness","03","production",1,5],["offline-vs-online","Offline Metrics vs Online Metrics","03","production",1,5],["ab-testing","A/B Tests, Novelty & Interference","03","production",1,5],["time-series-validation","Time-Series Validation & Backtesting","03","production",1,5],["recommenders","Recommenders & Degenerate Feedback Loops","03","production",1,5],["explainability","SHAP, Permutation Importance & Their Pitfalls","03","production",1,5],["ml-system-design","Designing an ML System","03","production",1,5],["tokenization","Tokenization & Byte-Pair Encoding","04","foundation",1,5],["token-economics","Token Economics: Cost, Context & Language","04","foundation",1,5],["embeddings","Embeddings & Semantic Similarity","04","foundation",1,5],["next-token","Next-Token Prediction, Logits & Softmax","04","foundation",1,5],["sampling","Temperature, Top-k & Top-p","04","foundation",1,5],["base-vs-instruct","Base, Instruct & Reasoning Models","04","foundation",1,5],["context-window","The Context Window & Lost in the Middle","04","foundation",1,5],["prompting","Prompting That Survives Review","04","foundation",1,5],["when-not-llm","When Not to Use an LLM","04","foundation",1,5],["self-attention","Self-Attention: Q, K and V","04","core",1,5],["scaling-sqrt-dk","Why We Divide by the Square Root of d_k","04","core",1,5],["multi-head","Multi-Head Attention","04","core",1,5],["causal-mask","Causal Masking","04","core",1,5],["positional-encoding","Positional Encoding & RoPE","04","core",1,5],["residual-norm","Residuals, LayerNorm & RMSNorm","04","core",1,5],["feed-forward","The Feed-Forward Block","04","core",1,5],["architectures","Decoder-Only vs Encoder-Decoder vs Encoder-Only","04","core",1,5],["quadratic-attention","The O(n squared) Problem","04","core",1,5],["kv-cache","The KV Cache: Why It Exists","04","core",1,5],["gqa-mqa","GQA, MQA & MLA","04","core",1,5],["flash-attention","FlashAttention","04","core",1,5],["training-stages","Pretraining, SFT & Alignment","04","advanced",1,5],["rlhf","RLHF and the Reward Model","04","advanced",1,5],["dpo","DPO and Why It Won","04","advanced",1,5],["finetune-vs-rag","Fine-Tune vs RAG vs Prompt","04","advanced",1,5],["lora","LoRA & QLoRA","04","advanced",1,5],["quantization","Quantization: What Actually Gets Quantized","04","advanced",1,5],["quant-formats","GGUF vs AWQ vs GPTQ","04","advanced",1,5],["distillation","Distillation","04","advanced",1,5],["moe","Mixture of Experts","04","advanced",1,5],["long-context","Extending Context: Interpolation & YaRN","04","advanced",1,5],["scaling-laws","Scaling Laws & Chinchilla","04","advanced",1,5],["forgetting","Catastrophic Forgetting","04","advanced",1,5],["rag-pipeline","The RAG Pipeline, Stage by Stage","04","production",1,5],["chunking","Chunking","04","production",1,5],["vector-db","Vector Databases, HNSW & ANN Recall","04","production",1,5],["hybrid-search","Hybrid Search & Reciprocal Rank Fusion","04","production",1,5],["reranking","Reranking: Bi-Encoder vs Cross-Encoder","04","production",1,5],["query-transformation","Query Transformation: HyDE, Multi-Query & Decomposition","04","production",1,5],["embedding-migration","Embedding Migration & Reindexing","04","production",1,5],["function-calling","Function Calling & Structured Outputs","04","production",1,5],["agents","Agents & the Agent Loop","04","production",1,5],["agent-memory","Agent Memory","04","production",1,5],["multi-agent-mcp","Multi-Agent Systems & MCP","04","production",1,5],["evals","Evaluation: Golden Sets & LLM-as-Judge","04","production",1,5],["observability","Observability, Tracing & Cost","04","production",1,5],["guardrails","Guardrails & Prompt Injection","04","production",1,5],["hallucination","Hallucination in Production","04","production",1,5],["caching","Caching: Prompt, Exact & Semantic","04","production",1,5],["serving","Serving: vLLM, Continuous Batching & PagedAttention","04","production",1,5],["prefill-decode","Prefill vs Decode, TTFT vs TPOT","04","production",1,5],["bayes-base-rate","Bayes is a base-rate machine","05","foundation",1,5],["clt-skew","The CLT does not rescue skewed metrics","05","foundation",1,5],["independence","Independence is the assumption that silently breaks","05","foundation",1,5],["count-distributions","Picking the right count distribution","05","foundation",1,5],["regression-to-mean","Regression to the mean is not a treatment effect","05","foundation",1,5],["correlation-causation","Correlation, causation and the third thing","05","foundation",1,5],["expected-value","Expected value and the linearity trick","05","foundation",1,5],["long-tails","Long tails break averages and break models","05","foundation",1,5],["sampling-bias","Sampling: which bias are you buying","05","foundation",1,5],["simulation","Simulation beats recall","05","foundation",1,5],["p-value","The p-value","05","core",1,5],["confidence-intervals","Confidence intervals","05","core",1,5],["power-mde","Power, MDE and \u201chow long do we run it\u201d","05","core",1,5],["peeking","Peeking","05","core",1,5],["sequential-testing","Sequential testing and always-valid inference","05","core",1,5],["multiple-comparisons","Multiple comparisons","05","core",1,5],["which-test","Which test, and when the standard choice is wrong","05","core",1,5],["bootstrap","The bootstrap","05","core",1,5],["winners-curse","The winner\u2019s curse","05","core",1,5],["simpsons-paradox","Simpson\u2019s paradox and the segment that flips","05","core",1,5],["practical-significance","Practical vs statistical significance","05","core",1,5],["bayesian-inference","Bayesian inference","05","advanced",1,5],["bayesian-ab","Bayesian A/B testing and expected loss","05","advanced",1,5],["confounding-dags","Confounding, DAGs and the backdoor criterion","05","advanced",1,5],["regression-diagnostics","Regression diagnostics that actually matter","05","advanced",1,5],["roc-pr-calibration","ROC-AUC, PR-AUC and calibration","05","advanced",1,5],["fairness-metrics","Fairness definitions that cannot both hold","05","advanced",1,5],["quasi-experiments","When you cannot randomise","05","advanced",1,5],["leakage-statistics","Leakage is a statistical failure","05","advanced",1,5],["model-uncertainty","Uncertainty in the model, not the data","05","advanced",1,5],["srm","Sample ratio mismatch","05","production",1,5],["cuped","CUPED and variance reduction","05","production",1,5],["randomisation-unit","Randomisation unit is not analysis unit","05","production",1,5],["interference","Interference: when SUTVA breaks","05","production",1,5],["novelty-effects","Novelty, primacy and long-term effects","05","production",1,5],["oec-guardrails","The OEC and its guardrails","05","production",1,6],["eval-set-size","82% on 50 prompts is not a result","05","production",1,6],["llm-judge-agreement","Validating an LLM judge","05","production",1,6],["prompt-variants","Twelve prompt variants is twelve tests","05","production",1,6],["paired-comparisons","Pairing, win rates and the rank that has an interval","05","production",1,6],["requirements","Turning the prompt into numbers","06","foundation",1,5],["back-of-envelope","The arithmetic you do out loud","06","foundation",1,5],["latency-budget","Spending the milliseconds first","06","foundation",1,5],["cost-model","Dollars per request, unprompted","06","foundation",1,5],["degradation","What the system does when it is wrong","06","foundation",1,5],["retrieval-stack","The retrieval stack","06","core",1,6],["serving-stack","The serving stack","06","core",1,6],["caching-layers","Four caches, four staleness bugs","06","core",1,6],["eval-harness","The eval harness","06","core",1,6],["guardrails","Guardrails","06","core",1,6],["observability","Observability","06","core",1,6],["offline-online-loop","The offline\u2013online loop","06","core",1,6],["rag-10m","Design: RAG over 10M internal documents","06","advanced",1,5],["inference-serving-70b","Design: an inference layer for a 70B model","06","advanced",1,5],["support-agent","Design: a customer-support agent","06","advanced",1,5],["semantic-search","Design: semantic search on a 50M-product catalogue","06","advanced",1,5],["coding-assistant-context","Design: an AI coding assistant\u2019s context retrieval","06","advanced",1,5],["fraud-realtime","Design: fraud scoring inside the authorisation path","06","production",1,5],["home-feed-recsys","Design: a home feed recommender","06","production",1,5],["genai-eval-harness","Design: the eval harness itself","06","production",1,5],["content-moderation","Design: content moderation at 50M posts a day","06","production",1,5],["genai-gateway","Design: a multi-tenant GenAI gateway","06","production",1,5],["health-readiness","Liveness & Readiness Probes","07","foundation",0,5],["select-model","The SELECT Mental Model","08","foundation",0,3],["joins-cardinality","Joins & Row Multiplication","08","foundation",0,3],["null-semantics","NULL & Three-Valued Logic","08","foundation",0,3],["distinct-vs-group","DISTINCT Versus GROUP BY","08","foundation",0,3],["order-limit-ties","ORDER BY, LIMIT & Ties","08","foundation",0,3],["cte-vs-subquery","CTEs, Subqueries & the Optimiser","08","foundation",0,3],["types-and-casts","Types, Casts & Time Zones","08","foundation",0,3],["result-shape","Result Shape & Grain","08","foundation",0,3],["window-frames","Window Frames: ROWS & RANGE","08","core",0,3],["row-number-rank-dense","ROW_NUMBER, RANK & DENSE_RANK","08","core",0,3],["running-totals","Running Totals & Moving Aggregates","08","core",0,3],["lag-lead","LAG, LEAD & Partition Boundaries","08","core",0,3],["deduplication","Deduplication Without Regret","08","core",0,3],["self-joins","Self-Joins & Unintended Pairs","08","core",0,3],["pivot-unpivot","Pivot, Unpivot & Lost Information","08","core",0,3],["conditional-aggregation","Conditional Aggregation & Shared Inputs","08","core",0,3],["temporal-asof-joins","Temporal & As-of Joins","08","advanced",0,3],["scd","Slowly Changing Dimensions","08","advanced",0,3],["reading-query-plan","Reading a Query Plan","08","advanced",0,3],["when-index-does-not-help","When an Index Does Not Help","08","advanced",0,3],["skew-and-spill","Skew, Memory & Spill","08","advanced",0,3],["sampling-without-bias","Sampling Without Bias","08","advanced",0,3],["recursive-ctes","Recursive CTEs & Cycle Guards","08","advanced",0,3]],"edges":[[0,32,0,1],[1,12,0,1],[3,61,1,1],[5,2,0,0],[6,28,0,1],[6,30,0,1],[7,15,0,1],[7,19,0,1],[8,28,0,1],[10,30,0,1],[10,22,0,1],[10,28,0,1],[10,61,1,1],[11,12,0,1],[11,16,0,1],[12,15,0,1],[12,13,0,1],[13,30,0,1],[13,15,0,1],[13,9,0,0],[14,26,0,1],[15,25,0,1],[15,129,1,1],[15,30,0,1],[15,19,0,1],[15,26,0,1],[16,74,1,1],[16,19,0,1],[17,5,0,0],[17,15,0,0],[17,9,0,0],[18,28,0,1],[18,19,0,1],[18,4,0,0],[19,67,1,1],[19,28,0,1],[19,30,0,1],[19,22,0,1],[21,26,0,1],[21,74,1,1],[21,25,0,1],[22,25,0,1],[22,19,0,0],[22,15,0,0],[22,30,0,1],[22,61,1,0],[24,28,0,1],[25,22,0,0],[25,30,0,1],[25,129,1,1],[27,28,0,1],[28,27,0,0],[28,19,0,0],[28,9,0,0],[28,108,1,1],[29,87,1,1],[30,22,0,0],[31,124,1,1],[31,122,1,1],[32,116,1,0],[33,107,1,0],[33,124,1,0],[33,116,1,0],[33,115,1,0],[122,153,1,1],[122,154,1,1],[122,42,1,0],[129,15,0,0],[129,153,1,1],[130,131,1,1],[130,81,1,0],[37,134,1,1],[59,61,0,1],[60,90,0,1],[63,82,0,1],[64,161,1,1],[66,80,0,1],[68,81,0,1],[70,172,1,1],[70,186,1,1],[71,90,0,1],[75,139,1,1],[76,157,1,0],[76,81,0,1],[83,153,1,1],[84,86,0,1],[85,86,0,1],[85,87,0,1],[89,118,1,1],[94,153,1,1],[98,197,1,1],[99,189,1,1],[99,188,1,1],[99,168,1,0],[100,60,0,0],[103,197,1,1],[105,152,0,1],[106,2,1,0],[106,89,1,0],[109,125,0,1],[113,2,1,0],[113,122,0,1],[117,37,1,1],[117,134,0,1],[121,42,1,0],[122,152,0,1],[125,107,0,0],[128,132,0,1],[130,122,0,0],[132,108,0,0],[136,90,1,0],[137,148,0,1],[140,89,1,0],[142,28,1,0],[143,106,0,0],[148,81,1,0],[205,106,0,0],[154,197,1,1],[155,81,1,1],[155,157,0,1],[157,194,0,1],[159,173,0,1],[159,189,0,1],[160,178,0,1],[163,108,1,1],[163,101,1,1],[164,172,0,1],[164,169,0,1],[165,166,0,1],[165,170,0,1],[166,50,1,1],[166,172,0,1],[167,186,0,1],[167,169,0,1],[167,185,0,1],[168,169,0,1],[168,173,0,1],[169,173,0,1],[172,50,1,1],[173,159,0,0],[174,185,0,1],[175,204,1,1],[176,50,1,0],[177,50,1,0],[177,169,0,0],[180,81,1,0],[181,81,1,0],[185,204,1,0],[189,173,0,0],[189,159,0,0],[190,204,1,0],[191,50,1,0],[191,172,0,0],[192,64,1,0],[193,173,0,0],[193,60,1,0],[194,196,1,1],[195,148,1,0],[196,122,1,0],[197,199,0,1],[198,152,1,0],[200,141,1,0],[200,140,1,0],[201,153,1,0],[202,152,1,0],[202,153,1,0],[203,81,1,0],[205,108,1,0],[205,148,1,0],[206,97,1,0],[206,148,1,0],[206,106,1,0],[208,122,1,0],[208,153,1,0],[210,141,1,0],[211,138,1,0],[212,97,1,0],[213,106,1,0],[214,81,1,0],[216,152,1,0],[221,230,0,0],[239,108,1,0]],"gaps":[["clustered standard errors",6,["bootstrap","eval-set-size","expected-value","independence","leakage-statistics","regression-diagnostics"]],["gradient clipping",5,["activations","condition-number","gradient-descent","rnn-lstm","vector-norms"]],["ridge regression",5,["condition-number","least-squares","linear-independence","linear-systems","null-space"]],["a/a test",5,["clt-skew","independence","randomisation-unit","simulation","srm"]],["oec",4,["multiple-comparisons","offline-vs-online","practical-significance","randomisation-unit"]],["design effect",4,["independence","interference","leakage-statistics","randomisation-unit"]],["column space",3,["linear-systems","span","vector-spaces"]],["vif",3,["linear-independence","linear-regression","regression-diagnostics"]],["whitening",3,["covariance-gram","diagonalization","pca"]],["arithmetic intensity",3,["complexity-flops","kv-cache","prefill-decode"]],["groupkfold",3,["bias-variance","cross-validation","leakage-statistics"]],["target encoding",3,["feature-engineering","gbdt-libraries","splits-leakage"]],["position bias",3,["llm-judge-agreement","offline-vs-online","recommenders"]],["cold start",3,["health-readiness","home-feed-recsys","recommenders"]],["compaction",3,["agent-memory","context-window","long-context"]],["bm25",3,["hybrid-search","retrieval-stack","when-not-llm"]],["admission control",3,["degradation","latency-budget","serving"]],["delta method",3,["independence","randomisation-unit","which-test"]],["bad controls",3,["confounding-dags","correlation-causation","cuped"]],["statistical power",3,["confidence-intervals","cuped","p-value"]],["max-t correction",3,["bootstrap","prompt-variants","winners-curse"]]],"stats":{"cards":241,"built":217,"chips":1274,"edges":182,"cross":86,"dead":1033,"uniqdead":913,"singles":825,"orphans":167,"sinks":129}};</script>
+<script>
+(function(){
+"use strict";
+const MODS={ "01":"Linear Algebra","02":"Blind 75","03":"Machine Learning","04":"LLMs",
+  "05":"Statistics","06":"System Design","07":"Infrastructure","08":"SQL" };
+const N=DATA.nodes.map((a,i)=>({i,id:a[0],title:a[1],mod:a[2],tier:a[3],built:!!a[4],chips:a[5],
+  x:0,y:0,vx:0,vy:0,r:4,in:0,out:0,on:true}));
+const E=DATA.edges.map(e=>({s:N[e[0]],t:N[e[1]],cross:!!e[2],fwd:!!e[3]}));
+E.forEach(e=>{e.t.in++;e.s.out++});
+N.forEach(n=>n.r=2.8+Math.min(n.in,9)*0.60);
+const adjOut=new Map(),adjIn=new Map();
+E.forEach(e=>{(adjOut.get(e.s.i)||adjOut.set(e.s.i,[]).get(e.s.i)).push(e.t);
+              (adjIn.get(e.t.i)||adjIn.set(e.t.i,[]).get(e.t.i)).push(e.s);});
+
+/* ---------- theme-aware colour cache ---------- */
+let C={};
+function readTheme(){const cs=getComputedStyle(document.documentElement);
+  C={edge:cs.getPropertyValue('--edge').trim(),hot:cs.getPropertyValue('--edge-hot').trim(),
+     surface:cs.getPropertyValue('--surface').trim(),ink:cs.getPropertyValue('--ink').trim(),
+     muted:cs.getPropertyValue('--muted').trim()};
+  for(const k in MODS) C[k]=cs.getPropertyValue('--m'+k).trim();}
+readTheme();
+matchMedia('(prefers-color-scheme:dark)').addEventListener('change',()=>{readTheme();draw();});
+new MutationObserver(()=>{readTheme();draw();}).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+
+/* ---------- layout ---------- */
+const cv=document.getElementById('cv'),ctx=cv.getContext('2d');
+let W=0,H=0,DPR=1;
+const keys=Object.keys(MODS);
+/* Deterministic layout: eight module clusters on a ring; inside each cluster a
+   phyllotaxis spiral ordered by in-degree, so the most-unlocked cards sit at the
+   centre of their module. No simulation — nothing to converge, nothing to explode. */
+const GOLD=2.399963229728653;
+keys.forEach((k,j)=>{
+  const a=(j/keys.length)*Math.PI*2-Math.PI/2;
+  const cx=Math.cos(a)*0.335, cy=Math.sin(a)*0.335;
+  const grp=N.filter(n=>n.mod===k).sort((p,q)=>q.in-p.in||p.title.localeCompare(q.title));
+  const R=0.030+0.0115*Math.sqrt(grp.length);
+  grp.forEach((n,i)=>{
+    const rr=R*Math.sqrt((i+0.5)/grp.length), th=i*GOLD+j;
+    n.x=cx+Math.cos(th)*rr; n.y=cy+Math.sin(th)*rr;
+    n.lx=cx*1.34; n.ly=cy*1.34;           // label anchor for the module name
+  });
+});
+function resize(){const b=cv.getBoundingClientRect();DPR=Math.min(2,devicePixelRatio||1);
+  W=b.width;H=b.height;cv.width=W*DPR;cv.height=H*DPR;ctx.setTransform(DPR,0,0,DPR,0,0);draw();}
+const S=()=>Math.min(W,H)*0.92;
+const px=n=>W/2+n.x*S(), py=n=>H/2+n.y*S();
+
+/* ---------- state ---------- */
+let hot=null,sel=null,crossOnly=false,query="";
+const modOn={}; keys.forEach(k=>modOn[k]=true);
+const visible=n=>modOn[n.mod]&&(!query||n.title.toLowerCase().includes(query)||n.id.includes(query));
+const focus=()=>sel||hot;
+function related(n){if(!n)return null;const s=new Set([n.i]);
+  (adjOut.get(n.i)||[]).forEach(m=>s.add(m.i));(adjIn.get(n.i)||[]).forEach(m=>s.add(m.i));return s;}
+
+function draw(){
+  if(!W)return;
+  ctx.clearRect(0,0,W,H);
+  const f=focus(),rel=related(f);
+  for(const e of E){
+    if(!visible(e.s)||!visible(e.t))continue;
+    if(crossOnly&&!e.cross)continue;
+    const lit=rel&&(rel.has(e.s.i)&&rel.has(e.t.i));
+    if(rel&&!lit){ctx.globalAlpha=.10;}else{ctx.globalAlpha=rel?.95:.5;}
+    ctx.strokeStyle=lit?C.hot:C.edge; ctx.lineWidth=lit?1.6:1;
+    const x1=px(e.s),y1=py(e.s),x2=px(e.t),y2=py(e.t);
+    const mx=(x1+x2)/2,my=(y1+y2)/2,nx=-(y2-y1)*0.12,ny=(x2-x1)*0.12;
+    ctx.beginPath();ctx.moveTo(x1,y1);ctx.quadraticCurveTo(mx+nx,my+ny,x2,y2);ctx.stroke();
+    if(lit){const a=Math.atan2(y2-(my+ny),x2-(mx+nx));ctx.globalAlpha=.95;
+      ctx.fillStyle=C.hot;ctx.beginPath();
+      ctx.moveTo(x2,y2);ctx.lineTo(x2-8*Math.cos(a-.4),y2-8*Math.sin(a-.4));
+      ctx.lineTo(x2-8*Math.cos(a+.4),y2-8*Math.sin(a+.4));ctx.closePath();ctx.fill();}
+  }
+  for(const n of N){
+    if(!visible(n))continue;
+    const lit=!rel||rel.has(n.i);
+    ctx.globalAlpha=lit?1:.16;
+    const x=px(n),y=py(n),r=n.r*(n===f?1.5:1);
+    ctx.beginPath();ctx.arc(x,y,r,0,7);
+    if(n.built){ctx.fillStyle=C[n.mod];ctx.fill();}
+    else{ctx.fillStyle=C.surface;ctx.fill();ctx.strokeStyle=C[n.mod];ctx.lineWidth=1.6;ctx.stroke();}
+    if(n===f){ctx.strokeStyle=C.ink;ctx.lineWidth=1.4;ctx.beginPath();ctx.arc(x,y,r+3.5,0,7);ctx.stroke();}
+  }
+  ctx.globalAlpha=1;ctx.font='600 9.5px "IBM Plex Mono",monospace';ctx.textAlign='center';
+  for(const k of keys){ if(!modOn[k]) continue;
+    const a=N.find(n=>n.mod===k); if(!a) continue;
+    ctx.fillStyle=C[k];
+    ctx.fillText(MODS[k].toUpperCase(), W/2+a.lx*S(), H/2+a.ly*S()); }
+  ctx.textAlign='left';
+  if(f){ctx.globalAlpha=1;ctx.font='600 12px "IBM Plex Mono",monospace';
+    const x=px(f),y=py(f),t=f.title,w=ctx.measureText(t).width;
+    let lx=Math.max(6,Math.min(W-w-14,x+12));
+    ctx.fillStyle=C.surface;ctx.globalAlpha=.94;
+    ctx.fillRect(lx-5,y-19,w+10,17);ctx.globalAlpha=1;
+    ctx.fillStyle=C.ink;ctx.fillText(t,lx,y-7);}
+  ctx.globalAlpha=1;
+}
+/* ---------- run ---------- */
+new ResizeObserver(resize).observe(cv);
+resize();
+
+/* ---------- interaction ---------- */
+function at(ev){const b=cv.getBoundingClientRect();
+  const mx=(ev.touches?ev.touches[0].clientX:ev.clientX)-b.left;
+  const my=(ev.touches?ev.touches[0].clientY:ev.clientY)-b.top;
+  let best=null,bd=Infinity;
+  for(const n of N){if(!visible(n))continue;
+    const dx=px(n)-mx,dy=py(n)-my,d=dx*dx+dy*dy;
+    if(d<bd&&d<400){bd=d;best=n;}}
+  return {n:best,mx,my};}
+cv.addEventListener('pointermove',ev=>{
+  const {n}=at(ev); if(n!==hot){hot=n;cv.style.cursor=n?'pointer':'default';
+    document.getElementById('hint').textContent=n?n.id:'hover a node'; draw();}});
+cv.addEventListener('pointerdown',ev=>{const {n}=at(ev);
+  sel=n||null; fill(sel); draw();});
+cv.addEventListener('pointerleave',()=>{hot=null;
+  document.getElementById('hint').textContent='hover a node';draw();});
+
+/* ---------- panel ---------- */
+const panel=document.getElementById('panel');
+function list(arr){return arr.length?'<ul>'+arr.map(m=>
+  `<li><b>${esc(m.title)}</b> <span style="color:var(--muted);font-family:var(--mono);font-size:10.5px">${m.mod}</span></li>`).join('')+'</ul>'
+  :'<p class="empty">None.</p>';}
+function esc(s){return s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
+function fill(n){
+  if(!n){panel.innerHTML=`<p class="ptitle">Nothing selected</p>
+    <p class="meta">click a node to pin it</p>
+    <p class="note" style="margin:0">The graph clusters by module &mdash; eight anchors around the ring. Cards that pull toward the centre are the ones other modules depend on.</p>`;return;}
+  const out=(adjOut.get(n.i)||[]),inn=(adjIn.get(n.i)||[]);
+  panel.innerHTML=`<p class="ptitle">${esc(n.title)}</p>
+    <p class="meta">${n.mod} ${esc(MODS[n.mod])} · ${esc(n.tier)} ${n.built?'':'· <span class="pill unbuilt">unbuilt</span>'}</p>
+    <h4>Unlocks (${out.length} of ${n.chips} chips resolved)</h4>${list(out)}
+    <h4>Unlocked by (${inn.length})</h4>${list(inn)}`;
+}
+fill(null);
+
+/* ---------- controls ---------- */
+const fw=document.getElementById('filters');
+keys.forEach(k=>{const c=DATA.nodes.filter(a=>a[2]===k).length;
+  const b=document.createElement('button');
+  b.className='chip';b.setAttribute('aria-pressed','true');
+  b.style.color=`var(--m${k})`;
+  b.innerHTML=`<span class="dot"></span>${esc(MODS[k])} <span style="color:var(--muted)">${c}</span>`;
+  b.onclick=()=>{modOn[k]=!modOn[k];b.classList.toggle('off',!modOn[k]);
+    b.setAttribute('aria-pressed',String(modOn[k]));draw();};
+  fw.appendChild(b);});
+document.getElementById('q').addEventListener('input',e=>{query=e.target.value.toLowerCase().trim();draw();});
+const co=document.getElementById('crossonly');
+co.onclick=()=>{crossOnly=!crossOnly;co.setAttribute('aria-pressed',String(crossOnly));
+  co.classList.toggle('off',false);co.style.color=crossOnly?'var(--signal)':'';draw();};
+document.getElementById('reset').onclick=()=>{
+  keys.forEach(k=>modOn[k]=true);[...fw.children].forEach(b=>{b.classList.remove('off');b.setAttribute('aria-pressed','true');});
+  crossOnly=false;co.setAttribute('aria-pressed','false');co.style.color='';
+  query='';document.getElementById('q').value='';sel=null;fill(null);draw();};
+
+/* ---------- tables + stats ---------- */
+const S2=DATA.stats;
+document.getElementById('stats').innerHTML=[
+ ['cards',S2.cards,''],['built',S2.built,'good'],['chips',S2.chips,''],
+ ['resolved edges',S2.edges,''],['cross-module',S2.cross,''],
+ ['unmatched chips',S2.dead,'hot'],['orphan cards',S2.orphans,'hot']
+].map(([l,v,c])=>`<div class="stat ${c}"><b>${v.toLocaleString()}</b><span>${l}</span></div>`).join('');
+
+document.getElementById('gaps').innerHTML=DATA.gaps.map(g=>
+ `<tr><td class="n">${g[1]}</td><td>${esc(g[0])}</td><td class="src">${g[2].slice(0,4).map(esc).join(', ')}${g[2].length>4?' +'+(g[2].length-4):''}</td></tr>`).join('');
+
+document.getElementById('hubs').innerHTML=N.slice().sort((a,b)=>b.in-a.in).slice(0,21).map(n=>
+ `<tr><td class="n">${n.in}</td><td>${esc(n.title)}</td><td class="src">${esc(MODS[n.mod])}</td></tr>`).join('');
+})();
+</script>
+</body></html>

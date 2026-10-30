@@ -45,3 +45,11 @@ The fifteen palette tokens are declared three times — `index.html`, `generator
 ## [impact: high] A generator is only the source of truth if its output still matches what is committed
 
 `build_index.py` rebuilds `index.html` from `templates/index-base.html`, and the docs (TASKS.md #21) say to edit the template, not the hub. But the 2026-09-07 audit corrections were applied to `index.html` only, so a routine rebuild on 2026-10-30 silently deleted ~30 committed lines; it was caught only because `git diff --stat` ran straight after. Lesson: before trusting any "edit the source, rebuild the artifact" rule, rebuild once and diff against the committed artifact; a non-empty diff you did not intend means the source has drifted and the rule is currently false. This is the second instance of the copy-drift pattern above (tokens, then templates), so it is a promotion candidate for RULES.md. Source: TASKS.md #27.
+
+## [impact: high] Re-read the handoff after any long step when another session shares the checkout
+
+On 2026-10-30 a second session committed and pushed twice while this one worked, updating MEMORY.md with "Do not run `build_index.py`". This session had read MEMORY.md at start, ran `build_index.py` anyway, and reverted 30 committed lines (restored). The same session also committed this session's untracked `docs/practice-brief.md` before its owner had confirmed it. Lesson: a handoff file is a snapshot. Before any step that rewrites a generated artefact or touches git, re-run `git log --oneline -3` and re-read MEMORY.md. A HEAD that moved since session start means someone else is writing. Source: TASKS.md #23, #25, #27.
+
+## [impact: med] A claim-word regex finds unsourced claims, not wrong ones
+
+The grounding sweep over 116 glossary drafts (`most|usually|often|\d…`) flagged entries that needed sources, but every one of the 5 maths errors had no claim word in it ("Bonferroni treats them as independent", "Whitening inverts it"). Only the isolated reviewer subagent found them. Lesson: a mechanical sweep and a domain review answer different questions, so run both on general-knowledge drafts. Source: TASKS.md #24 evidence.

@@ -15,6 +15,7 @@
   --memory:#0C7A70; --memory-soft:#DCF0ED;
   --code-bg:#101A19; --code-ink:#D6E2DF; --code-mut:#7E938E;
   --shadow:0 1px 2px rgba(19,28,26,.05), 0 10px 26px -18px rgba(19,28,26,.35);
+  --m01:#0C7A70; --m02:#A8670B; --m03:#1E6E8C; --m04:#C11E5C; --m05:#5F7A1E; --m06:#9C4221;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
@@ -25,6 +26,7 @@
     --memory:#42D3BF; --memory-soft:#0C2B28;
     --code-bg:#080E0D; --code-ink:#D6E2DF; --code-mut:#71857F;
     --shadow:0 1px 2px rgba(0,0,0,.4), 0 14px 32px -20px rgba(0,0,0,.8);
+    --m01:#42D3BF; --m02:#E0A33C; --m03:#5BB8D6; --m04:#FF6A9C; --m05:#A8C94A; --m06:#E08A5F;
   }
 }
 :root[data-theme="dark"]{
@@ -35,6 +37,7 @@
   --memory:#42D3BF; --memory-soft:#0C2B28;
   --code-bg:#080E0D; --code-ink:#D6E2DF; --code-mut:#71857F;
   --shadow:0 1px 2px rgba(0,0,0,.4), 0 14px 32px -20px rgba(0,0,0,.8);
+  --m01:#42D3BF; --m02:#E0A33C; --m03:#5BB8D6; --m04:#FF6A9C; --m05:#A8C94A; --m06:#E08A5F;
 }
 
 
@@ -56,11 +59,11 @@ h1{font-size:clamp(2.6rem,7vw,4.2rem); line-height:1.0; margin:14px 0 0; font-we
 .deck{max-width:56ch; color:var(--ink-2); font-size:1.08rem; margin:20px 0 0}
 .deck b{color:var(--ink); font-weight:600}
 .howto{border:1px solid var(--line); border-radius:12px; padding:20px 22px 18px; background:var(--sunk)}
-.howto ol{margin:0; padding:0; list-style:none; counter-reset:h; display:flex; flex-direction:column; gap:11px}
-.howto li{counter-increment:h; position:relative; padding-left:26px; font-size:.9rem; color:var(--ink-2); line-height:1.5}
-.howto li::before{content:counter(h); position:absolute; left:0; top:0;
+.howto ol,.steps ol{margin:0; padding:0; list-style:none; counter-reset:h; display:flex; flex-direction:column; gap:11px}
+.howto li,.steps li{counter-increment:h; position:relative; padding-left:26px; font-size:.9rem; color:var(--ink-2); line-height:1.5}
+.howto li::before,.steps li::before{content:counter(h); position:absolute; left:0; top:0;
   font-family:"IBM Plex Mono",monospace; font-size:.74rem; font-weight:700; color:var(--signal)}
-.howto li b{color:var(--ink); font-weight:600}
+.howto li b,.steps li b{color:var(--ink); font-weight:600}
 .lbl{font-family:"IBM Plex Mono",monospace; font-size:11px; letter-spacing:.14em;
   text-transform:uppercase; color:var(--muted); font-weight:600; margin:0 0 10px}
 .controls{display:flex; flex-wrap:wrap; align-items:center; gap:14px 20px; margin:30px 0 0}
@@ -173,7 +176,7 @@ a.stop:hover{border-color:var(--line); background:var(--surface)}
   align-items:start}
 .pathnote{border:1px solid var(--line); border-radius:12px; background:var(--sunk);
   padding:18px 20px; font-size:.9rem; color:var(--ink-2); position:sticky; top:22px}
-.pathnote h3{font-size:.98rem; margin:0 0 8px}
+.pathnote h2,.pathnote h3{font-size:.98rem; margin:0 0 8px}
 .pathnote p{margin:0 0 10px}
 .pathnote p:last-child{margin:0}
 .pathnote b{color:var(--ink)}
@@ -182,92 +185,165 @@ a.stop:hover{border-color:var(--line); background:var(--surface)}
   .pathwrap{grid-template-columns:1fr; gap:22px}
   .pathnote{position:static}
 }
+
+/* ---- 2026-09-07 content audit: source links + checked dates ---- */
+a.src{color:var(--memory); text-decoration:underline; text-underline-offset:2px;
+  text-decoration-thickness:1px; text-decoration-color:var(--line)}
+a.src:hover{text-decoration-color:var(--memory)}
+.checked{display:block; margin-top:10px; font-family:"IBM Plex Mono",monospace;
+  font-size:.72rem; letter-spacing:.02em; color:var(--muted)}
+.pathdeps{margin:10px 0 14px; padding-left:18px; display:flex; flex-direction:column; gap:7px}
+.pathdeps a{color:var(--memory); text-decoration:underline; text-underline-offset:2px;
+  text-decoration-thickness:1px; text-decoration-color:var(--line)}
+.pathdeps a:hover{text-decoration-color:var(--memory)}
+
+/* ---- 2026-10-30 hub refinement: start in the masthead, tools row, module colour ---- */
+.masthead .here{grid-template-columns:1fr; gap:16px; margin:0}
+.masthead .here .ring{flex-direction:row; justify-content:flex-start; align-items:baseline}
+.masthead .here .ring svg{display:none}
+.steps{margin:0 0 18px}
+.pathnote details{margin:0 0 10px}
+.pathnote summary{cursor:pointer; color:var(--ink); font-weight:500}
+.pathnote summary::marker{color:var(--muted)}
+.tools{list-style:none; margin:0; padding:0; display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr))}
+.tools li{border-top:2px solid var(--ink); border-bottom:1px solid var(--line)}
+.tools li+li{border-left:1px solid var(--line)}
+.tools a{display:flex; flex-direction:column; gap:6px; height:100%; padding:20px 22px 22px;
+  text-decoration:none; color:inherit; transition:background-color .14s ease}
+.tools a:hover{background:var(--surface)}
+.tools h2{font-size:1.25rem; line-height:1.15}
+.tools p{margin:0; color:var(--ink-2); font-size:.92rem; flex:1}
+.tools .n{font-family:"IBM Plex Mono",monospace; font-size:.74rem; color:var(--muted);
+  font-variant-numeric:tabular-nums}
+.tools .go{margin-top:4px}
+.mod{--mc:var(--ink)}
+.mod-n{color:var(--mc)}
+.mod-n::before{content:""; display:inline-block; width:7px; height:7px; border-radius:50%;
+  background:var(--mc); margin-right:7px; vertical-align:1px}
+@media (max-width:980px){
+  .tools{grid-template-columns:1fr}
+  .tools li+li{border-left:0}
+}
 </style></head><body>
 
 <div class="top"><div class="top-in">
   <div class="masthead">
     <div>
-      <p class="eyebrow">Personal technical interview prep</p>
       <h1>Gradient Path</h1>
-      <p class="deck">One page per subject, built to be read in ten minutes before bed rather than
-        studied for three hours on a Saturday. Every card leads with a <b>picture</b> and plain
-        English, holds the precise version one switch away, and carries a <b>prompt you can paste
-        into any chatbot</b> so the practice keeps going when you are away from here.</p>
+      <p class="deck">Free interview prep for AI and ML engineering, one ten-minute card at a time.
+        Every card opens with a <b>picture</b> and plain English, keeps the precise version one
+        switch away, and ends with a <b>prompt</b> you can paste into any chatbot to keep practising.</p>
       <div class="controls">
         <button class="btn" type="button" id="theme">Dark / light</button>
         <span class="meter" id="meter">&nbsp;</span>
       </div>
     </div>
-    <aside class="howto">
-      <h2 class="lbl">How to use this</h2>
-      <ol>
-        <li>Do the <b>one</b> thing the path says. Do not open three modules.</li>
-        <li>Read the picture before the words, every time.</li>
-        <li>Mark each card honestly &mdash; <b>fuzzy</b> is the useful answer, not solid.</li>
-        <li>Copy a card's <b>prompt</b> into ChatGPT or Gemini and let it quiz you while you work.</li>
-        <li>Come back to the fuzzy ones tomorrow. That is the whole method.</li>
-      </ol>
-    </aside>
+    <div id="here-slot"></div>
   </div>
 </div></div>
 
 <div class="shell">
   <p class="sect">Your path</p>
-  <div id="here-slot"></div>
   <div class="pathwrap">
     <ol class="path" id="path"></ol>
     <aside class="pathnote">
-      <h3>Why this order</h3>
-      <p>Nothing on the path leans on something further down it. The linear algebra comes before
-      the transformer that uses it; the classical ML floor comes before the LLM stack that sits
-      on top of it; and the production tiers come last because they are the first three pointed
-      at a system that is actually serving traffic.</p>
-      <p><b>The coding module runs alongside.</b> It shares nothing with the rest, so slot it in
-      whenever &mdash; one pattern a night is the intended pace.</p>
-      <p>A stop turns solid when <b>every</b> card in it is marked solid. The marker moves to the
-      first stop that is not finished, so it is always pointing at exactly one thing.</p>
+      <div class="steps">
+        <h2>How to use this</h2>
+        <ol>
+          <li>Do the <b>one</b> thing the path says. Do not open three modules.</li>
+          <li>Read the picture before the words, every time.</li>
+          <li>Mark each card honestly &mdash; <b>fuzzy</b> is the useful answer, not solid.</li>
+          <li>Copy a card's <b>prompt</b> into ChatGPT or Gemini and let it quiz you.</li>
+          <li>Come back to the fuzzy ones tomorrow. That is the whole method.</li>
+        </ol>
+      </div>
+      <h2>Why this order</h2>
+      <p><b>A suggested order, not a dependency graph:</b> the maths before the models that use it,
+      the production tiers last.</p>
+      <details>
+        <summary>Three cards that reach forward</summary>
+      <ul class="pathdeps">
+        <li><a href="01-linear-algebra.html#dot-product">Dot Product</a> (card 3) scores itself
+        against softmax and attention, which
+        <a href="01-linear-algebra.html#attention-math">Attention Math</a> only builds at card 34.</li>
+        <li><a href="01-linear-algebra.html#vector-spaces">Vector Spaces</a> and
+        <a href="01-linear-algebra.html#rank">Rank</a> lean on PCA before
+        <a href="01-linear-algebra.html#pca">PCA</a> arrives at card 27.</li>
+        <li>The first linear algebra cards use RAG retrieval as their running example, and RAG is
+        taught two modules later in <a href="04-llms.html">LLMs</a>.</li>
+      </ul>
+      <p>Each is motivation, not a prerequisite. Where a card truly needs earlier machinery, its
+      <b>Unlocks</b> row names it.</p>
+      </details>
+      <p><b>Blind 75 runs alongside</b>, one pattern a night.</p>
+      <p>A stop turns solid when <b>every</b> card in it is marked solid.</p>
     </aside>
   </div>
+</div>
+
+<div class="shell" style="padding-top:20px">
+  <p class="sect">Study tools</p>
+  <ul class="tools">
+    <li><a href="roadmap.html">
+      <h2>Thirteen Weeks</h2>
+      <p>Every card in the order it builds, split into thirteen weeks at about two cards a night.</p>
+      <span class="n">199 cards &middot; 18 coding patterns</span>
+      <span class="go">Open the plan &rarr;</span>
+    </a></li>
+    <li><a href="chips-and-gaps.html">
+      <h2>Chips and Gaps</h2>
+      <p>The concept map: which cards lean on which, where they converge, and the terms still waiting for a card.</p>
+      <span class="n">241 cards mapped</span>
+      <span class="go">Open the map &rarr;</span>
+    </a></li>
+    <li><a href="glossary.html">
+      <h2>Glossary</h2>
+      <p>The words the cards use without stopping to teach them, each linked to the cards that name it.</p>
+      <span class="n">116 terms</span>
+      <span class="go">Open the glossary &rarr;</span>
+    </a></li>
+  </ul>
 </div>
 
 <div class="shell" style="padding-top:34px">
   <p class="sect">All modules</p>
   <div class="grid">
-    <a class="mod" href="01-linear-algebra.html">
+    <a class="mod" href="01-linear-algebra.html" style="--mc:var(--m01)">
       <div class="mod-top"><span class="mod-n">MODULE 01</span><span class="pill live">Live</span>
         <span class="pill">ML foundations</span></div>
       <h2>Linear Algebra, Slowly</h2>
-      <p>Scalars through <b>SVD, PCA and the math inside a transformer</b>. Every idea explained twice &mdash; plain English with an analogy, or the precise version you would say to an interviewer. Ends with the linear algebra that only shows up in production: KV cache arithmetic, quantization, LoRA and RoPE.</p>
+      <p>Scalars to <b>SVD and PCA</b>, then the linear algebra a served model runs on: KV cache arithmetic, quantization, LoRA, RoPE.</p>
       <ul class="facts"><li>38 topics</li><li>4 tiers</li><li>114 drill questions</li><li>42 prompts</li></ul>
       <div class="prog"><span>Marked solid</span><b id="p-la">0 / 38</b></div>
       <div class="bar"><i id="b-la"></i></div>
       <span class="go">Open module &rarr;</span>
     </a>
-    <a class="mod" href="blind75nightlyreview.html">
+    <a class="mod" href="blind75nightlyreview.html" style="--mc:var(--m02)">
       <div class="mod-top"><span class="mod-n">MODULE 02</span><span class="pill live">Live</span>
         <span class="pill">Coding &middot; Python</span></div>
       <h2>Blind 75 in 18 Moves</h2>
-      <p>Seventy-five problems, eighteen ideas. Almost every one is the same bargain: <b>something moves through the data</b>, and <b>something gets remembered</b> so it never has to be worked out twice. Learn to spot which two and the problem starts telling you its own answer.</p>
+      <p>Seventy-five problems, eighteen ideas: spot <b>what moves through the data</b> and <b>what gets remembered</b>.</p>
       <ul class="facts"><li>18 patterns</li><li>75 problems</li><li>18 prompts</li></ul>
       <div class="prog"><span>Marked solid</span><b id="p-b75">0 / 18</b></div>
       <div class="bar"><i id="b-b75"></i></div>
       <span class="go">Open module &rarr;</span>
     </a>
-    <a class="mod" href="03-machine-learning.html">
+    <a class="mod" href="03-machine-learning.html" style="--mc:var(--m03)">
       <div class="mod-top"><span class="mod-n">MODULE 03</span><span class="pill live">Live</span>
         <span class="pill">ML foundations</span></div>
       <h2>Machine Learning, Model by Model</h2>
-      <p>Linear regression through gradient boosting, clustering, neural networks and the production failures. Classical ML is the <b>floor</b> now, not the differentiator &mdash; nobody loses an offer for not knowing bias and variance, they lose it for knowing them only as a definition. Every card ends in a decision.</p>
+      <p>Linear regression to gradient boosting, clustering and neural nets, and the production failures. <b>Every card ends in a decision.</b></p>
       <ul class="facts"><li>48 topics</li><li>4 tiers</li><li>144 drill questions</li><li>52 prompts</li></ul>
       <div class="prog"><span>Marked solid</span><b id="p-ml">0 / 48</b></div>
       <div class="bar"><i id="b-ml"></i></div>
       <span class="go">Open module &rarr;</span>
     </a>
-    <a class="mod" href="04-llms.html">
+    <a class="mod" href="04-llms.html" style="--mc:var(--m04)">
       <div class="mod-top"><span class="mod-n">MODULE 04</span><span class="pill live">Live</span>
         <span class="pill">LLM engineering</span></div>
       <h2>LLMs, End to End</h2>
-      <p>Tokens through attention, fine-tuning, RAG, agents, evaluation and serving. The 2026 loop has moved: knowing what a transformer is still gates you, but candidates lose offers on <b>evaluation</b> and on <b>cost and latency arithmetic</b>. Every card carries the follow-up question, not just the definition.</p>
+      <p>Tokens to attention, fine-tuning, RAG, agents, <b>evaluation</b> and serving, with the follow-up question on every card.</p>
       <ul class="facts"><li>51 topics</li><li>4 tiers</li><li>153 drill questions</li><li>55 prompts</li></ul>
       <div class="prog"><span>Marked solid</span><b id="p-llm">0 / 51</b></div>
       <div class="bar"><i id="b-llm"></i></div>

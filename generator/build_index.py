@@ -102,21 +102,21 @@ def main():
     src = open(_os.path.join(ROOT, 'templates', 'index-base.html')).read()
 
     # --- the live module grid: append cards 05 and 06 -----------------------
-    new_cards = '''    <a class="mod" href="05-statistics.html">
+    new_cards = '''    <a class="mod" href="05-statistics.html" style="--mc:var(--m05)">
       <div class="mod-top"><span class="mod-n">MODULE 05</span><span class="pill live">Live</span>
         <span class="pill">ML foundations</span></div>
       <h2>Statistics &amp; Probability</h2>
-      <p>Distributions and Bayes through experimentation and LLM evaluation. This is where offers are lost quietly &mdash; not by failing to define a p-value, but by failing the question after it. Ends on the 2026 problem nobody has an answer for: <b>putting an honest number on a model that talks back</b>.</p>
+      <p>Distributions and Bayes through A/B tests and LLM evaluation: not the p-value, but <b>the question after it</b>.</p>
       <ul class="facts"><li>40 topics</li><li>4 tiers</li><li>120 drill questions</li><li>44 prompts</li></ul>
       <div class="prog"><span>Marked solid</span><b id="p-stats">0 / 40</b></div>
       <div class="bar"><i id="b-stats"></i></div>
       <span class="go">Open module &rarr;</span>
     </a>
-    <a class="mod" href="06-system-design.html">
+    <a class="mod" href="06-system-design.html" style="--mc:var(--m06)">
       <div class="mod-top"><span class="mod-n">MODULE 06</span><span class="pill live">Live</span>
         <span class="pill">System design</span></div>
       <h2>ML &amp; GenAI System Design</h2>
-      <p>Twelve building blocks, then ten rounds worked end to end: RAG over 10M documents, a 70B serving layer, a support agent, fraud inside a payment authorisation, moderation at 50M posts a day. The round is not scored on naming vLLM &mdash; it is scored on <b>which constraint binds, in numbers</b>, before you draw a box.</p>
+      <p>Twelve building blocks, then ten designs worked end to end, scored on <b>which constraint binds, in numbers</b>.</p>
       <ul class="facts"><li>22 designs</li><li>4 tiers</li><li>66 drill questions</li><li>26 prompts</li></ul>
       <div class="prog"><span>Marked solid</span><b id="p-sd">0 / 22</b></div>
       <div class="bar"><i id="b-sd"></i></div>
@@ -126,7 +126,7 @@ def main():
       <div class="mod-top"><span class="mod-n">CERT PREP</span><span class="pill live">Live</span>
         <span class="pill">AWS AIF-C01</span></div>
       <h2>AWS AI Practitioner in 14 Days</h2>
-      <p>The free version of the prep the paid plans sell: a day-by-day plan, thirty topics in plain language, and two timed 65-question mock exams in the exam&rsquo;s own domain weights. It opens on a scenario question, because the exam&rsquo;s real skill is <b>matching a business problem to the right AWS service</b>.</p>
+      <p>A day-by-day plan, thirty topics and two timed 65-question mocks in the exam&rsquo;s own domain weights, built around <b>matching a business problem to the right AWS service</b>.</p>
       <ul class="facts"><li>30 topics</li><li>160 questions</li><li>2 mock exams</li><li>65 prompts</li></ul>
       <span class="go">Open the plan &rarr;</span>
     </a>
@@ -165,12 +165,6 @@ def main():
     src = re.sub(r'var MODULES = \[.*?\];', 'var MODULES = ' + json.dumps(mods_js) + ';', src, flags=re.S)
     src = re.sub(r'var PATH = \[.*?\];', 'var PATH = ' + json.dumps(path_js) + ';', src, flags=re.S)
     src = re.sub(r'var TOTAL = \d+;', f'var TOTAL = {total};', src)
-
-    # the deck mentions the switch, which now does something real
-    src = src.replace(
-        'holds the precise version one switch away',
-        'holds the precise version one switch away &mdash; and in <b>Simple</b> the formulas '
-        'and code are genuinely gone, not just moved down the page')
 
     open(os.path.join(SITE, 'index.html'), 'w').write(src)
     print(f'hub: {len(MODULES)} modules, {len(path_js)} path stops, {total} cards')
