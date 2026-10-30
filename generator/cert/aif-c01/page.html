@@ -113,6 +113,8 @@ h1{font-size:1.2rem; font-weight:700; line-height:1.2}
 .cfoot{display:flex; flex-wrap:wrap; align-items:center; gap:8px 16px; margin-top:22px; padding-top:14px;
   border-top:1px solid var(--line-soft); font-size:.82rem; color:var(--meta)}
 .cfoot .meta{margin-right:auto}
+.cfoot label{min-width:0; max-width:100%}
+.cfoot select{max-width:100%; text-overflow:ellipsis}
 select,input[type=date]{font:inherit; font-size:.82rem; color:var(--ink); background:var(--ground);
   border:1px solid var(--line); border-radius:8px; padding:5px 8px}
 .hint{font-size:.8rem; color:var(--meta)}
@@ -158,6 +160,8 @@ section.block{padding:52px 0 0}
 .ledger li.is-now .n, .ledger li.is-now .tp, .ledger li.is-now .st{color:var(--ink-2)}
 .ledger li.is-mock .t{color:var(--ink)}
 .ledger li.is-done .n, .ledger li.is-done .st{color:var(--memory)}
+.ledger li.is-now.is-done .n, .ledger li.is-now.is-done .st{color:var(--ink-2)}
+.vh{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap}
 .ledger li.wk{display:block; padding:26px 10px 8px; border-bottom:1px solid var(--line); font-family:var(--display); font-weight:700; font-size:1.05rem}
 
 .dom{margin-top:34px}
@@ -274,6 +278,8 @@ footer p{max-width:78ch; margin:0 0 10px}
   .picker{margin-left:0}
   .plist{grid-template-columns:minmax(0,1fr)}
   .exam-top .in, .exam-body .in{padding-left:16px; padding-right:16px}
+  .navgrid{grid-template-columns:repeat(auto-fill,minmax(44px,1fr))}
+  .navgrid button{min-height:44px}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none !important}}
 </style></head>
@@ -312,6 +318,8 @@ footer p{max-width:78ch; margin:0 0 10px}
             <option value="all">Everything unlocked</option>
             <option value="weak">My weakest domain</option>
             <option value="missed">Ones I got wrong</option>
+            <option value="fuzzy">Topics I marked fuzzy</option>
+            <option value="topic" id="pooltopic" hidden>This topic</option>
           </select></label>
         </div>
       </div>
@@ -320,6 +328,7 @@ footer p{max-width:78ch; margin:0 0 10px}
         <h2 id="today-h"><span class="dayn" id="dayn">Day 1</span> of 14</h2>
         <p class="sub" id="daytitle"></p>
         <ul class="tasks" id="tasks"></ul>
+        <button class="btn" type="button" data-say="today">Listen to today&rsquo;s topics</button>
         <div class="dates">
           <label for="start">Started</label><input type="date" id="start">
           <span id="examday"></span>
@@ -341,7 +350,7 @@ footer p{max-width:78ch; margin:0 0 10px}
 
   <section class="block" id="topics" aria-labelledby="topics-h">
     <h2 id="topics-h">Thirty topics, by domain</h2>
-    <p class="lede">Each topic reads plainly first, with one line to remember and the trap the exam sets. The exam-level facts sit beside it; <b>Plain only</b> at the top hides them. <b>Listen</b> reads the plain version aloud. The two prompts turn any chatbot into a study partner, written for voice mode so you can practise while doing something else.</p>
+    <p class="lede">Each topic reads plainly first, with one line to remember and the trap the exam sets. The exam-level facts sit beside it; <b>Plain only</b> at the top hides them. <b>Listen</b> reads a topic aloud, with its exam facts unless <b>Plain only</b> is on; <b>Listen to today&rsquo;s topics</b> plays the whole day back to back. The two prompts turn any chatbot into a study partner, written for voice mode so you can practise while doing something else.</p>
     <div id="domains"></div>
   </section>
 
@@ -354,7 +363,7 @@ footer p{max-width:78ch; margin:0 0 10px}
 
   <section class="block" id="mocks" aria-labelledby="mocks-h">
     <h2 id="mocks-h">Two mock exams</h2>
-    <p class="lede">Each mock is 65 original questions in the exam&rsquo;s own proportions (13, 16, 18, 9 and 9 across the five domains), timed at 90 minutes, with no feedback until you submit. The two mocks share no questions. Once you sit one, its questions join the practice console.</p>
+    <p class="lede">Each mock is 65 original questions split 13, 16, 18, 9 and 9 across the five domains, the published domain weights rounded to 65 (AWS publishes no per-question split, and 15 of the real exam&rsquo;s questions are unscored and unmarked). Each is timed at 90 minutes, with no feedback until you submit. Leaving does not pause the clock. The two mocks share no questions. Once you sit one, its questions join the practice console.</p>
     <div class="mocks" id="mocklist"></div>
     <p class="note">The real exam reports a scaled score from 100 to 1,000 and passes at 700. AWS does not publish how raw answers convert to that scale, and 15 of its 65 questions are unscored, so the percentages here are not a score prediction. A working rule: clear 80% on both mocks, then sit the real one.</p>
   </section>
@@ -380,9 +389,10 @@ footer p{max-width:78ch; margin:0 0 10px}
     <span class="sp"></span>
     <button class="btn" type="button" id="flag">Flag</button>
     <button class="btn go" type="button" id="submit">Submit</button>
-    <button class="btn" type="button" id="leave">Save and leave</button>
+    <button class="btn" type="button" id="leave">Leave (timer runs)</button>
   </div></div>
   <div class="exam-body"><div class="in" id="examin"></div></div>
+  <p class="vh" id="examlive" aria-live="polite"></p>
 </div>
 <div class="toast" id="toast" role="status"></div>
 
@@ -442,12 +452,21 @@ function poolList(){
   const p = S.pool, u = unlocked();
   if (p === 'weak') { const w = weakest(); return u.filter(q => q.d === w); }
   if (p === 'missed') return u.filter(q => S.answers[q.id] && !S.answers[q.id][2]);
+  if (p === 'fuzzy') return u.filter(q => S.topics[q.t] === 'fuzzy');
+  if (p === 'topic' && TOP.get(S.drill)) return u.filter(q => q.t === S.drill);
   if (p === 'today') { const ids = DATA.days[dayNum()-1].topics; if (ids.length) return u.filter(q => ids.includes(q.t)); }
   return u;
 }
+// the topic pool stays chosen until you pick another, so Next keeps drilling that topic
+function syncPool(){
+  const t = TOP.get(S.drill), o = $('#pooltopic');
+  if (S.pool === 'topic' && !t) S.pool = 'today';
+  o.hidden = !t; if (t) o.textContent = 'This topic: ' + t.title;
+  $('#pool').value = S.pool;
+}
 function nextQ(){
   let list = poolList();
-  if (!list.length) { list = unlocked(); if (S.pool === 'missed') toast('Nothing missed yet, so drawing from everything.'); }
+  if (!list.length) { list = unlocked(); if (S.pool === 'missed') toast('Nothing missed yet, so drawing from everything.'); if (S.pool === 'fuzzy') toast('No topic is marked fuzzy yet, so drawing from everything.'); }
   // unseen first, then last-time-wrong, then the rest; never the same question twice running
   const rank = (q) => { const a = S.answers[q.id]; return !a ? 0 : (!a[2] ? 1 : 2); };
   const others = list.filter(q => !cur || q.id !== cur.id);
@@ -623,12 +642,21 @@ let speaking = null;
 function say(id, btn){
   if (!('speechSynthesis' in window)) { toast('This browser cannot read aloud.'); return; }
   const was = speaking; speechSynthesis.cancel(); speaking = null;
-  $$('[data-say]').forEach(b => b.textContent = 'Listen');
+  const label = (b) => b.dataset.say === 'today' ? 'Listen to today\u2019s topics' : 'Listen';
+  $$('[data-say]').forEach(b => b.textContent = label(b));
   if (was === id) return;
-  const t = TOP.get(id);
-  const u = new SpeechSynthesisUtterance([t.title + '.', ...t.simple, 'Remember: ' + t.hook, 'The trap: ' + t.trap].join(' '));
-  u.rate = 0.98; u.onend = () => { if (speaking === id) { speaking = null; btn.textContent = 'Listen'; } };
-  speaking = id; btn.textContent = 'Stop'; speechSynthesis.speak(u);
+  const ids = id === 'today' ? DATA.days[dayNum()-1].topics : [id];
+  if (!ids.length) { toast('No new topics today. Open any topic and press Listen.'); return; }
+  // speechSynthesis queues utterances, so a day plays back to back
+  ids.forEach((tid, k) => {
+    const t = TOP.get(tid);
+    const u = new SpeechSynthesisUtterance([t.title + '.', ...t.simple, 'Remember: ' + t.hook, 'The trap: ' + t.trap,
+      ...(S.plain ? [] : ['For the exam.', ...t.detail.map(f => strip(f).replace(/\.?$/, '.'))])].join(' '));
+    u.rate = 0.98;
+    if (k === ids.length - 1) u.onend = () => { if (speaking === id) { speaking = null; btn.textContent = label(btn); } };
+    speechSynthesis.speak(u);
+  });
+  speaking = id; btn.textContent = 'Stop';
 }
 function openTopic(id){
   const el = document.getElementById('t-' + id); if (!el) return;
@@ -643,10 +671,7 @@ document.addEventListener('click', e => {
   const m = e.target.closest('[data-mark]'); if (m) { S.topics[m.dataset.t] = m.dataset.mark; save(); renderTopicsMeta(); return; }
   const dr = e.target.closest('[data-drill]');
   if (dr) {
-    const list = unlocked().filter(q => q.t === dr.dataset.drill);
-    const fresh = list.filter(q => !S.answers[q.id]);
-    const from = fresh.length ? fresh : list;
-    cur = from[Math.floor(Math.random()*from.length)]; renderQ();
+    S.pool = 'topic'; S.drill = dr.dataset.drill; save(); syncPool(); nextQ();
     $('#console').scrollIntoView({behavior:'smooth', block:'center'});
     return;
   }
@@ -655,18 +680,25 @@ document.addEventListener('click', e => {
 });
 
 // ---------- look-alikes ----------
-$('#la tbody').innerHTML = DATA.confusables.map(r => `<tr><td>${esc(r[0])}</td><td>${esc(r[1])}</td><td tabindex="0">${esc(r[2])}</td></tr>`).join('');
+$('#la tbody').innerHTML = DATA.confusables.map(r => `<tr><td>${esc(r[0])}</td><td>${esc(r[1])}</td><td tabindex="0"><span class="ans">${esc(r[2])}</span><span class="vh cue" hidden>Hidden. Press Enter to show.</span></td></tr>`).join('');
+// blur only hides from eyes; covered answers are also hidden from screen readers until peeked
+function syncCover(){
+  const on = $('#la').classList.contains('covered');
+  $$('#la td:nth-child(3)').forEach(td => { const hide = on && !td.classList.contains('peek');
+    td.querySelector('.ans').setAttribute('aria-hidden', hide); td.querySelector('.cue').hidden = !hide; });
+}
 $('#la').addEventListener('keydown', e => {
   const td = e.target.closest('td:nth-child(3)');
-  if (td && (e.key === 'Enter' || e.key === ' ') && $('#la').classList.contains('covered')) { td.classList.toggle('peek'); e.preventDefault(); }
+  if (td && (e.key === 'Enter' || e.key === ' ') && $('#la').classList.contains('covered')) { td.classList.toggle('peek'); syncCover(); e.preventDefault(); }
 });
 $('#cover').addEventListener('click', e => {
   const b = e.currentTarget, on = b.getAttribute('aria-pressed') !== 'true';
   b.setAttribute('aria-pressed', on); b.textContent = on ? 'Show the differences' : 'Cover the differences';
   $('#la').classList.toggle('covered', on);
   $$('#la td.peek').forEach(td => td.classList.remove('peek'));
+  syncCover();
 });
-$('#la').addEventListener('click', e => { const td = e.target.closest('td:nth-child(3)'); if (td && $('#la').classList.contains('covered')) td.classList.toggle('peek'); });
+$('#la').addEventListener('click', e => { const td = e.target.closest('td:nth-child(3)'); if (td && $('#la').classList.contains('covered')) { td.classList.toggle('peek'); syncCover(); } });
 
 // ---------- general prompts ----------
 $('#pdomain').innerHTML = [1,2,3,4,5].map(d => `<option value="${d}">Domain ${d}: ${DOMS[d][0]}</option>`).join('');
@@ -724,7 +756,7 @@ function clock(){
 }
 function renderExamQ(){
   ['#flag','#submit','#clock'].forEach(s => $(s).hidden = false);
-  $('#leave').textContent = 'Save and leave';
+  $('#leave').textContent = 'Leave (timer runs)';
   const id = M.qs[M.i], q = QS.get(id), multi = q.right.length > 1, mine = new Set(M.ans[id] || []);
   $('#flag').textContent = M.flags[id] ? 'Unflag' : 'Flag';
   // one definition of "answered", shared with Submit: a Select TWO with one pick is partial, not answered
@@ -737,7 +769,7 @@ function renderExamQ(){
     <div class="navgrid" aria-label="Jump to a question">${M.qs.map((x,i) => { const st = full(x) ? 'ans' : picks(x) ? 'part' : '';
       return `<button type="button" data-j="${i}" class="${st} ${M.flags[x] ? 'flag' : ''} ${i === M.i ? 'cur' : ''}" aria-label="Question ${i+1}${M.flags[x] ? ', flagged' : ''}${st === 'ans' ? ', answered' : st === 'part' ? ', ' + picks(x) + ' of ' + QS.get(x).right.length + ' chosen' : ''}">${i+1}</button>`; }).join('')}</div>`;
 }
-const go = (i) => { M.i = i; saveM(); renderExamQ(); $('#exam .exam-body').scrollTop = 0; };
+const go = (i) => { M.i = i; saveM(); renderExamQ(); $('#exam .exam-body').scrollTop = 0; $('#examlive').textContent = 'Question ' + (i+1) + ' of 65'; };
 $('#examin').addEventListener('click', e => {
   if (!M || M.done) return;
   const o = e.target.closest('[data-e]');
@@ -829,7 +861,7 @@ $('#reset').addEventListener('click', () => {
   location.reload();
 });
 
-$('#pool').value = S.pool;
+syncPool();
 applyMode(); renderToday(); renderWeights(); renderLedger(); renderTopics(); renderPrompts(); renderMocks(); nextQ();
 if (location.hash.startsWith('#t-')) openTopic(location.hash.slice(3));
 })();

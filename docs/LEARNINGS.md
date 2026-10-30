@@ -53,3 +53,7 @@ On 2026-10-30 a second session committed and pushed twice while this one worked,
 ## [impact: med] A claim-word regex finds unsourced claims, not wrong ones
 
 The grounding sweep over 116 glossary drafts (`most|usually|often|\d…`) flagged entries that needed sources, but every one of the 5 maths errors had no claim word in it ("Bonferroni treats them as independent", "Whitening inverts it"). Only the isolated reviewer subagent found them. Lesson: a mechanical sweep and a domain review answer different questions, so run both on general-knowledge drafts. Source: TASKS.md #24 evidence.
+
+## 2026-10-30 — External model reviews need the same scope check as your own content
+
+Two AI reviews of the AIF-C01 page were applied. Gemini's "missing" list was half out of scope: 11 of its services and concepts appear nowhere in the v1.2 domain pages or in-scope list, apparently carried over from the older guide and from third-party prep material. One of its accuracy claims (b48) was simply wrong. GPT's narrower list was correct. In the other direction, the independent fact-check caught a fact that had gone stale in the last three months (DynamoDB vector search), which turned a "clearly wrong" distractor into a second right answer. Lesson: triage every review claim against the fetched primary source before editing, and re-check distractors as well as keys, because a service launch can silently make a wrong option right. First occurrence.

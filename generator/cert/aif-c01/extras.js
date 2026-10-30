@@ -74,6 +74,13 @@ const CONFUSABLES = [
   ['Overfitting','Underfitting','High variance: great on training, bad on new data, versus high bias: bad on both.'],
   ['Batch inference','Asynchronous inference','A whole dataset offline with no endpoint, versus a queue of single large requests with a notification.'],
   ['Prompt injection','Data poisoning','Attacks the live input, versus attacks the training or retrieval data.'],
+  ['Amazon Quick','Kiro','Business users ask questions of data and automate work, versus developers build software with an agentic IDE.'],
+  ['AgentCore Identity','Policy in AgentCore','Whose credentials the agent acts with, versus which tool actions it is allowed to take.'],
+  ['Contextual grounding check','Automated Reasoning check','Is the answer supported by the retrieved source, versus is it consistent with rules you encoded as a formal policy.'],
+  ['AWS CloudTrail','Amazon CloudWatch','Who called which API and when, versus metrics, logs and alarms on how it is running.'],
+  ['AWS Budgets','AWS Cost Explorer','Alerts before you overspend, versus analyses and forecasts what you already spent.'],
+  ['Scope 2: enterprise app','Scope 3: pre-trained models','You buy a SaaS product with GenAI inside, versus you build your own app on an FM API (RAG included).'],
+  ['Prompt caching','Caching answers','Reuses an identical prompt prefix and still generates a new reply, versus returns a stored reply without calling the model.'],
 ];
 
 // General prompts. {domain} is filled in by the page when relevant.
@@ -83,7 +90,7 @@ const PROMPTS = [
     text:`You are my study partner for the AWS Certified AI Practitioner exam (AIF-C01, exam guide version 1.2). I am practising by voice while doing something else, so:
 - Keep every reply under 60 words. No lists, tables or markdown.
 - Ask one question at a time and wait for my answer.
-Run a loop: give me a short business scenario and ask which AWS service or AI concept fits. After I answer, say right or wrong in one sentence and give the one-line reason. Rotate across all five domains, weighting Domain 3 (Applications of Foundation Models) most. Every fifth question, ask me to explain a concept in my own words instead. If you are not sure an AWS feature exists, say so instead of guessing. Start now.` },
+Run a loop: give me a short business scenario and ask which AWS service or AI concept fits. After I answer, say right or wrong in one sentence and give the one-line reason. Rotate across all five domains, weighting Domain 3 (Applications of Foundation Models) most. Every fifth question, ask me to explain a concept in my own words instead. If you are not sure an AWS feature exists, say so instead of guessing. After each answer, ask which requirement ruled out the closest alternative; count a lucky guess as wrong and bring that concept back three questions later. Start now.` },
   { id:'oral', title:'Oral exam on one domain',
     use:'Day 9–11, out loud, 20 minutes.',
     text:`Act as an examiner for AWS Certified AI Practitioner (AIF-C01), focusing on {domain}. Ask me 10 exam-style multiple-choice questions, one at a time, each with four options labelled A to D, written the way AWS writes them (a short business scenario, then “Which solution meets these requirements?”). Wait for my answer each time. Then tell me whether I am right, why the correct option is right, and why my choice was wrong, in under 80 words. After 10 questions, give my score and the two concepts I should revisit. Do not invent AWS features.` },

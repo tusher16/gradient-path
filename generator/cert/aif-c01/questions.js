@@ -2,7 +2,7 @@
 // are copied from AWS's official or paid practice sets.
 //
 // q(id, set, topic, stem, right[], wrong[], explanation)
-//   set: 'P' = practice drill (one per topic, the opening console pool)
+//   set: 'P' = practice drill (at least one per topic, the opening console pool)
 //        'A' = Mock A (day 7)   'B' = Mock B (day 13); each mock is 65 Qs
 //              split 13/16/18/9/9 to mirror the 20/24/28/14/14 domain weights
 //   right holds every correct option; more than one makes it multiple-response.
@@ -32,7 +32,7 @@ q('p06','P','aws-ai-services','An insurer receives scanned claim forms and needs
   'Textract reads scanned documents and extracts text, key-value form fields and tables. Comprehend analyses text you already have, Rekognition labels objects and faces in images, and Polly speaks text aloud.');
 q('p07','P','trad-ml-vs-fm','A bank must explain every loan rejection to regulators and scores 5 million applications a day from tabular data. Which is the best fit?',
   ['A traditional ML model such as a gradient-boosted tree on the tabular features'],['A large multimodal foundation model','An image diffusion model','A general-purpose LLM prompted with each application'],
-  'Tabular data, very high volume, tight cost and a hard explainability requirement all point to a traditional, interpretable model. FMs are costlier per prediction and much harder to explain; diffusion models generate images.');
+  'Tabular data, very high volume, tight cost and a hard explainability requirement all point to traditional ML. A tree ensemble is not a glass box like a single shallow tree, but post-hoc tools such as SHAP explain each decision, which is far easier than explaining an LLM. FMs also cost more per prediction; diffusion models generate images.');
 q('p08','P','ml-lifecycle','A data team wants to clean and normalise training data with a visual, no-code tool before training. Which AWS service fits?',
   ['AWS Glue DataBrew'],['Amazon Inspector','SageMaker Model Monitor','AWS CloudTrail'],
   'Glue DataBrew is visual, no-code data preparation. Inspector scans for vulnerabilities, Model Monitor watches deployed models, and CloudTrail logs API calls.');
@@ -54,9 +54,9 @@ q('p13','P','fm-lifecycle','Which stage of the foundation model lifecycle uses m
 q('p14','P','genai-tradeoffs','A customer asks a chatbot the same question twice and gets two differently worded answers. Which characteristic of GenAI does this show?',
   ['Nondeterminism'],['Overfitting','Data drift','Underfitting'],
   'Sampling-based generation can return different outputs for the same input: nondeterminism. Over- and underfitting describe training fit; data drift is a change in production inputs over time.');
-q('p15','P','token-pricing','A startup’s prototype on Amazon Bedrock gets a few hundred unpredictable requests a day. Which pricing option is cheapest?',
+q('p15','P','token-pricing','A startup’s prototype on Amazon Bedrock gets a few hundred unpredictable requests a day, and each user waits for the reply in the app. Which pricing option is cheapest?',
   ['On-demand (pay per token)'],['Provisioned Throughput with a 6-month commitment','Provisioned Throughput with no commitment','Batch inference with results the next day'],
-  'Low, spiky traffic suits paying per token. Provisioned Throughput bills by the hour whether used or not, and batch suits large offline jobs, not users waiting for replies.');
+  'Low, spiky, interactive traffic suits paying per token. Provisioned Throughput bills by the hour whether used or not, and batch is cheaper per token but returns results later, which fails users waiting for a reply.');
 q('p16','P','aws-genai-stack','A team wants to call foundation models from several providers through one API, without managing any infrastructure. Which service fits?',
   ['Amazon Bedrock'],['Amazon EC2 with self-installed models','SageMaker Ground Truth','Amazon Personalize'],
   'Bedrock is serverless access to FMs from Amazon and other providers through a single API. EC2 means running servers yourself, Ground Truth labels data, and Personalize builds recommenders.');
@@ -68,7 +68,7 @@ q('p18','P','fm-selection-params','A support bot gives inconsistent, sometimes i
   'Lower temperature makes token choice more deterministic and answers more consistent. Raising it adds variety; output length and stop sequences control where text ends, not how random it is.');
 q('p19','P','rag','A company wants an assistant that answers from its HR policies, which change monthly, cites the source, and never needs retraining. What should it use?',
   ['Amazon Bedrock Knowledge Bases (RAG)'],['Fine-tune the model every month','Continued pre-training on the policies','Pre-train a new model'],
-  'RAG retrieves the current documents at question time and returns citations; updating the data source updates the answers. Every other option retrains weights, costs more and goes stale between runs.');
+  'RAG retrieves the current documents at question time and returns citations. When a policy changes, you update the data source and sync the knowledge base; no weights change. Every other option retrains the model, costs more and goes stale between runs.');
 q('p20','P','customization-ladder','Which is the LEAST expensive way to improve a foundation model’s answers for a specific task?',
   ['Prompt engineering with a few examples'],['Fine-tuning','Continued pre-training','Pre-training from scratch'],
   'Prompting is the bottom rung: no training, no new infrastructure. Each other option retrains weights and climbs the cost ladder, with pre-training from scratch the most expensive.');
@@ -84,9 +84,9 @@ q('p23','P','prompt-risks','A user types “Ignore all previous instructions and
 q('p24','P','fm-evaluation','Which metric best evaluates generated summaries against reference summaries?',
   ['ROUGE'],['BLEU','RMSE','AUC-ROC'],
   'ROUGE measures how much of the reference the summary covers: the standard summarisation metric. BLEU is for translation, RMSE for regression, and AUC-ROC for classifiers.');
-q('p25','P','responsible-ai','A bank’s chatbot on Amazon Bedrock must never give investment advice. What is the simplest control?',
+q('p25','P','responsible-ai','A bank’s chatbot on Amazon Bedrock must not give investment advice. What is the simplest control?',
   ['A denied topic in Amazon Bedrock Guardrails'],['An IAM policy on the chatbot’s role','Raising the temperature','Turning on AWS CloudTrail'],
-  'Denied topics block a subject in both prompts and responses. IAM controls who may call the model, not what it says; temperature adds randomness; CloudTrail only records API calls.');
+  'Denied topics detect and block a subject in both prompts and responses. Like any filter it reduces risk rather than guaranteeing it, so test it. IAM controls who may call the model, not what it says; temperature adds randomness; CloudTrail only records API calls.');
 q('p26','P','bias-variance','A model scores 99% on training data but 70% on new data. What is happening?',
   ['Overfitting (high variance)'],['Underfitting (high bias)','The model generalises well','Prompt injection'],
   'Great on training and poor on unseen data means it memorised noise: overfitting, high variance. Underfitting is poor on both.');
@@ -102,6 +102,90 @@ q('p29','P','data-lineage','Auditors ask exactly which datasets, and which versi
 q('p30','P','governance','A compliance team needs AWS’s SOC 2 and ISO reports for an AI project review. Where do they get them?',
   ['AWS Artifact'],['AWS CloudTrail','AWS Config','Amazon Inspector'],
   'Artifact provides on-demand access to AWS’s own compliance reports and agreements. CloudTrail logs API calls, Config tracks resource configuration, and Inspector scans for vulnerabilities.');
+
+// --- added 2026-10-30 from the Gemini and GPT reviews: the thin objectives,
+//     the 2026 additions, same-family distractors and Select TWO practice ---
+q('p31','P','agentic-ai','A team has 40 internal REST APIs and Lambda functions. It wants every one of its agents to discover and call them through one standard tool interface, without custom integration code per agent. Which approach fits?',
+  ['Expose the APIs and functions as MCP tools through Amazon Bedrock AgentCore Gateway'],['Paste each API’s documentation into every agent’s system prompt','Fine-tune the model on the API specifications','Store the API list as a prompt in Amazon Bedrock Prompt Management'],
+  'MCP is the standard plug between agents and tools, and AgentCore Gateway turns existing APIs and Lambda functions into MCP tools any agent can use. Pasting docs into prompts costs tokens and is not a callable interface; fine-tuning and stored prompts do not let an agent call anything.');
+q('p32','P','agentic-ai','A research agent slows down and starts ignoring its instructions after about 30 tool calls, because every raw tool result and the full conversation are sent to the model on each step. What is the best fix?',
+  ['Summarise older history and tool output, and pass only what the current step needs'],['Switch to a model with a larger context window and keep sending everything','Raise the temperature so the model explores more options','Fine-tune the model on past research conversations'],
+  'This is context engineering: curate what goes into the window each step. A bigger window still grows cost and latency with every call and buries the instruction; temperature adds randomness; fine-tuning does not shrink the context.');
+q('p33','P','agentic-ai','Every invoice goes through the same five steps in the same order: extract fields, validate totals, check the supplier, post to the ledger, email a receipt. Which design is MOST predictable and cost-effective?',
+  ['A fixed workflow that calls a model only for the extraction step'],['An autonomous agent that decides which steps to run for each invoice','A multi-agent system with a supervisor agent assigning the steps','One large model prompted with chain-of-thought to perform all five steps'],
+  'When the steps are known and never change, a plain workflow is cheaper and behaves the same every time; use a model only where judgement is needed. Agents earn their cost when the path is not known in advance.');
+q('p34','P','rag','An insurer replaces policy documents in the S3 data source of its Bedrock knowledge base, but the assistant still quotes the old rules. It must answer from current policies without retraining and give reviewers evidence. Which TWO actions fit? (Select TWO.)',
+  ['Sync the knowledge base data source so the new documents are re-ingested into the index','Return source citations so reviewers can check each answer against the policy text'],['Fine-tune the model after every policy change','Set the temperature to 0 instead of updating the index','Turn on prompt caching for the policy text'],
+  'The index still holds the old chunks until a sync re-ingests the changed files. Citations give reviewers the evidence. Fine-tuning is the retraining the company wants to avoid; temperature and caching do not refresh what the knowledge base retrieves.');
+q('p35','P','securing-ai','A support agent acts in a ticketing system on behalf of signed-in employees. It may issue refunds under $100, and larger refunds must be blocked by an enforced rule. Which TWO capabilities fit? (Select TWO.)',
+  ['Amazon Bedrock AgentCore Identity for the employee’s delegated credentials','Policy in Amazon Bedrock AgentCore to allow the refund action only under $100'],['A line in the system prompt asking the agent to respect the limit','A Guardrails denied topic that blocks all discussion of refunds','AgentCore Observability, reviewing violations after they happen'],
+  'Identity decides whose credentials the agent uses; Policy enforces what its tools may do. A prompt instruction is a request, not an enforced rule; a denied topic would block legitimate refunds too; observability only shows a violation after it happened.');
+q('p36','P','governance','A company builds a customer chatbot on Amazon Bedrock that answers from its own documents through Knowledge Bases. It does not change any model’s weights. Which scope of the Generative AI Security Scoping Matrix is this?',
+  ['Scope 3: pre-trained models'],['Scope 2: enterprise app','Scope 4: fine-tuned models','Scope 5: self-trained models'],
+  'Building your own application on an existing FM through an API, including RAG, is Scope 3. Scope 2 is buying a SaaS product with GenAI built in; Scope 4 changes the weights; Scope 5 trains from scratch.');
+q('p37','P','governance','Staff use a licensed SaaS CRM product that has a built-in generative AI writing assistant. The company builds nothing itself. Which scope of the Generative AI Security Scoping Matrix is this?',
+  ['Scope 2: enterprise app'],['Scope 1: consumer app','Scope 3: pre-trained models','Scope 4: fine-tuned models'],
+  'A business product with GenAI features, bought under an enterprise agreement, is Scope 2. Scope 1 is a public consumer service such as a free chatbot; Scopes 3 and 4 mean you build on or change a model yourself.');
+q('p38','P','token-pricing','An app sends the same 8,000-token system prompt and tool definitions at the start of every request, followed by a different user question. Which statement about Amazon Bedrock prompt caching is correct?',
+  ['Requests that start with the identical cached prefix read it at a lower price and latency, and the model still writes a fresh answer'],['It stores whole answers, so a repeated question is answered without calling the model','It caches matching text found anywhere in the prompt, in any order','It works with every model on Bedrock and the cache never expires'],
+  'Prompt caching reuses a stable prefix marked with cache checkpoints. It is not an answer cache, the prefix must match exactly from the start, only supported models offer it, and entries expire after a few minutes without a hit.');
+q('p39','P','token-pricing','A team wants an email alert before its monthly Amazon Bedrock spend passes $2,000. Which service should it use?',
+  ['AWS Budgets'],['AWS Cost Explorer','AWS Trusted Advisor','AWS Config'],
+  'Budgets sets a spending limit and alerts you as you approach or exceed it. Cost Explorer analyses and forecasts past spend but is not the alert; Trusted Advisor gives best-practice checks; Config tracks resource configuration.');
+q('p40','P','aws-genai-stack','A finance analyst with no coding skills wants to ask questions of sales data in plain English, build dashboards and automate a weekly report. Which AWS offering fits?',
+  ['Amazon Quick'],['Kiro','Strands Agents','Amazon SageMaker JumpStart'],
+  'Amazon Quick is the AI workspace for business users. Kiro is an agentic coding IDE for developers, Strands Agents is an SDK for writing agents in code, and JumpStart deploys pre-trained models for ML teams.');
+q('p41','P','aws-genai-stack','A developer wants an IDE in which an AI agent turns a written specification into code, tests and documentation for a new web service. Which AWS offering fits?',
+  ['Kiro'],['Strands Agents','Amazon Bedrock AgentCore Runtime','Amazon Quick'],
+  'Kiro is AWS’s agentic IDE that works from specs. Strands Agents is a library for building your own agent, AgentCore Runtime hosts agents in production, and Quick is for business users rather than software development.');
+q('p42','P','aws-genai-stack','A company wants AI agents to help assess, migrate and modernise hundreds of legacy .NET and mainframe applications. Which AWS service is built for this?',
+  ['AWS Transform'],['Amazon Quick','AWS Glue DataBrew','Amazon Bedrock Knowledge Bases'],
+  'AWS Transform uses agents for migration and modernisation work such as .NET, mainframe and VMware. Quick is a business-user workspace, DataBrew prepares data, and Knowledge Bases provides RAG.');
+q('p43','P','fm-evaluation','A support bot often gives correct answers in different words from the reference answers, and ROUGE scores them low. Which metric better measures whether the meaning matches?',
+  ['BERTScore'],['BLEU','Perplexity','Accuracy'],
+  'BERTScore compares embeddings, so a faithful paraphrase still scores well. BLEU, like ROUGE, counts exact word overlap; perplexity measures how well a model predicts text, not whether an answer matches a reference; plain accuracy needs exact labels.');
+q('p44','P','responsible-ai','A company hosts its own model on a SageMaker AI endpoint. It wants the same denied topics and PII masking it already uses for Bedrock models, without migrating the model. What should it do?',
+  ['Call the ApplyGuardrail API with the existing Bedrock guardrail on the endpoint’s inputs and outputs'],['Import the model into Bedrock first, because guardrails only work on Bedrock-hosted models','Attach an AWS WAF web ACL to the endpoint','Run Amazon Macie on each model response'],
+  'ApplyGuardrail evaluates any text against a guardrail without invoking a Bedrock model, so it protects self-hosted and third-party models too. WAF filters web requests by pattern, not meaning, and Macie scans data stored in S3.');
+q('p45','P','responsible-ai','A mortgage assistant must check that its answers about loan eligibility are consistent with the company’s written lending rules, encoded as a formal policy. Which Bedrock Guardrails feature is built for this?',
+  ['Automated Reasoning checks'],['Contextual grounding checks','Word filters','Denied topics'],
+  'Automated Reasoning checks validate a response against rules you encode as a formal policy. Contextual grounding checks test support from the retrieved source text, word filters block exact words, and denied topics block whole subjects.');
+q('p46','P','transparency','A lender must tell one rejected applicant which inputs pushed their score down the most. Which tool provides this?',
+  ['SageMaker Clarify feature attributions (SHAP values)'],['SageMaker Model Cards','AWS AI Service Cards','SageMaker Model Monitor'],
+  'Clarify explains individual predictions by attributing them to input features. Model Cards document a model as a whole, AI Service Cards document AWS services, and Model Monitor watches a live model for drift.');
+q('p47','P','governance','An auditor asks which IAM role invoked a Bedrock model last Tuesday. Separately, the operations team wants an alarm when model latency rises. Which pairing is correct?',
+  ['AWS CloudTrail for the auditor; Amazon CloudWatch for the latency alarm'],['Amazon CloudWatch for the auditor; AWS CloudTrail for the latency alarm','AWS Config for both','AWS Artifact for the auditor; AWS Trusted Advisor for the latency alarm'],
+  'CloudTrail records who called which API and when; CloudWatch holds metrics and alarms. Config tracks resource configuration, Artifact holds AWS’s compliance reports, and Trusted Advisor runs best-practice checks.');
+q('p48','P','aws-ai-services','An insurer receives scanned claim letters. It must pull out the text, then find the customer’s sentiment and any personal data in it, with no ML expertise. Which TWO services fit? (Select TWO.)',
+  ['Amazon Textract','Amazon Comprehend'],['Amazon Rekognition','Amazon Transcribe','Amazon Polly'],
+  'Textract reads the scanned letters; Comprehend finds sentiment and PII in the extracted text. Rekognition labels objects and faces, Transcribe turns speech into text, and Polly turns text into speech.');
+q('p49','P','aws-ai-services','A travel company wants a chatbot that understands requests such as “change my booking” and answers customers in their own language. Which TWO services fit? (Select TWO.)',
+  ['Amazon Lex','Amazon Translate'],['Amazon Personalize','Amazon Textract','Amazon Rekognition'],
+  'Lex understands intents and slots in a conversation; Translate converts between languages. Personalize recommends items, Textract reads documents, and Rekognition analyses images.');
+q('p50','P','aws-ai-services','An online store wants “customers who bought this also bought” recommendations from its click and purchase history, without building a model. Which service fits?',
+  ['Amazon Personalize'],['Amazon Comprehend','Amazon Lex','SageMaker Ground Truth'],
+  'Personalize builds recommendations from user-item interaction data. Comprehend analyses text, Lex builds chatbots, and Ground Truth labels training data.');
+q('p51','P','inference-types','Users upload 500 MB video files one at a time. Each takes about 20 minutes to analyse, and the user is notified when it is done. Traffic is sporadic. Which SageMaker AI option fits?',
+  ['Asynchronous inference'],['A real-time endpoint','Serverless inference','Batch transform run each night'],
+  'Large payloads, long processing and a notification on completion is asynchronous inference, which can also scale to zero between uploads. Real-time (25 MB) and serverless (4 MB) cap payloads far below 500 MB and processing at 60 seconds; a nightly batch makes users wait until tomorrow.');
+q('p52','P','agentic-ai','A team building its own chatbot must store each user’s conversation history so the next session can continue where the last one stopped, at any scale and with no servers to manage. Which service fits?',
+  ['Amazon DynamoDB'],['Amazon Redshift','Amazon S3 Glacier','Amazon EMR'],
+  'DynamoDB is a serverless key-value store with fast lookups by user or session ID. Redshift is a warehouse for analytics queries, Glacier is archive storage with retrieval delays, and EMR runs big-data processing clusters.');
+q('p53','P','ml-lifecycle','A team wants to run an open-source model but must choose the exact GPU type and keep the model inside its own VPC. It accepts the extra operational work. Which serving approach fits?',
+  ['Self-host it on a SageMaker AI endpoint or in containers on Amazon ECS or Amazon EKS'],['Import it into Amazon Bedrock and call it on demand','Serve it from Amazon Quick','Run it inside an AWS Glue DataBrew job'],
+  'Self-hosting gives control of hardware and network at the cost of patching, scaling and paying for idle capacity. Bedrock is managed, so you do not pick the hardware; Quick and DataBrew do not host models.');
+q('p54','P','prompt-techniques','A production app must keep calling a tested prompt while the team experiments with new wording, and must be able to roll back if the new wording performs worse. What should the team do in Amazon Bedrock Prompt Management?',
+  ['Create prompt versions and point production at a tested version'],['Have production call the working draft and edit it in place','Put the prompt into the model’s fine-tuning data instead','Raise the temperature on the new wording'],
+  'A version is a frozen snapshot an application can call, so experiments in the draft cannot break production and rollback is choosing an earlier version. Editing the live draft risks production, fine-tuning is not prompt management, and temperature changes sampling, not the prompt.');
+q('p55','P','customization-ladder','A company’s large model meets its quality bar on one task but costs too much at 2 million requests a day. It wants a smaller, faster model that keeps most of that quality on this task. Which approach fits?',
+  ['Model distillation'],['Continued pre-training','RAG','Prompt caching'],
+  'Distillation trains a small student model on the large teacher’s answers. Continued pre-training adapts a model to a domain without shrinking it, RAG adds facts, and caching cuts the cost of a repeated prefix but leaves the large model doing all the work.');
+q('p56','P','rag','Which order is correct for building and then using a RAG application?',
+  ['Chunk documents → embed and store the chunks → embed the question and retrieve chunks → add chunks to the prompt → generate'],['Embed whole documents → chunk the stored vectors → retrieve chunks → generate → add the chunks to the prompt','Chunk documents → embed the question → store the chunk vectors → generate → retrieve chunks','Retrieve chunks → chunk documents → embed and store the chunks → add chunks to the prompt → generate'],
+  'Build the index first (chunk, then embed and store). At question time, embed the question, retrieve the nearest chunks, put them in the prompt, then generate. Retrieval must come before generation, and chunking happens to text, not to vectors.');
+q('p57','P','governance','Which pairing of service and question is correct for all four?',
+  ['Macie: where is sensitive data in S3? · CloudTrail: who called this API? · Config: does this resource still meet our rules? · Inspector: does this image have known vulnerabilities?'],['Macie: who called this API? · CloudTrail: where is sensitive data in S3? · Config: does this image have known vulnerabilities? · Inspector: does this resource still meet our rules?','Macie: where is sensitive data in S3? · CloudTrail: does this resource still meet our rules? · Config: who called this API? · Inspector: does this image have known vulnerabilities?','Macie: does this image have known vulnerabilities? · CloudTrail: who called this API? · Config: does this resource still meet our rules? · Inspector: where is sensitive data in S3?'],
+  'Macie finds sensitive data, CloudTrail records API activity, Config checks configuration against rules, and Inspector scans for software vulnerabilities. The exam tests these four as look-alikes, often in one question.');
 
 // ============================ MOCK A ============================
 // --- Domain 1 (13)
@@ -207,12 +291,12 @@ q('a33','A','rag','What problem does Retrieval Augmented Generation primarily so
   ['It grounds responses in current, company-specific data without retraining the model'],['It shortens the model’s training time','It lowers the price per token','It removes the need to write prompts'],
   'RAG retrieves relevant documents at question time and puts them in the prompt, so answers reflect your current data. It does not train the model, change the token price or replace prompts.');
 q('a34','A','rag','Which AWS service can store and search vector embeddings for a RAG application?',
-  ['Amazon OpenSearch Service'],['AWS Artifact','Amazon Polly','AWS Trusted Advisor'],
-  'OpenSearch Service (including Serverless) supports vector search and is a common Knowledge Bases vector store. The others are a compliance-report portal, text-to-speech and a best-practice checker.');
+  ['Amazon OpenSearch Service'],['Amazon Redshift','Amazon Kinesis Data Streams','AWS Lake Formation'],
+  'OpenSearch Service (including Serverless) supports vector search and is a common Knowledge Bases vector store. Redshift is a data warehouse for analytics SQL, Kinesis Data Streams moves streaming records, and Lake Formation manages data lake permissions.');
 q('a35','A','rag','Which TWO AWS databases can store and search embeddings for a RAG application? (Select TWO.)',
-  ['Amazon Aurora PostgreSQL with the pgvector extension','Amazon Neptune Analytics'],['Amazon S3 Glacier','AWS CloudTrail','AWS Config'],
-  'Aurora PostgreSQL with pgvector and Neptune Analytics both support vector search, and Aurora and Neptune are named in the exam guide. Glacier is archive storage, and CloudTrail and Config are governance services.');
-q('a36','A','customization-ladder','Which order runs from LEAST to MOST cost and effort for customising a foundation model?',
+  ['Amazon Aurora PostgreSQL with the pgvector extension','Amazon Neptune Analytics'],['Amazon Redshift','Amazon S3 Glacier','AWS Glue Data Catalog'],
+  'Aurora PostgreSQL with pgvector and Neptune Analytics both support vector search, and Aurora and Neptune are named in the exam guide. Redshift is a warehouse for analytics SQL; Glacier is archive storage with retrieval delays; the Glue Data Catalog stores table metadata, not vectors.');
+q('a36','A','customization-ladder','Which order runs from LEAST to MOST typical up-front cost and effort for customising a foundation model?',
   ['Prompt engineering → RAG → fine-tuning → continued pre-training'],['Fine-tuning → prompt engineering → continued pre-training → RAG','Continued pre-training → fine-tuning → RAG → prompt engineering','RAG → continued pre-training → prompt engineering → fine-tuning'],
   'The ladder goes prompting (no training), RAG (retrieval infrastructure), fine-tuning (labelled data, some training), continued pre-training (large corpus, much more training). Pre-training from scratch sits above all four.');
 q('a37','A','customization-ladder','A company wants a smaller, cheaper model that reproduces a large model’s answers for one specific task. Which technique fits?',
@@ -341,8 +425,8 @@ q('b11','B','trad-ml-vs-fm','A company wants to pull complaint themes out of mil
   ['A foundation model, because the input is unstructured multilingual text and the task is open-ended'],['A linear regression model','A hand-written rules engine for each language','A time-series forecasting model'],
   'Open-ended understanding and summarising of messy multilingual text is where FMs beat traditional ML. Regression predicts numbers, 30 sets of hand rules would not scale, and forecasting is for time series.');
 q('b12','B','mlops','Which TWO are MLOps practices? (Select TWO.)',
-  ['Automating training and deployment pipelines','Monitoring production models and retraining when they drift'],['Training once and never updating the model','Copying model files between laptops by hand','Skipping evaluation to deploy faster'],
-  'MLOps is about repeatable automated pipelines and continuous monitoring with retraining. The distractors are the anti-patterns MLOps exists to remove.');
+  ['Automating training and deployment pipelines','Monitoring production models and retraining when they drift'],['Retraining by hand whenever customers complain','Tracking model versions in a shared spreadsheet','Promoting whichever model has the highest training-set accuracy'],
+  'MLOps is about repeatable automated pipelines and continuous monitoring with retraining. Manual retraining is not repeatable, a spreadsheet is not a model registry, and training-set accuracy hides overfitting; evaluate on held-out data.');
 q('b13','B','metrics','For a spam filter, the business is most upset when legitimate emails land in the spam folder. Which metric should be maximised?',
   ['Precision'],['Recall','RMSE','R²'],
   'Precision asks how often “spam” verdicts are right; maximising it reduces good emails flagged as spam (false positives). Recall would catch more spam at the cost of more false alarms; RMSE and R² are regression metrics.');
@@ -413,7 +497,7 @@ q('b34','B','rag','What is the main benefit of Amazon Bedrock Knowledge Bases ov
   'Knowledge Bases manages the whole RAG pipeline and returns source citations. It still needs your data, trains nothing, and reduces rather than eliminates hallucination.');
 q('b35','B','customization-ladder','A model must know the latest product prices, which change daily. Which approach fits?',
   ['RAG'],['Fine-tuning every day','Continued pre-training','Model distillation'],
-  'Daily-changing facts belong in retrieval, so updating the data updates the answers. Retraining daily is slow and costly, and distillation shrinks a model rather than updating its facts.');
+  'Daily-changing facts belong in retrieval: update the source data and re-sync the index, and the answers follow. Retraining daily is slow and costly, and distillation shrinks a model rather than updating its facts.');
 q('b36','B','customization-ladder','Which TWO approaches change the model’s weights? (Select TWO.)',
   ['Fine-tuning','Continued pre-training'],['RAG','Few-shot prompting','Prompt templates'],
   'Fine-tuning and continued pre-training both train the model. RAG, few-shot prompting and templates only change what goes into the prompt.');
@@ -454,7 +538,7 @@ q('b47','B','fm-evaluation','Which metric best shows that a GenAI support agent 
 q('b48','B','responsible-ai','Which TWO are dimensions of responsible AI as described by AWS? (Select TWO.)',
   ['Fairness','Veracity and robustness'],['Maximum token throughput','Lowest latency','Largest parameter count'],
   'AWS lists fairness, explainability, privacy and security, safety, controllability, veracity and robustness, governance, and transparency. The others are performance properties.');
-q('b49','B','responsible-ai','A chatbot must never output specific competitor names or profanity. Which Bedrock Guardrails feature fits best?',
+q('b49','B','responsible-ai','A chatbot must not output specific competitor names or profanity. Which Bedrock Guardrails feature fits best?',
   ['Word filters'],['Contextual grounding checks','AWS KMS encryption','Amazon Inspector'],
   'Word filters block exact words and phrases, including a profanity list. Grounding checks test support from sources, and KMS and Inspector are security services.');
 q('b50','B','responsible-ai','A chatbot must resist users trying to override its instructions. Which Bedrock Guardrails setting addresses this?',
@@ -480,8 +564,8 @@ q('b56','B','transparency','What trade-off does a team usually make by choosing 
   'Complex models often win on accuracy and lose on explainability: the interpretability-versus-performance trade-off. Linear models are typically faster to train.');
 // --- Domain 5 (9)
 q('b57','B','securing-ai','What does applying least privilege to an application that calls Amazon Bedrock mean?',
-  ['Its IAM role allows only bedrock:InvokeModel on the specific models it needs'],['Its IAM role has AdministratorAccess','It uses the root account access keys','Its data sits in a public S3 bucket for easy access'],
-  'Least privilege grants only the actions and resources required. Administrator access, root keys and public buckets are the opposite.');
+  ['Its IAM role allows only bedrock:InvokeModel on the specific models it needs'],['Its IAM role allows bedrock:* on all models so new models work without a policy change','Its IAM role can invoke any model but only from inside the company VPC','Its IAM role can read every S3 bucket in the account in case new data sources are added'],
+  'Least privilege grants only the actions and resources required. A wildcard on actions or models, or blanket S3 read, grants more than needed; a VPC condition limits where calls come from, not what they may do.');
 q('b58','B','securing-ai','An agent uses API keys for a third-party tool. They must be stored securely and rotated. Which service fits?',
   ['AWS Secrets Manager'],['Hard-code the keys in the system prompt','Store them in a public S3 bucket','Display them on a CloudWatch dashboard'],
   'Secrets Manager stores and rotates credentials securely. Putting secrets in prompts, public buckets or dashboards exposes them, and a prompt can leak.');
@@ -489,8 +573,8 @@ q('b59','B','securing-ai','Which TWO measures help reduce hallucinations in a Ge
   ['Ground responses with RAG over trusted documents','Validate outputs with a contextual grounding check'],['Increase the temperature','Remove the system prompt','Increase the maximum output tokens'],
   'Grounding in trusted sources and checking that responses are supported both reduce hallucination. Higher temperature adds randomness, and removing instructions or lengthening output does not help.');
 q('b60','B','securing-ai','A business rule says an agent’s refund tool may only issue refunds under $100. Which AgentCore capability enforces rules on what tools may do?',
-  ['Policy in Amazon Bedrock AgentCore'],['Amazon Polly','Amazon Rekognition','AWS Glue DataBrew'],
-  'Policy in AgentCore defines and enforces rules on agent tool actions. The others are speech, image analysis and data preparation services.');
+  ['Policy in Amazon Bedrock AgentCore'],['Amazon Bedrock AgentCore Identity','A denied topic in Amazon Bedrock Guardrails','Amazon Bedrock AgentCore Observability'],
+  'Policy in AgentCore defines and enforces rules on what agent tools may do, such as an amount limit. Identity manages whose credentials the agent uses, a denied topic blocks a subject in text (and would stop all refund talk), and Observability shows what happened after the fact.');
 q('b61','B','data-lineage','Which practice protects privacy when sharing training data with analysts?',
   ['Masking or anonymising personal data'],['Raising the model temperature','Increasing the chunk size','Turning off AWS CloudTrail'],
   'Masking and anonymisation are privacy-enhancing techniques. Temperature and chunk size do nothing for privacy, and disabling CloudTrail removes the audit trail.');
@@ -505,6 +589,6 @@ q('b64','B','governance','Which service runs automated checks on cost optimisati
   'Trusted Advisor checks the account against best practices across cost, security, reliability, performance and service quotas. Artifact serves reports, Macie finds PII, and Transcribe converts speech.');
 q('b65','B','governance','A company fine-tunes a foundation model on its own data using Amazon Bedrock. Which scope of the Generative AI Security Scoping Matrix is this?',
   ['Scope 4: fine-tuned models'],['Scope 1: consumer app','Scope 2: enterprise app','Scope 5: self-trained models'],
-  'Customising an existing FM with your data is Scope 4. Scopes 1 and 2 use someone else’s app; Scope 5 trains a model from scratch.');
+  'Changing an existing FM’s weights with your data is Scope 4. If the company had only built an app on the model, even with RAG through Knowledge Bases, it would be Scope 3. Scopes 1 and 2 use someone else’s app; Scope 5 trains a model from scratch.');
 
 module.exports = Q;
