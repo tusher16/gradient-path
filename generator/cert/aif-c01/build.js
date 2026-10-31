@@ -4,6 +4,7 @@
 // Run from anywhere:  node generator/cert/aif-c01/build.js
 // Exit 1 on any validation error; nothing is written in that case.
 const fs = require('fs');
+const crypto = require('crypto');
 const path = require('path');
 
 const HERE = __dirname;
@@ -102,7 +103,20 @@ const block = (name) => {
 const rtpl = fs.readFileSync(path.join(HERE, 'reels.html'), 'utf8');
 for (const slot of ['/*__TOKENS__*/', '/*__MOTION__*/', '/*__DATA__*/null'])
   if (rtpl.split(slot).length !== 2) { console.error(`reels.html needs exactly one ${slot}`); process.exit(1); }
-const rdata = { topics: TOPICS.map(({ id, d, title, hook }) => ({ id, d, title, hook })), motion: MOTION, domains: DOMAINS };
+// Narration: each reel is read as segments (title + step 1, each later step, then the hook).
+// tts/narrate.py records them with Kokoro into audio/aif-c01/<topic>-<n>-<hash>.mp3; the hash
+// covers the voice and the text, so an edited caption simply has no file yet and that segment
+// falls back to the browser's own voice. The export below is what narrate.py reads.
+const VOICE = 'af_heart';
+const AUDIO_DIR = path.join(HERE, '..', '..', '..', 'audio', 'aif-c01');
+const segs = TOPICS.map((t) => [...MOTION[t.id].steps.map((s, k) => (k === 0 ? t.title + '. ' : '') + s), 'Remember. ' + t.hook]);
+const key = (text) => crypto.createHash('sha1').update(VOICE + '|' + text).digest('hex').slice(0, 10);
+const script = TOPICS.flatMap((t, i) => segs[i].map((text, k) => ({ file: `${t.id}-${k}-${key(text)}.mp3`, text })));
+fs.writeFileSync(path.join(HERE, 'tts', 'script.json'), JSON.stringify({ voice: VOICE, segments: script }, null, 1));
+const have = new Set(fs.existsSync(AUDIO_DIR) ? fs.readdirSync(AUDIO_DIR) : []);
+const audio = {}; let recorded = 0;
+TOPICS.forEach((t, i) => { audio[t.id] = segs[i].map((text, k) => { const f = `${t.id}-${k}-${key(text)}.mp3`; if (have.has(f)) { recorded++; return '/audio/aif-c01/' + f; } return null; }); });
+const rdata = { topics: TOPICS.map(({ id, d, title, hook }) => ({ id, d, title, hook })), motion: MOTION, domains: DOMAINS, segs, audio, voice: VOICE };
 const reels = rtpl.replace('/*__TOKENS__*/', () => block('tokens')).replace('/*__MOTION__*/', () => block('motion'))
   .replace('/*__DATA__*/null', () => JSON.stringify(rdata).replace(/</g, '\\u003c'));
 fs.writeFileSync(REELS_OUT, reels);
@@ -110,4 +124,4 @@ fs.writeFileSync(REELS_OUT, reels);
 const fmt = (o) => [1, 2, 3, 4, 5].map((d) => o[d] || 0).join('/');
 console.log(`aif-c01: ${TOPICS.length} topics | motion ${Object.keys(MOTION).length} | practice ${QUESTIONS.filter((q) => q.set === 'P').length} | ` +
   `Mock A ${fmt(counts.A)} | Mock B ${fmt(counts.B)} | ${(html.length / 1024).toFixed(0)} KB → ${path.relative(process.cwd(), OUT)}`);
-console.log(`reels: ${TOPICS.length} reels | ${(reels.length / 1024).toFixed(0)} KB → ${path.relative(process.cwd(), REELS_OUT)}`);
+console.log(`reels: ${TOPICS.length} reels | narration ${recorded}/${script.length} recorded (${VOICE}) | ${(reels.length / 1024).toFixed(0)} KB → ${path.relative(process.cwd(), REELS_OUT)}`);

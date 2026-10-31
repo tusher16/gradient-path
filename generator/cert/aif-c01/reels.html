@@ -119,7 +119,7 @@ let html = `<section class="reel" id="intro"><div class="card plain">
   <p>Each reel is one AIF-C01 exam topic: a diagram that builds step by step, read aloud, then the one line to remember. About 45 seconds each. Swipe up, or press the down arrow, for the next.</p>
   <div class="row"><button class="btn go" type="button" id="start-sound">Start with sound</button><button class="btn" type="button" id="start-muted">Watch muted</button></div>
   <ol class="doms">${[1,2,3,4,5].map(d => `<li><a href="#r-${first[d]}" data-jump="${first[d]}"><span class="n">${d}</span><span>${esc(DOMS[d][0])}</span><span class="c">${count(d)} reels · ${DOMS[d][1]}%</span></a></li>`).join('')}</ol>
-  <p class="note">The voice is your browser&rsquo;s own; nothing is recorded or sent. For the questions and the 14-day plan, go to the <a href="/aws-ai-practitioner">study page</a>.</p>
+  <p class="note">Narration is recorded with <a href="https://huggingface.co/hexgrad/Kokoro-82M">Kokoro-82M</a>, an open text-to-speech model; if a clip is missing, your browser&rsquo;s own voice reads that part. Nothing is recorded from you or sent anywhere. For the questions and the 14-day plan, go to the <a href="/aws-ai-practitioner">study page</a>.</p>
 </div></section>`;
 T.forEach((t, i) => {
   const m = DATA.motion[t.id];
@@ -156,17 +156,32 @@ function pickVoice(){
   const vs = speechSynthesis.getVoices().filter(v => /^en(-|_|$)/i.test(v.lang));
   voice = vs.find(v => /natural|neural|google|samantha|daniel|serena/i.test(v.name)) || vs.find(v => v.localService) || vs[0] || null;
 }
-if (canSpeak) { pickVoice(); speechSynthesis.onvoiceschanged = pickVoice; } else { $('#sound').disabled = true; $('#sound').title = 'This browser cannot read aloud'; $('#start-sound').hidden = true; }
+if (canSpeak) { pickVoice(); speechSynthesis.onvoiceschanged = pickVoice; }
+// recorded narration (Kokoro clips) plays through one reused element: iOS unlocks an element
+// once inside a tap, and every later play() on that same element is then allowed
+const player = new Audio(); player.preload = 'auto';
+const clipsOf = (r) => DATA.audio[T[+r.dataset.i].id] || [];
+const firstClip = Object.values(DATA.audio).flat().find(Boolean) || null;
+if (!canSpeak && !firstClip) { $('#sound').disabled = true; $('#sound').title = 'This browser cannot read aloud'; $('#start-sound').hidden = true; }
+function prefetch(r){ if (r) clipsOf(r).forEach(u => { if (u) { const a = new Audio(); a.preload = 'auto'; a.src = u; } }); }
 const readTime = (s) => Math.min(7500, Math.max(2600, s.length * 58));
 const lastStep = (r) => DATA.motion[T[+r.dataset.i].id].steps.length - 1;
-function say(text, tok){
-  if (!P.sound || !canSpeak) return sleep(readTime(text));
+function speak(text, fin){
+  if (!canSpeak) { sleep(readTime(text)).then(fin); return; }
+  const u = new SpeechSynthesisUtterance(text); if (voice) u.voice = voice; u.rate = 1.02; u.onend = fin; u.onerror = fin;
+  speechSynthesis.speak(u);
+}
+// a recorded clip when there is one, the browser's voice when not, silence when sound is off;
+// a timer backs up every path, because some engines never fire their end event
+function say(text, tok, src){
+  if (!P.sound) return sleep(readTime(text));
   return new Promise(res => {
-    let done = false; const fin = () => { if (!done) { done = true; res(); } };
-    const u = new SpeechSynthesisUtterance(text); if (voice) u.voice = voice; u.rate = 1.02; u.onend = fin; u.onerror = fin;
-    speechSynthesis.speak(u);
-    // some engines never fire onend; never hang the reel on it
-    setTimeout(fin, readTime(text) * 2 + 2500);
+    let done = false; const fin = () => { if (!done) { done = true; player.onended = player.onerror = null; res(); } };
+    setTimeout(fin, readTime(text) * 2 + 4000);
+    if (src) {
+      player.onended = fin; player.onerror = () => { player.onerror = null; speak(text, fin); };
+      player.src = src; player.play().catch(() => speak(text, fin));
+    } else speak(text, fin);
   }).then(() => sleep(tok === P.tok ? 320 : 0));
 }
 function show(r, k, instant){
@@ -178,24 +193,25 @@ function reset(r){
   $$('.seg i', r).forEach(s => s.classList.remove('on'));
   $('.cap', r).textContent = ''; $('.hk', r).textContent = '';
 }
-function halt(){ P.tok++; if (canSpeak) speechSynthesis.cancel(); }
+function halt(){ P.tok++; if (canSpeak) speechSynthesis.cancel(); player.onended = player.onerror = null; player.pause(); }
 async function play(r, from = 0){
   halt(); const tok = P.tok; P.cur = r; P.paused = false; P.at = from;
   $('[data-act="pause"]', r).textContent = 'Pause';
   const t = T[+r.dataset.i], m = DATA.motion[t.id];
   reset(r);
   for (let k = 0; k < from; k++) show(r, k, true);
-  if (canSpeak && P.sound) await sleep(80);   // Chrome drops a speak() issued straight after cancel()
+  const clips = clipsOf(r); prefetch(r.nextElementSibling);
+  if (canSpeak && P.sound && !clips[from]) await sleep(80);   // Chrome drops a speak() issued straight after cancel()
   for (let k = from; k < m.steps.length; k++) {
     if (tok !== P.tok) return;
     P.at = k; show(r, k, false); $('.cap', r).textContent = m.steps[k];
-    await say((k === 0 ? t.title + '. ' : '') + m.steps[k], tok);
+    await say(DATA.segs[+r.dataset.i][k], tok, clips[k]);
   }
   if (tok !== P.tok) return;
   P.at = m.steps.length;
   $$('.seg i', r).forEach(s => s.classList.add('on'));
   $('.hk', r).textContent = t.hook;
-  await say('Remember. ' + t.hook, tok);
+  await say(DATA.segs[+r.dataset.i][m.steps.length], tok, clips[m.steps.length]);
   if (tok !== P.tok || !P.auto) return;
   await sleep(700);
   if (tok === P.tok) go(r.nextElementSibling);
@@ -221,8 +237,13 @@ $$('.reel').forEach(r => io.observe(r));
 
 // iOS only lets speech start inside a tap, so a tap that turns sound on also speaks once, silently
 function soundOn(on){
-  P.sound = on && canSpeak; $('#sound').setAttribute('aria-pressed', P.sound);
-  if (P.sound) { const u = new SpeechSynthesisUtterance(' '); u.volume = 0; speechSynthesis.speak(u); }
+  P.sound = on && (canSpeak || !!firstClip); $('#sound').setAttribute('aria-pressed', P.sound);
+  if (P.sound && canSpeak) { const u = new SpeechSynthesisUtterance(' '); u.volume = 0; speechSynthesis.speak(u); }
+  // no reel is playing yet (the intro's Start button): unlock the player now, inside the tap
+  if (P.sound && !P.cur && firstClip) {
+    const tok = P.tok; player.muted = true; player.src = firstClip;
+    player.play().then(() => { if (tok === P.tok) player.pause(); player.muted = false; }).catch(() => { player.muted = false; });
+  }
   if (P.cur) play(P.cur, Math.min(P.at, lastStep(P.cur)));
 }
 $('#sound').addEventListener('click', () => soundOn(!P.sound));

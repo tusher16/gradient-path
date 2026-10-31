@@ -89,7 +89,7 @@ curl -sI http://localhost:8080/nonexistent            # expect: 404
 | nginx.conf / Dockerfile change | Level 4 locally (docker run) before push |
 | k8s manifest change | Cluster diff review + Level 4 after apply |
 | New module | Levels 1–3 + hub rebuild + sitemap entry (once SEO P2 lands) |
-| Cert page content (`generator/cert/*`) | `node generator/cert/aif-c01/build.js` exits 0 (it is the validator) + Level 3 at 1440 and 390: answer a question, sit and submit a mock. Reels: a reel plays when it fills the screen, Pause holds, the down arrow moves on, a `#r-<topic>` link opens on its reel; with sound, captions are spoken and the feed advances (a stubbed `speechSynthesis.speak` that ends at once runs a reel in seconds). Answer-key changes need a reviewer who did not write them |
+| Cert page content (`generator/cert/*`) | `node generator/cert/aif-c01/build.js` exits 0 (it is the validator) + Level 3 at 1440 and 390: answer a question, sit and submit a mock. Reels: a reel plays when it fills the screen, Pause holds, the down arrow moves on, a `#r-<topic>` link opens on its reel; with sound, captions are spoken and the feed advances (a stubbed `speechSynthesis.speak` that ends at once runs a reel in seconds). Narration: the build line reports `narration N/N recorded`; fewer means some segments fall back to the browser voice. `/audio/aif-c01/<file>.mp3` returns 200 `audio/mpeg` with one `Cache-Control: public, max-age=31536000, immutable`. Answer-key changes need a reviewer who did not write them |
 
 ## Gaps (honest)
 

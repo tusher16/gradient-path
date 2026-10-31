@@ -7,6 +7,8 @@ FROM nginx:1.27-alpine
 # git push -- nothing here has to change.
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY *.html /usr/share/nginx/html/
+# Recorded narration for the reels page (generator/cert/aif-c01/tts/narrate.py)
+COPY audio/ /usr/share/nginx/html/audio/
 
 EXPOSE 80
 

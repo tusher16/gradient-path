@@ -19,3 +19,7 @@ generator/node_modules/
 generator/_to_delete/
 generator/**/__pycache__/
 generator/*.pyc
+
+# Kokoro narration tool env (local only, never committed)
+generator/cert/aif-c01/tts/.venv/
+generator/cert/aif-c01/tts/script.json
