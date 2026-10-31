@@ -10,6 +10,7 @@ const OUT = path.join(HERE, '..', '..', '..', 'aws-ai-practitioner.html');
 const TOPICS = require('./topics.js');
 const QUESTIONS = require('./questions.js');
 const { DAYS, CONFUSABLES, PROMPTS } = require('./extras.js');
+const MOTION = require('./motion.js');
 
 // Mock blueprint: 13/16/18/9/9 = 65, the 20/24/28/14/14 weights of 65.
 const MOCK_SPLIT = { 1: 13, 2: 16, 3: 18, 4: 9, 5: 9 };
@@ -65,6 +66,14 @@ for (const d of DAYS) for (const id of d.topics) {
 }
 for (const t of TOPICS) if (!allDayTopics.has(t.id)) err(`topic ${t.id} is never taught in week 1`);
 if (DAYS.length !== 14) err(`plan has ${DAYS.length} days, needs 14`);
+for (const [id, m] of Object.entries(MOTION)) {
+  if (!topicById.has(id)) err(`motion ${id}: unknown topic`);
+  if (!(m.h > 0) || !m.steps?.length || !m.svg) err(`motion ${id}: needs h, steps and svg`);
+  if (/<script|on\w+=|href=/i.test(m.svg)) err(`motion ${id}: svg must be plain geometry`);
+  const ts = [...m.svg.matchAll(/--t:(\d+)/g)].map((x) => +x[1]);
+  if (Math.max(...ts) >= m.steps.length) err(`motion ${id}: an element appears at step ${Math.max(...ts)} but there are ${m.steps.length} captions`);
+  for (let i = 0; i < m.steps.length; i++) if (!ts.includes(i)) err(`motion ${id}: caption ${i + 1} has nothing appearing with it`);
+}
 
 if (errors.length) {
   console.error(errors.map((e) => '  ✗ ' + e).join('\n'));
@@ -72,7 +81,7 @@ if (errors.length) {
   process.exit(1);
 }
 
-const data = { topics: TOPICS, questions: QUESTIONS, days: DAYS, confusables: CONFUSABLES, prompts: PROMPTS };
+const data = { topics: TOPICS, questions: QUESTIONS, days: DAYS, confusables: CONFUSABLES, prompts: PROMPTS, motion: MOTION };
 const json = JSON.stringify(data).replace(/</g, '\\u003c');
 const tpl = fs.readFileSync(path.join(HERE, 'page.html'), 'utf8');
 if (!tpl.includes('/*__DATA__*/')) { console.error('page.html has no /*__DATA__*/ slot'); process.exit(1); }
@@ -81,5 +90,5 @@ const html = tpl.replace('/*__DATA__*/null', () => json);
 fs.writeFileSync(OUT, html);
 
 const fmt = (o) => [1, 2, 3, 4, 5].map((d) => o[d] || 0).join('/');
-console.log(`aif-c01: ${TOPICS.length} topics | practice ${QUESTIONS.filter((q) => q.set === 'P').length} | ` +
+console.log(`aif-c01: ${TOPICS.length} topics | motion ${Object.keys(MOTION).length} | practice ${QUESTIONS.filter((q) => q.set === 'P').length} | ` +
   `Mock A ${fmt(counts.A)} | Mock B ${fmt(counts.B)} | ${(html.length / 1024).toFixed(0)} KB → ${path.relative(process.cwd(), OUT)}`);

@@ -281,6 +281,49 @@ footer p{max-width:78ch; margin:0 0 10px}
   .navgrid{grid-template-columns:repeat(auto-fill,minmax(44px,1fr))}
   .navgrid button{min-height:44px}
 }
+/* motion explainers: one authored diagram per Domain 1 topic. At rest the
+   finished diagram shows; .run replays it step by step, each step --step apart */
+.mo{margin:0 0 20px; padding:14px 16px 12px; background:var(--sunk); border-radius:14px; --step:1.8s}
+.mo svg{display:block; width:100%; height:auto; max-height:320px; overflow:visible}
+.mo .bx{fill:var(--surface); stroke:var(--line); stroke-width:1.5}
+.mo .bx.m{fill:var(--memory-soft); stroke:var(--memory)}
+.mo .bx.s{fill:var(--signal-soft); stroke:var(--signal)}
+.mo .bx.off{fill:none; stroke:var(--ink-2); stroke-dasharray:4 4}
+.mo .ln{fill:none; stroke:var(--ink-2); stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round}
+.mo .ln.m{stroke:var(--memory)} .mo .ln.s{stroke:var(--signal)} .mo .ln.dash{stroke-dasharray:5 5}
+.mo .dot{fill:var(--ink-2)} .mo .dot.m{fill:var(--memory)} .mo .dot.s{fill:var(--signal)}
+.mo .pl{fill:var(--line)}
+.mo text{font-family:var(--body); font-size:15px; fill:var(--ink-2)}
+.mo text.lb{font-size:16px; font-weight:600; fill:var(--ink)}
+.mo text.lb.m{fill:var(--memory)} .mo text.lb.s{fill:var(--signal)}
+.mo text.hd{font-family:var(--display); font-size:19px; font-weight:700; fill:var(--ink)}
+.mo .mid{text-anchor:middle} .mo .end{text-anchor:end}
+.mo .g{transform-box:fill-box; transform-origin:center}
+.mo.run .a{animation:moIn var(--dur,.5s) cubic-bezier(.16,1,.3,1) calc(var(--t,0) * var(--step) + var(--o,0s)) both}
+.mo.run .a.g{animation-name:moGrow}
+.mo.run .a.d{stroke-dasharray:1; animation-name:moDraw; animation-timing-function:cubic-bezier(.33,0,.2,1)}
+@keyframes moIn{from{opacity:0; transform:translate(var(--x,0px),var(--y,8px))}}
+@keyframes moGrow{from{opacity:0; transform:scale(.55)}}
+@keyframes moDraw{from{stroke-dashoffset:1}}
+.mocap{margin:12px 0 0; padding:0; list-style:none; display:grid; gap:6px; font-size:.92rem; color:var(--ink-2); counter-reset:mo}
+.mocap li{display:grid; grid-template-columns:22px minmax(0,1fr); gap:0 6px; counter-increment:mo}
+.mocap li::before{content:counter(mo); font-family:var(--mono); font-size:.78rem; color:var(--memory); padding-top:2px}
+.mo.run .mocap li{animation:moCap .5s ease-out calc(var(--t) * var(--step)) both}
+@keyframes moCap{from{opacity:.25}}
+.mo .mofoot{display:flex; justify-content:flex-end; margin-top:8px}
+.mo .mofoot .btn{font-size:.8rem; padding:6px 12px}
+@media (prefers-reduced-motion:reduce){.mo.run .a, .mo.run .mocap li{animation:none} .mo .mofoot{display:none}}
+
+/* how to use this page: a route on the ground, no cards */
+.route{list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:0 22px; counter-reset:rt}
+.route li{counter-increment:rt; border-top:2px solid var(--line); padding-top:14px; position:relative}
+.route li::before{content:counter(rt); position:absolute; top:-13px; left:0; width:24px; height:24px; border-radius:50%;
+  background:var(--ground); border:2px solid var(--memory); color:var(--memory); font:600 .78rem/20px var(--mono); text-align:center}
+.route li:first-child{border-top-color:var(--memory)}
+.route h3{font-size:1rem; margin:8px 0 6px}
+.route p{margin:0; font-size:.9rem; color:var(--ink-2)}
+.route a{color:var(--ink); text-underline-offset:3px; text-decoration-color:var(--line)}
+@media (max-width:860px){.route{grid-template-columns:minmax(0,1fr); gap:22px}}
 @media (prefers-reduced-motion:reduce){*{transition:none !important}}
 </style></head>
 <body>
@@ -288,7 +331,7 @@ footer p{max-width:78ch; margin:0 0 10px}
 <header class="bar"><div class="bar-in">
   <a class="home" href="/">Gradient Path <span>/ AWS AI Practitioner</span></a>
   <nav class="jump" aria-label="Sections">
-    <a href="#plan">14 days</a><a href="#topics">Topics</a><a href="#lookalikes">Look-alikes</a><a href="#mocks">Mock exams</a><a href="#prompts">Prompts</a>
+    <a href="#howto">How to use</a><a href="#plan">14 days</a><a href="#topics">Topics</a><a href="#lookalikes">Look-alikes</a><a href="#mocks">Mock exams</a><a href="#prompts">Prompts</a>
   </nav>
   <button class="tog" type="button" id="mode" aria-pressed="false" title="Hide or show the exam-level detail in every topic">Plain only</button>
   <button class="tog" type="button" id="theme">Dark / light</button>
@@ -341,6 +384,18 @@ footer p{max-width:78ch; margin:0 0 10px}
       </aside>
     </div>
   </div>
+
+  <section class="block" id="howto" aria-labelledby="howto-h">
+    <h2 id="howto-h">How to use this page</h2>
+    <p class="lede">About 45 minutes a day for 14 days. Progress stays in this browser only: no account, nothing sent anywhere.</p>
+    <ol class="route">
+      <li><h3>Open today&rsquo;s plan</h3><p>The panel beside the question shows your day, its topics and three tasks. Set the start date once; the <a href="#plan">14 days</a> list shows the whole route.</p></li>
+      <li><h3>Learn the day&rsquo;s topics</h3><p>Open each one in <a href="#topics">Topics</a>: watch the short diagram (Domain 1), read the plain version, then the exam facts. Mark it fuzzy or solid.</p></li>
+      <li><h3>Drill</h3><p>Answer from <b>Today&rsquo;s topics</b> in the <a href="#console">question panel</a>, or press <b>Drill this topic</b>. Switch to <b>Ones I got wrong</b> or <b>Topics I marked fuzzy</b> to repair gaps.</p></li>
+      <li><h3>Practise away from the screen</h3><p>Press <b>Listen to today&rsquo;s topics</b> on a walk, or paste a <a href="#prompts">prompt</a> into a chatbot&rsquo;s voice mode. Use the <a href="#lookalikes">look-alikes</a> to test yourself.</p></li>
+      <li><h3>Sit the mocks</h3><p><a href="#mocks">Mock A</a> on day 7, Mock B on day 13: 90 minutes each, then review every miss. Week 2 re-drills by weight. Day 14 is the exam.</p></li>
+    </ol>
+  </section>
 
   <section class="block" id="plan" aria-labelledby="plan-h">
     <h2 id="plan-h">The 14 days</h2>
@@ -594,6 +649,17 @@ Do not invent AWS features or limits. If you are unsure, say so.`;
 function simplePrompt(t){
   return `Explain "${t.title}" for the AWS Certified AI Practitioner exam as if I am completely new to tech. Use one everyday analogy, no jargon, under 150 words. Then tell me the mistake people make about it on the exam (usually this: ${t.trap}). Give me a memory trick, then ask me one simple question to check I understood. Keep it conversational; I may be listening rather than reading.`;
 }
+// the diagram is decoration for sighted readers; the numbered captions carry the same content as text
+function motionHtml(id){
+  const m = DATA.motion[id]; if (!m) return '';
+  return `<figure class="mo" data-mo="${id}"><svg viewBox="0 0 440 ${m.h}" aria-hidden="true" focusable="false">${m.svg}</svg>
+    <figcaption><ol class="mocap">${m.steps.map((s,i) => `<li style="--t:${i}">${esc(s)}</li>`).join('')}</ol>
+    <div class="mofoot"><button class="btn" type="button" data-replay>Replay</button></div></figcaption></figure>`;
+}
+function playMotion(el){
+  if (!el || reduced()) return;
+  el.classList.remove('run'); void el.getBoundingClientRect(); el.classList.add('run');
+}
 function renderTopics(){
   let html = '';
   for (const d of [1,2,3,4,5]) {
@@ -601,7 +667,7 @@ function renderTopics(){
     for (const t of DATA.topics.filter(x => x.d === d)) {
       html += `<details class="topic" id="t-${t.id}"><summary><span class="tt">${esc(t.title)}<small data-acc="${t.id}"></small></span><span class="dot" data-dot="${t.id}" aria-hidden="true"></span></summary>
       <div class="tbody">
-        <div class="simple">${t.simple.map(p => `<p>${esc(p)}</p>`).join('')}
+        <div class="simple">${motionHtml(t.id)}${t.simple.map(p => `<p>${esc(p)}</p>`).join('')}
           <p class="hook">${esc(t.hook)}</p>
           <p class="trap"><b>The trap:</b> ${esc(t.trap)}</p></div>
         <div class="detail"><h4>For the exam <span class="num" style="font-weight:400;color:var(--meta);font-size:.78rem">task ${esc(t.task)}</span></h4><ul>${t.detail.map(f => `<li>${f}</li>`).join('')}</ul></div>
@@ -663,7 +729,10 @@ function openTopic(id){
   el.open = true;
   el.scrollIntoView({behavior: reduced() ? 'auto' : 'smooth', block:'start'});
 }
+// toggle does not bubble, so listen in the capture phase: opening a topic plays its diagram once
+document.addEventListener('toggle', e => { const d = e.target; if (d.classList && d.classList.contains('topic') && d.open) playMotion(d.querySelector('.mo')); }, true);
 document.addEventListener('click', e => {
+  const rp = e.target.closest('[data-replay]'); if (rp) { playMotion(rp.closest('.mo')); return; }
   const o = e.target.closest('[data-open]'); if (o) { e.preventDefault(); openTopic(o.dataset.open); history.replaceState(null, '', '#t-' + o.dataset.open); return; }
   const c = e.target.closest('[data-copy]');
   if (c) { const t = TOP.get(c.dataset.t); copy(c.dataset.copy === 'quiz' ? quizPrompt(t) : simplePrompt(t), c); return; }

@@ -88,9 +88,9 @@ Module 07 is announced on the hub with a `soon` pill and a `Not yet` affordance 
 
 | Page | URL | Built by | Content | Storage keys |
 |---|---|---|---|---|
-| `aws-ai-practitioner.html` | `/aws-ai-practitioner` | `node generator/cert/aif-c01/build.js` (validates, then inlines `topics.js`, `questions.js`, `extras.js` into `page.html`) | 30 topics, 57 practice + 2×65 mock questions (13/16/18/9/9 per domain), 14-day plan, 32 look-alike pairs, 5 general prompts; scope = AIF-C01 exam guide v1.2 (2026-10-29) | `aif-v1-state`, `aif-v1-mock`; theme shares `gradient_path_theme` |
+| `aws-ai-practitioner.html` | `/aws-ai-practitioner` | `node generator/cert/aif-c01/build.js` (validates, then inlines `topics.js`, `questions.js`, `extras.js`, `motion.js` into `page.html`) | 30 topics, 57 practice + 2×65 mock questions (13/16/18/9/9 per domain), 14-day plan, 10 Domain 1 motion diagrams, a how-to-use route, 32 look-alike pairs, 5 general prompts; scope = AIF-C01 exam guide v1.2 (2026-10-29) | `aif-v1-state`, `aif-v1-mock`; theme shares `gradient_path_theme` |
 
-**Fact** — `node generator/cert/aif-c01/build.js` → `30 topics | practice 57 | Mock A 13/16/18/9/9 | Mock B 13/16/18/9/9 | 218 KB`, run 2026-10-30 after the review round (TASKS.md #30). The output is generated: edit the sources, never the HTML. It does not use the card schema or `check.py`; `build.js` is its own validator (answer counts, Select TWO wording, mock split, every topic taught in week 1). Clean URLs come from `nginx.conf` `try_files $uri $uri.html $uri/`. It is not in `MODULES`, so it does not count toward the 217.
+**Fact** — `node generator/cert/aif-c01/build.js` → `30 topics | motion 10 | practice 57 | Mock A 13/16/18/9/9 | Mock B 13/16/18/9/9 | 252 KB`, run 2026-10-31 (TASKS.md #31). The output is generated: edit the sources, never the HTML. It does not use the card schema or `check.py`; `build.js` is its own validator (answer counts, Select TWO wording, mock split, every topic taught in week 1). Clean URLs come from `nginx.conf` `try_files $uri $uri.html $uri/`. It is not in `MODULES`, so it does not count toward the 217.
 
 ## Data Flow
 
