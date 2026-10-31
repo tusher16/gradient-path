@@ -66,6 +66,7 @@ for (const d of DAYS) for (const id of d.topics) {
 }
 for (const t of TOPICS) if (!allDayTopics.has(t.id)) err(`topic ${t.id} is never taught in week 1`);
 if (DAYS.length !== 14) err(`plan has ${DAYS.length} days, needs 14`);
+for (const t of TOPICS) if (!MOTION[t.id]) err(`topic ${t.id}: no motion diagram`);
 for (const [id, m] of Object.entries(MOTION)) {
   if (!topicById.has(id)) err(`motion ${id}: unknown topic`);
   if (!(m.h > 0) || !m.steps?.length || !m.svg) err(`motion ${id}: needs h, steps and svg`);

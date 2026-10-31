@@ -1,4 +1,4 @@
-// Domain 1–3 motion explainers: one short animated diagram per topic, drawn
+// Motion explainers for all 30 topics: one short animated diagram per topic, drawn
 // above the plain text. Geometry only (boxes, lines, dots, labels); no
 // pictures. Each entry: h = viewBox height (width is always 440), steps =
 // the captions, svg = inner markup. An element appears at step --t (with an
@@ -548,6 +548,140 @@ module.exports = {
     txt(222, 183, 'same meaning?', '', 3, 0.5) + txt(430, 183, 'paraphrases', 'end lb m', 3, 0.7) +
     [[14, 102, 'task done?'], [124, 116, 'users happy?'], [248, 124, 'cost per chat?']]
       .map(([x, w, s], i) => tag(x, 218, w, 30, s, 'bx', '', 4, i * 0.2)).join('') },
+
+// ---------------- Domain 4 · Guidelines for responsible AI ----------------
+'responsible-ai': { h: 272,
+  steps: [
+    'Responsible AI means the system is fair, safe, truthful, robust, open about itself, and governed by people who answer for it.',
+    'Amazon Bedrock Guardrails sit on both sides of the model, checking what goes in and what comes out.',
+    'They block topics you name, filter harmful content and prompt attacks, and mask personal data.',
+    'A contextual grounding check asks whether the answer is supported by the source. It does not prove the source is true.',
+    'The legal risks: copyright claims, biased outputs, hallucinated claims and lost customer trust.'],
+  svg:
+    [[14, 12, 84, 'fairness'], [104, 12, 66, 'safety'], [176, 12, 80, 'veracity'], [262, 12, 98, 'robustness'],
+     [14, 48, 112, 'transparency'], [132, 48, 104, 'governance'], [242, 48, 118, 'explainability']]
+      .map(([x, y, w, s], i) => tag(x, y, w, 28, s, 'bx m', 'lb m', 0, i * 0.1)).join('') +
+    tag(14, 104, 76, 32, 'prompt', 'bx', 'lb', 1) + arrow(94, 120, 110, 120, '', 1, 0.2) +
+    box(114, 96, 12, 48, 'bx m', 1, 0.3, 6) + arrow(130, 120, 150, 120, '', 1, 0.4) +
+    tag(154, 104, 76, 32, 'model', 'bx', 'lb', 1, 0.5) + arrow(234, 120, 250, 120, '', 1, 0.6) +
+    box(254, 96, 12, 48, 'bx m', 1, 0.7, 6) + arrow(270, 120, 290, 120, '', 1, 0.8) +
+    tag(294, 104, 80, 32, 'answer', 'bx m', 'lb m', 1, 0.9) +
+    txt(190, 92, 'Guardrails, both sides', 'mid lb m', 1, 0.3) +
+    path('M120 144 V160', 'ln', 2) + tag(56, 162, 128, 28, 'denied topic', 'bx s', 'lb s', 2, 0.1) +
+    path('M260 144 V160', 'ln', 2, 0.4) + tag(206, 162, 112, 28, 'PII masked', 'bx m', 'lb m', 2, 0.5) +
+    path('M318 176 H332', 'ln', 3) + tag(334, 162, 98, 28, 'grounded?', 'bx m', 'lb m', 3, 0.2) +
+    [[14, 92, 'copyright'], [112, 52, 'bias'], [170, 114, 'hallucination'], [290, 92, 'lost trust']]
+      .map(([x, w, s], i) => tag(x, 230, w, 28, s, 'bx s', 'lb s', 4, i * 0.15)).join('') },
+
+'bias-variance': { h: 252,
+  steps: [
+    'High bias is underfitting: the model is too simple and misses the pattern.',
+    'High variance is overfitting: it memorises the noise, perfect on training data and poor on new data.',
+    'A good fit follows the pattern and ignores the noise.',
+    'Bias in the fairness sense starts with the data: a dataset that is mostly one group teaches the model to favour that group.',
+    'Catch it by testing each group separately, checking label quality and auditing outputs. SageMaker Clarify measures bias.'],
+  svg:
+    [[14, 'high bias', 'lb s', 'M20 76 L134 62', 'ln s'], [152, 'high variance', 'lb s', null, 'ln s'], [290, 'good fit', 'lb m', 'M296 100 Q 350 62 414 38', 'ln m']]
+      .map(([x0, lab, lc, line, lcls], k) => {
+        const ys = [98, 84, 74, 66, 58, 64, 52, 42, 46];
+        const pts = ys.map((y, i) => [x0 + 12 + i * 14, y]);
+        const d = line || 'M' + pts.map(([x, y]) => `${x} ${y}`).join(' L');
+        return path(`M${x0} 16 V112 H${x0 + 130}`, 'ln', k) +
+          pts.map(([x, y], i) => dot(x, y, 4, 'dot', k, 0.1 + i * 0.04)).join('') +
+          path(d, `${lcls} d`, k, 0.6) + txt(x0 + 65, 136, lab, `mid ${lc}`, k, 0.8);
+      }).join('') +
+    Array.from({ length: 10 }, (_, i) => dot(24 + i * 22, 178, 8, i < 8 ? 'dot' : 'dot m', 3, i * 0.05)).join('') +
+    txt(250, 183, 'unfair to group B', 'lb s', 3, 0.7) +
+    [[14, 118, 'subgroup tests'], [140, 108, 'label quality'], [256, 100, 'human audit'], [364, 66, 'Clarify']]
+      .map(([x, w, s], i) => tag(x, 210, w, 30, s, i === 3 ? 'bx m' : 'bx', i === 3 ? 'lb m' : '', 4, i * 0.15)).join('') },
+
+'transparency': { h: 254,
+  steps: [
+    'A transparent model shows its reasoning: you can read a decision tree’s questions.',
+    'An opaque model, such as a deep network or an FM, is a black box, but tools can still show which inputs pushed a decision.',
+    'The most accurate models are often the hardest to explain, so a bank may give up a little accuracy for a lot of explanation.',
+    'Documentation is transparency too: SageMaker Model Cards record what a model is for, how it was trained and its risks.',
+    'Good design tells users when AI made a decision and gives them a way to contest it.'],
+  svg:
+    tag(14, 16, 150, 30, 'income > 40k?', 'bx', 'lb', 0) +
+    path('M54 46 L48 76 M124 46 L134 76', 'ln', 0, 0.3) +
+    tag(10, 78, 76, 28, 'approve', 'bx m', 'lb m', 0, 0.5) + tag(96, 78, 76, 28, 'review', 'bx', '', 0, 0.6) +
+    box(232, 16, 88, 88, 'bx', 1, 0, 10) +
+    path('M252 36 L276 60 L300 36 M252 60 L276 36 L300 60 M252 84 L276 60 L300 84 M252 60 L276 84 L300 60', 'ln', 1, 0.2) +
+    [36, 60, 84].map((y) => [252, 276, 300].map((x) => dot(x, y, 4, 'dot', 1, 0.2)).join('')).join('') +
+    [[26, 86, 'bx m'], [46, 60, 'bx s'], [66, 24, 'bx']].map(([y, w, c], i) => box(334, y, w, 12, c, 1, 0.6 + i * 0.15, 3)).join('') +
+    txt(376, 100, 'why', 'mid lb m', 1, 1.0) +
+    box(90, 120, 12, 12, 'bx', 2, 0, 2) + txt(108, 131, 'accuracy', '', 2) +
+    box(190, 120, 12, 12, 'bx m', 2, 0, 2) + txt(208, 131, 'explainability', '', 2) +
+    txt(14, 162, 'tree', 'lb', 2, 0.2) + box(90, 148, 110, 11, 'bx', 2, 0.3, 3) + box(90, 162, 200, 11, 'bx m', 2, 0.4, 3) +
+    txt(14, 198, 'deep net', 'lb', 2, 0.5) + box(90, 184, 200, 11, 'bx', 2, 0.6, 3) + box(90, 198, 70, 11, 'bx m', 2, 0.7, 3) +
+    box(322, 124, 108, 92, 'bx', 3, 0, 8) + txt(376, 146, 'Model Card', 'mid lb', 3, 0.1) +
+    path('M336 164 H416 M336 180 H404 M336 196 H412', 'ln', 3, 0.3) +
+    tag(14, 222, 118, 28, 'AI decided', 'bx', '', 4) + arrow(136, 236, 160, 236, 'm', 4, 0.3) +
+    tag(164, 222, 136, 28, 'ask a person', 'bx m', 'lb m', 4, 0.5) },
+
+// ---------------- Domain 5 · Security, compliance and governance ----------------
+'securing-ai': { h: 266,
+  steps: [
+    'Shared responsibility: AWS secures the hardware, buildings and the managed service; you secure your data, access and configuration.',
+    'IAM decides who and what may call a model or read data, always with the least access needed.',
+    'KMS encrypts data at rest and TLS in transit; Macie finds personal data in S3; PrivateLink keeps traffic off the public internet.',
+    'For agents, AgentCore Identity sets whose credentials it uses, and Policy in AgentCore sets which tool actions are allowed.',
+    'Guardrails filter what goes in and what is said. Each layer answers a different question.'],
+  svg:
+    tag(14, 14, 412, 30, 'You: data, IAM, prompts, configuration', 'bx m', 'lb m', 0) +
+    tag(14, 50, 412, 30, 'AWS: hardware, facilities, the managed service', 'bx', 'lb', 0, 0.4) +
+    tag(14, 110, 84, 32, 'request', 'bx', 'lb', 1) + arrow(102, 126, 118, 126, '', 1, 0.2) +
+    tag(122, 110, 60, 32, 'IAM', 'bx m', 'lb m', 1, 0.3) + txt(152, 162, 'who?', 'mid lb m', 1, 0.5) +
+    arrow(186, 126, 202, 126, '', 1, 0.5) + tag(206, 110, 76, 32, 'model', 'bx', 'lb', 1, 0.6) +
+    [[14, 64, 'KMS'], [84, 56, 'TLS'], [146, 72, 'Macie'], [224, 108, 'PrivateLink']]
+      .map(([x, w, s], i) => tag(x, 180, w, 30, s, 'bx', '', 2, i * 0.15)).join('') +
+    tag(14, 224, 168, 30, 'AgentCore Identity', 'bx m', 'lb m', 3) +
+    tag(190, 224, 176, 30, 'Policy in AgentCore', 'bx m', 'lb m', 3, 0.3) +
+    arrow(286, 126, 302, 126, '', 4) + tag(306, 110, 120, 32, 'Guardrails', 'bx m', 'lb m', 4, 0.2) +
+    txt(366, 162, 'what is said?', 'mid lb m', 4, 0.4) },
+
+'data-lineage': { h: 236,
+  steps: [
+    'Lineage is the family tree of your data: where it came from, what was done to it, and which model learned from it.',
+    'When a prediction looks wrong, lineage lets you trace it back to the data that caused it.',
+    'A data catalogue is the library index: what each dataset is, where it lives and who owns it (AWS Glue Data Catalog).',
+    'Secure data engineering: check quality, control access (Lake Formation), mask personal data, and prove nothing was tampered with.'],
+  svg:
+    tag(14, 18, 92, 30, 'source A', 'bx', '', 0) + tag(14, 62, 92, 30, 'source B', 'bx', '', 0, 0.1) +
+    path('M106 33 L126 50 M106 77 L126 60', 'ln', 0, 0.3) +
+    tag(130, 40, 84, 30, 'cleaned', 'bx', '', 0, 0.4) + arrow(218, 55, 236, 55, '', 0, 0.6) +
+    tag(240, 40, 110, 30, 'training set', 'bx', '', 0, 0.7) + arrow(354, 55, 368, 55, '', 0, 0.9) +
+    tag(372, 40, 60, 30, 'model', 'bx m', 'lb m', 0, 1.0) +
+    dot(402, 112, 8, 'dot s g', 1) + txt(402, 138, 'odd answer', 'mid lb s', 1, 0.2) +
+    path('M392 116 Q 240 160 108 84', 'ln s d', 1, 0.5) +
+    box(14, 62, 92, 30, 'bx s', 1, 1.2, 15) + txt(60, 82, 'source B', 'mid lb s', 1, 1.2) +
+    tag(14, 150, 176, 30, 'Glue Data Catalog', 'bx m', 'lb m', 2) +
+    path('M200 158 H260 M200 166 H246 M200 174 H256', 'ln', 2, 0.3) +
+    [[14, 76, 'quality'], [98, 72, 'access'], [178, 88, 'masking'], [274, 90, 'integrity']]
+      .map(([x, w, s], i) => tag(x, 198, w, 30, s, 'bx', '', 3, i * 0.15)).join('') },
+
+'governance': { h: 300,
+  steps: [
+    'Who called which API, and when? AWS CloudTrail. Is everything still set up the way our rules say? AWS Config.',
+    'Are our servers and containers vulnerable? Amazon Inspector. Where are AWS’s own compliance reports? AWS Artifact.',
+    'Are we following best practice on cost and security? AWS Trusted Advisor.',
+    'The Generative AI Security Scoping Matrix: Scopes 1–2 buy a GenAI product, Scopes 3–5 build. The more you own, the more security you own.',
+    'Data governance adds rules on retention, residency, logging and the data lifecycle.'],
+  svg:
+    [['who called this API?', 'AWS CloudTrail'], ['still set up right?', 'AWS Config'],
+     ['is it vulnerable?', 'Amazon Inspector'], ['AWS’s own reports?', 'AWS Artifact'],
+     ['best practice?', 'Trusted Advisor']]
+      .map(([q, s], k) => {
+        const y = 22 + k * 36, t = Math.min(2, Math.floor(k / 2)), d = k === 4 ? 0 : (k % 2) * 0.5;
+        return `<text class="a end" x="222" y="${y + 5}" style="${st(t, d, from(-14, 0))}">${q}</text>` +
+          tag(232, y - 14, 196, 28, s, 'bx m', 'lb m', t, d + 0.2);
+      }).join('') +
+    txt(94, 204, 'buy', 'mid lb', 3) + txt(306, 204, 'build', 'mid lb m', 3) +
+    [1, 2, 3, 4, 5].map((n, i) => tag(14 + i * 84, 212, 78, 30, `Scope ${n}`, i < 2 ? 'bx' : 'bx m', i < 2 ? '' : 'lb m', 3, 0.2 + i * 0.12)).join('') +
+    arrow(14, 254, 426, 254, 'm', 3, 0.9) +
+    [[14, 90, 'retention'], [110, 92, 'residency'], [208, 78, 'logging'], [292, 88, 'lifecycle']]
+      .map(([x, w, s], i) => tag(x, 264, w, 30, s, 'bx', '', 4, i * 0.15)).join('') },
 
 
 };
