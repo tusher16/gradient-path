@@ -73,7 +73,7 @@ python3 build_index.py
 # from index.html (template drift) — do not run it until TASKS.md #27 is done.
 
 # Rebuild the AWS AI Practitioner page (validates, then writes the root HTML)
-node generator/cert/aif-c01/build.js   # → 30 topics | motion 17 | practice 57 | Mock A 13/16/18/9/9 | Mock B 13/16/18/9/9
+node generator/cert/aif-c01/build.js   # → 30 topics | motion 24 | practice 57 | Mock A 13/16/18/9/9 | Mock B 13/16/18/9/9
 
 # Local serve check (post-deploy verification set in docs/TEST_PLAN.md)
 docker build -t gradient-path . && docker run -p 8080:80 gradient-path
