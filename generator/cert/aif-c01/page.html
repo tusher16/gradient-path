@@ -1,13 +1,14 @@
 <!doctype html><html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>AWS AI Practitioner in 14 Days &mdash; Gradient Path</title>
-<meta name="description" content="Free AWS Certified AI Practitioner (AIF-C01) prep: a 14-day plan, 30 plain-language topics, 30 practice questions and two timed 65-question mock exams (160 original questions in all), and a copy-paste AI study prompt for every topic. No signup.">
+<meta name="description" content="Free AWS Certified AI Practitioner (AIF-C01) prep: a 14-day plan, 30 plain-language topics with an animated diagram each, 57 practice questions and two timed 65-question mock exams (187 original questions in all), a reels-style video feed, and a copy-paste AI study prompt for every topic. No signup.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%221%22%20x2%3D%221%22%20y2%3D%220%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23C11E5C%22%2F%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%230C7A70%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%23131C1A%22%2F%3E%3Cpath%20d%3D%22M8%2025C8%2015%2024%2017%2024%207%22%20fill%3D%22none%22%20stroke%3D%22url%28%23g%29%22%20stroke-width%3D%224.5%22%20stroke-linecap%3D%22round%22%2F%3E%3C%2Fsvg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
 <script>try{var t=localStorage.getItem('gradient_path_theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
 <style>
+/*@tokens*/
 :root{
   --ground:#EFF3F2; --surface:#FFFFFF; --sunk:#E6ECEA;
   --line:#D2DBD9; --line-soft:#E3E9E8;
@@ -40,6 +41,7 @@
   --shadow:0 1px 2px rgba(0,0,0,.4), 0 14px 32px -20px rgba(0,0,0,.8);
   color-scheme:dark;
 }
+/*@/tokens*/
 *{box-sizing:border-box}
 [hidden]{display:none !important}
 html{scrollbar-color:var(--line) var(--ground); scroll-padding-top:72px}
@@ -281,7 +283,8 @@ footer p{max-width:78ch; margin:0 0 10px}
   .navgrid{grid-template-columns:repeat(auto-fill,minmax(44px,1fr))}
   .navgrid button{min-height:44px}
 }
-/* motion explainers: one authored diagram per Domain 1 topic. At rest the
+/*@motion*/
+/* motion explainers: one authored diagram per topic. At rest the
    finished diagram shows; .run replays it step by step, each step --step apart */
 .mo{margin:0 0 20px; padding:14px 16px 12px; background:var(--sunk); border-radius:14px; --step:1.8s}
 .mo svg{display:block; width:100%; height:auto; max-height:320px; overflow:visible}
@@ -313,6 +316,7 @@ footer p{max-width:78ch; margin:0 0 10px}
 .mo .mofoot{display:flex; justify-content:flex-end; margin-top:8px}
 .mo .mofoot .btn{font-size:.8rem; padding:6px 12px}
 @media (prefers-reduced-motion:reduce){.mo.run .a, .mo.run .mocap li{animation:none} .mo .mofoot{display:none}}
+/*@/motion*/
 
 /* how to use this page: a route on the ground, no cards */
 .route{list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:0 22px; counter-reset:rt}
@@ -331,7 +335,7 @@ footer p{max-width:78ch; margin:0 0 10px}
 <header class="bar"><div class="bar-in">
   <a class="home" href="/">Gradient Path <span>/ AWS AI Practitioner</span></a>
   <nav class="jump" aria-label="Sections">
-    <a href="#howto">How to use</a><a href="#plan">14 days</a><a href="#topics">Topics</a><a href="#lookalikes">Look-alikes</a><a href="#mocks">Mock exams</a><a href="#prompts">Prompts</a>
+    <a href="#howto">How to use</a><a href="/aws-ai-practitioner-reels">Reels</a><a href="#plan">14 days</a><a href="#topics">Topics</a><a href="#lookalikes">Look-alikes</a><a href="#mocks">Mock exams</a><a href="#prompts">Prompts</a>
   </nav>
   <button class="tog" type="button" id="mode" aria-pressed="false" title="Hide or show the exam-level detail in every topic">Plain only</button>
   <button class="tog" type="button" id="theme">Dark / light</button>
@@ -406,6 +410,7 @@ footer p{max-width:78ch; margin:0 0 10px}
   <section class="block" id="topics" aria-labelledby="topics-h">
     <h2 id="topics-h">Thirty topics, by domain</h2>
     <p class="lede">Each topic reads plainly first, with one line to remember and the trap the exam sets. The exam-level facts sit beside it; <b>Plain only</b> at the top hides them. <b>Listen</b> reads a topic aloud, with its exam facts unless <b>Plain only</b> is on; <b>Listen to today&rsquo;s topics</b> plays the whole day back to back. The two prompts turn any chatbot into a study partner, written for voice mode so you can practise while doing something else.</p>
+    <p class="lede" style="margin-top:-10px">Rather watch? All thirty play as <a href="/aws-ai-practitioner-reels">reels</a>: each diagram builds step by step and is read aloud, one topic per swipe.</p>
     <div id="domains"></div>
   </section>
 
@@ -459,7 +464,7 @@ const $ = (s, r=document) => r.querySelector(s);
 const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
 const esc = (s) => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const strip = (s) => String(s).replace(/<[^>]+>/g, '');
-const DOMS = {1:['Fundamentals of AI and ML',20],2:['Fundamentals of generative AI',24],3:['Applications of foundation models',28],4:['Guidelines for responsible AI',14],5:['Security, compliance and governance',14]};
+const DOMS = DATA.domains;
 const TOP = new Map(DATA.topics.map(t => [t.id, t]));
 const QS = new Map(DATA.questions.map(q => [q.id, q]));
 const DAY_MS = 864e5, KEYS = 'ABCDEF';

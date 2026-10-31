@@ -105,4 +105,7 @@ Run a loop: give me a short business scenario and ask which AWS service or AI co
     text:`I will explain a concept from the AWS Certified AI Practitioner exam as if teaching a new colleague. Listen, then: (1) say what I got right, (2) correct anything wrong or missing, plainly, (3) ask me one follow-up question an examiner would ask. Keep it under 100 words. Ask me which concept I want to teach.` },
 ];
 
-module.exports = { DAYS, CONFUSABLES, PROMPTS };
+// Domain names and exam weights, shared by the study page and the reels page.
+const DOMAINS = {1:['Fundamentals of AI and ML',20],2:['Fundamentals of generative AI',24],3:['Applications of foundation models',28],4:['Guidelines for responsible AI',14],5:['Security, compliance and governance',14]};
+
+module.exports = { DAYS, CONFUSABLES, PROMPTS, DOMAINS };

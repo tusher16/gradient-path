@@ -1,0 +1,262 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>AWS AI Practitioner Reels &mdash; Gradient Path</title>
+<meta name="description" content="Thirty AWS Certified AI Practitioner (AIF-C01) topics as a reels-style feed: each animated diagram builds step by step, read aloud, then the line to remember. Free, no signup.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%221%22%20x2%3D%221%22%20y2%3D%220%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23C11E5C%22%2F%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%230C7A70%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%23131C1A%22%2F%3E%3Cpath%20d%3D%22M8%2025C8%2015%2024%2017%2024%207%22%20fill%3D%22none%22%20stroke%3D%22url%28%23g%29%22%20stroke-width%3D%224.5%22%20stroke-linecap%3D%22round%22%2F%3E%3C%2Fsvg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<script>try{var t=localStorage.getItem('gradient_path_theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<style>
+/* tokens and the diagram styles are copied in from page.html by build.js, never edited here */
+/*__TOKENS__*/
+/*__MOTION__*/
+*{box-sizing:border-box}
+[hidden]{display:none !important}
+html,body{height:100%}
+body{margin:0; background:var(--ground); color:var(--ink); font-family:var(--body); font-size:16px; line-height:1.55;
+  -webkit-font-smoothing:antialiased; overflow:hidden}
+::selection{background:var(--signal-soft); color:var(--ink)}
+a{color:inherit; text-underline-offset:3px; text-decoration-color:var(--line)}
+a:hover{text-decoration-color:var(--signal)}
+h1,h2{font-family:var(--display); margin:0; letter-spacing:-.015em; text-wrap:balance; font-weight:700}
+button{font:inherit; color:inherit; cursor:pointer}
+:focus-visible{outline:2px solid var(--signal); outline-offset:3px; border-radius:6px}
+.num{font-family:var(--mono); font-variant-numeric:tabular-nums}
+
+.bar{position:fixed; inset:0 0 auto; z-index:5; height:52px; background:var(--surface); border-bottom:1px solid var(--line)}
+.bar-in{max-width:1180px; height:100%; margin:0 auto; padding:0 20px; display:flex; align-items:center; gap:8px}
+.home{font-family:var(--display); font-weight:700; text-decoration:none; font-size:1rem; margin-right:auto; white-space:nowrap}
+.home b{font-weight:700} .home .short{display:none}
+.home span{color:var(--meta); font-weight:500}
+.tog{font-family:var(--mono); font-size:.74rem; border:1px solid var(--line); background:transparent; border-radius:999px; padding:6px 11px; white-space:nowrap}
+.tog:hover{border-color:var(--ink-2)}
+.tog[aria-pressed="true"]{border-color:var(--memory); color:var(--memory)}
+.tog:disabled{opacity:.45; cursor:not-allowed}
+.btn{font-family:var(--mono); font-size:.8rem; font-weight:600; border-radius:999px; border:1px solid var(--line);
+  background:var(--surface); padding:9px 15px; text-decoration:none; display:inline-flex; align-items:center; min-height:40px}
+.btn:hover{border-color:var(--ink-2)}
+.btn.go{background:var(--memory); border-color:var(--memory); color:var(--surface)}
+
+/* the feed: one reel per screen, snapping */
+.feed{position:fixed; inset:52px 0 0; overflow-y:auto; scroll-snap-type:y mandatory; overscroll-behavior:contain; scrollbar-width:none}
+.feed::-webkit-scrollbar{display:none}
+.reel{height:calc(100dvh - 52px); scroll-snap-align:start; scroll-snap-stop:always; display:grid; place-items:center; padding:14px 16px}
+.card{width:min(100%, 470px, calc((100dvh - 80px) * 9 / 16)); height:min(100%, 840px); background:var(--surface);
+  border:1px solid var(--line); border-radius:16px; padding:18px 18px 14px; display:flex; flex-direction:column; gap:10px; overflow:hidden}
+.meta{display:flex; justify-content:space-between; gap:12px; font-family:var(--mono); font-size:.72rem; color:var(--meta); white-space:nowrap}
+.meta span:first-child{overflow:hidden; text-overflow:ellipsis}
+.card h2{font-size:clamp(1.25rem, 4.4vw, 1.5rem); line-height:1.2}
+.card .mo{margin:0; padding:12px; flex:1 1 auto; min-height:0; display:flex; align-items:center; justify-content:center}
+.card .mo svg{max-height:100%; width:100%}
+/* reels drive the steps from script: an element shows when its step is reached */
+.card .mo .a{opacity:0}
+.card .mo .a.on{opacity:1; animation:moIn var(--dur,.5s) cubic-bezier(.16,1,.3,1) var(--o,0s) both}
+.card .mo .a.g.on{animation-name:moGrow}
+.card .mo .a.d.on{stroke-dasharray:1; animation-name:moDraw; animation-timing-function:cubic-bezier(.33,0,.2,1)}
+.card .mo .a.now{animation:none}
+.seg{display:flex; gap:4px}
+.seg i{flex:1; height:3px; border-radius:2px; background:var(--line); transition:background .3s ease-out}
+.seg i.on{background:var(--memory)}
+.cap{margin:0; font-size:1.06rem; line-height:1.5; min-height:4.5em; color:var(--ink)}
+.hk{margin:0; font-family:var(--display); font-weight:700; font-size:1.02rem; line-height:1.35; color:var(--memory); min-height:2.7em}
+.hk:empty{visibility:hidden}
+.acts{display:flex; flex-wrap:wrap; gap:8px; align-items:center}
+.acts .btn{padding:7px 13px; min-height:36px; font-size:.76rem}
+
+/* intro and end cards */
+.card.plain{justify-content:center; gap:16px}
+.card.plain h1{font-size:clamp(1.9rem, 7vw, 2.4rem); line-height:1.08}
+.card.plain p{margin:0; color:var(--ink-2)}
+.card.plain .row{display:flex; flex-wrap:wrap; gap:10px}
+.doms{list-style:none; margin:0; padding:0; border-top:1px solid var(--line)}
+.doms li{border-bottom:1px solid var(--line)}
+.doms a{display:grid; grid-template-columns:22px minmax(0,1fr) auto; gap:8px; padding:9px 2px; text-decoration:none; font-size:.92rem}
+.doms .n{font-family:var(--mono); color:var(--memory); font-size:.8rem; padding-top:2px}
+.doms .c{font-family:var(--mono); color:var(--meta); font-size:.74rem; padding-top:3px}
+.note{font-size:.82rem; color:var(--meta) !important}
+.toast{position:fixed; left:50%; bottom:22px; transform:translateX(-50%) translateY(14px); background:var(--ink); color:var(--ground);
+  padding:9px 15px; border-radius:999px; font-size:.86rem; opacity:0; transition:opacity .2s ease-out, transform .2s ease-out; pointer-events:none; z-index:9}
+.toast.on{opacity:1; transform:translateX(-50%)}
+@media (max-width:640px){
+  .bar-in{padding:0 12px; gap:6px}
+  .home .long{display:none} .home .short{display:inline}
+  .tog{padding:6px 9px; font-size:.7rem}
+  .reel{padding:0}
+  .card{width:100%; height:100%; border-radius:0; border:0; padding:16px 16px 12px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none !important} .card .mo .a.on{animation:none}}
+</style></head>
+<body>
+
+<header class="bar"><div class="bar-in">
+  <a class="home" href="/aws-ai-practitioner"><b class="long">AWS AI Practitioner</b><b class="short">AIF-C01</b> <span>/ Reels</span></a>
+  <button class="tog" type="button" id="sound" aria-pressed="false">Sound</button>
+  <button class="tog" type="button" id="auto" aria-pressed="true">Auto next</button>
+  <button class="tog" type="button" id="theme">Theme</button>
+</div></header>
+
+<main class="feed" id="feed" aria-label="Topic reels"></main>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+const DATA = /*__DATA__*/null;
+(function(){
+'use strict';
+const $ = (s, el = document) => el.querySelector(s), $$ = (s, el = document) => [...el.querySelectorAll(s)];
+const esc = (s) => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const reduced = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+const canSpeak = 'speechSynthesis' in window;
+const T = DATA.topics, DOMS = DATA.domains;
+function toast(msg){ const t = $('#toast'); t.textContent = msg; t.classList.add('on'); clearTimeout(toast.h); toast.h = setTimeout(() => t.classList.remove('on'), 1800); }
+
+// ---------- render ----------
+const first = {}; T.forEach((t) => { if (!(t.d in first)) first[t.d] = t.id; });
+const count = (d) => T.filter(t => t.d === d).length;
+let html = `<section class="reel" id="intro"><div class="card plain">
+  <h1>Thirty topics, by domain</h1>
+  <p>Each reel is one AIF-C01 exam topic: a diagram that builds step by step, read aloud, then the one line to remember. About 45 seconds each. Swipe up, or press the down arrow, for the next.</p>
+  <div class="row"><button class="btn go" type="button" id="start-sound">Start with sound</button><button class="btn" type="button" id="start-muted">Watch muted</button></div>
+  <ol class="doms">${[1,2,3,4,5].map(d => `<li><a href="#r-${first[d]}" data-jump="${first[d]}"><span class="n">${d}</span><span>${esc(DOMS[d][0])}</span><span class="c">${count(d)} reels · ${DOMS[d][1]}%</span></a></li>`).join('')}</ol>
+  <p class="note">The voice is your browser&rsquo;s own; nothing is recorded or sent. For the questions and the 14-day plan, go to the <a href="/aws-ai-practitioner">study page</a>.</p>
+</div></section>`;
+T.forEach((t, i) => {
+  const m = DATA.motion[t.id];
+  html += `<article class="reel" id="r-${t.id}" data-i="${i}" aria-label="${esc(t.title)}"><div class="card">
+    <div class="meta"><span>Domain ${t.d} &middot; ${esc(DOMS[t.d][0])}</span><span class="num">${String(i+1).padStart(2,'0')} / ${T.length}</span></div>
+    <h2>${esc(t.title)}</h2>
+    <figure class="mo"><svg viewBox="0 0 440 ${m.h}" aria-hidden="true" focusable="false">${m.svg}</svg></figure>
+    <div class="seg" aria-hidden="true">${m.steps.map(() => '<i></i>').join('')}<i></i></div>
+    <p class="cap" aria-live="polite"></p>
+    <p class="hk"></p>
+    <div class="acts"><button class="btn" type="button" data-act="pause">Pause</button><button class="btn" type="button" data-act="replay">Replay</button>
+      <a class="btn" href="/aws-ai-practitioner#t-${t.id}">Read the topic</a><button class="btn" type="button" data-act="link">Copy link</button></div>
+  </div></article>`;
+});
+html += `<section class="reel" id="end"><div class="card plain">
+  <h1>That&rsquo;s all thirty.</h1>
+  <p>Now test yourself: the study page has 57 practice questions and two timed 65-question mocks.</p>
+  <div class="row"><a class="btn go" href="/aws-ai-practitioner#console">Practise questions</a><button class="btn" type="button" data-jump="intro">Back to the start</button></div>
+</div></section>`;
+$('#feed').innerHTML = html;
+// group each diagram's elements by the step they belong to, once
+const steps = new Map();
+$$('article.reel').forEach(r => {
+  const by = []; $$('.a', r).forEach(el => { const k = +el.style.getPropertyValue('--t') || 0; (by[k] = by[k] || []).push(el); });
+  steps.set(r, by);
+});
+
+// ---------- the player ----------
+// one reel plays at a time; a token cancels anything a superseded run still has pending
+const P = { sound: false, auto: true, cur: null, tok: 0, paused: false, at: 0 };
+let voice = null;
+function pickVoice(){
+  if (!canSpeak) return;
+  const vs = speechSynthesis.getVoices().filter(v => /^en(-|_|$)/i.test(v.lang));
+  voice = vs.find(v => /natural|neural|google|samantha|daniel|serena/i.test(v.name)) || vs.find(v => v.localService) || vs[0] || null;
+}
+if (canSpeak) { pickVoice(); speechSynthesis.onvoiceschanged = pickVoice; } else { $('#sound').disabled = true; $('#sound').title = 'This browser cannot read aloud'; $('#start-sound').hidden = true; }
+const readTime = (s) => Math.min(7500, Math.max(2600, s.length * 58));
+const lastStep = (r) => DATA.motion[T[+r.dataset.i].id].steps.length - 1;
+function say(text, tok){
+  if (!P.sound || !canSpeak) return sleep(readTime(text));
+  return new Promise(res => {
+    let done = false; const fin = () => { if (!done) { done = true; res(); } };
+    const u = new SpeechSynthesisUtterance(text); if (voice) u.voice = voice; u.rate = 1.02; u.onend = fin; u.onerror = fin;
+    speechSynthesis.speak(u);
+    // some engines never fire onend; never hang the reel on it
+    setTimeout(fin, readTime(text) * 2 + 2500);
+  }).then(() => sleep(tok === P.tok ? 320 : 0));
+}
+function show(r, k, instant){
+  (steps.get(r)[k] || []).forEach(el => { el.classList.add('on'); el.classList.toggle('now', !!instant); });
+  $$('.seg i', r).forEach((s, j) => s.classList.toggle('on', j <= k));
+}
+function reset(r){
+  $$('.a', r).forEach(el => el.classList.remove('on', 'now'));
+  $$('.seg i', r).forEach(s => s.classList.remove('on'));
+  $('.cap', r).textContent = ''; $('.hk', r).textContent = '';
+}
+function halt(){ P.tok++; if (canSpeak) speechSynthesis.cancel(); }
+async function play(r, from = 0){
+  halt(); const tok = P.tok; P.cur = r; P.paused = false; P.at = from;
+  $('[data-act="pause"]', r).textContent = 'Pause';
+  const t = T[+r.dataset.i], m = DATA.motion[t.id];
+  reset(r);
+  for (let k = 0; k < from; k++) show(r, k, true);
+  if (canSpeak && P.sound) await sleep(80);   // Chrome drops a speak() issued straight after cancel()
+  for (let k = from; k < m.steps.length; k++) {
+    if (tok !== P.tok) return;
+    P.at = k; show(r, k, false); $('.cap', r).textContent = m.steps[k];
+    await say((k === 0 ? t.title + '. ' : '') + m.steps[k], tok);
+  }
+  if (tok !== P.tok) return;
+  P.at = m.steps.length;
+  $$('.seg i', r).forEach(s => s.classList.add('on'));
+  $('.hk', r).textContent = t.hook;
+  await say('Remember. ' + t.hook, tok);
+  if (tok !== P.tok || !P.auto) return;
+  await sleep(700);
+  if (tok === P.tok) go(r.nextElementSibling);
+}
+function pause(r){
+  if (P.cur !== r) return;
+  if (P.paused) { play(r, Math.min(P.at, lastStep(r))); return; }
+  halt(); P.paused = true; $('[data-act="pause"]', r).textContent = 'Play';
+}
+function go(el){ if (el) el.scrollIntoView({behavior: reduced() ? 'auto' : 'smooth', block: 'start'}); }
+
+// play whichever reel fills the screen; leaving a reel stops it
+const io = new IntersectionObserver((es) => {
+  for (const e of es) {
+    if (!e.isIntersecting) continue;
+    const r = e.target;
+    if (r.matches('article.reel')) { if (P.cur !== r) play(r); }
+    else { halt(); P.cur = null; }
+    history.replaceState(null, '', '#' + r.id);
+  }
+}, { root: $('#feed'), threshold: 0.6 });
+$$('.reel').forEach(r => io.observe(r));
+
+// iOS only lets speech start inside a tap, so a tap that turns sound on also speaks once, silently
+function soundOn(on){
+  P.sound = on && canSpeak; $('#sound').setAttribute('aria-pressed', P.sound);
+  if (P.sound) { const u = new SpeechSynthesisUtterance(' '); u.volume = 0; speechSynthesis.speak(u); }
+  if (P.cur) play(P.cur, Math.min(P.at, lastStep(P.cur)));
+}
+$('#sound').addEventListener('click', () => soundOn(!P.sound));
+$('#auto').addEventListener('click', e => { P.auto = !P.auto; e.currentTarget.setAttribute('aria-pressed', P.auto); toast(P.auto ? 'Moves to the next reel when one ends.' : 'Stays on each reel until you swipe.'); });
+$('#start-sound').addEventListener('click', () => { soundOn(true); go($('article.reel')); });
+$('#start-muted').addEventListener('click', () => { soundOn(false); go($('article.reel')); });
+$('#feed').addEventListener('click', async e => {
+  const j = e.target.closest('[data-jump]'); if (j) { e.preventDefault(); go(j.dataset.jump === 'intro' ? $('#intro') : $('#r-' + j.dataset.jump)); return; }
+  const a = e.target.closest('[data-act]'); if (!a) return;
+  const r = a.closest('article.reel');
+  if (a.dataset.act === 'pause') pause(r);
+  if (a.dataset.act === 'replay') play(r, 0);
+  if (a.dataset.act === 'link') {
+    const url = location.origin + location.pathname + '#' + r.id;
+    try { await navigator.clipboard.writeText(url); toast('Link copied.'); } catch(_) { toast(url); }
+  }
+});
+document.addEventListener('keydown', e => {
+  if (e.metaKey || e.ctrlKey || e.altKey || /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)) return;
+  const here = P.cur || $('#intro');
+  if (e.key === 'ArrowDown' || e.key === 'j' || e.key === 'PageDown') { e.preventDefault(); go(here.nextElementSibling); }
+  if (e.key === 'ArrowUp' || e.key === 'k' || e.key === 'PageUp') { e.preventDefault(); go(here.previousElementSibling); }
+  if (e.key === ' ' && P.cur && !e.target.closest('button,a')) { e.preventDefault(); pause(P.cur); }
+});
+document.addEventListener('visibilitychange', () => { if (document.hidden && P.cur && !P.paused) pause(P.cur); });
+$('#theme').addEventListener('click', () => {
+  let c = document.documentElement.getAttribute('data-theme');
+  if (!c) c = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  const n = c === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', n);
+  try { localStorage.setItem('gradient_path_theme', n); } catch(e) {}
+});
+// a shared link opens on its reel
+const h = location.hash.slice(1); if (h && document.getElementById(h)) document.getElementById(h).scrollIntoView({block: 'start'});
+})();
+</script>
+</body></html>

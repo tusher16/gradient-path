@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-// Validate the AIF-C01 sources, then inline them into ../../../aws-ai-practitioner.html.
+// Validate the AIF-C01 sources, then inline them into ../../../aws-ai-practitioner.html
+// and the reels feed ../../../aws-ai-practitioner-reels.html.
 // Run from anywhere:  node generator/cert/aif-c01/build.js
 // Exit 1 on any validation error; nothing is written in that case.
 const fs = require('fs');
@@ -7,9 +8,10 @@ const path = require('path');
 
 const HERE = __dirname;
 const OUT = path.join(HERE, '..', '..', '..', 'aws-ai-practitioner.html');
+const REELS_OUT = path.join(HERE, '..', '..', '..', 'aws-ai-practitioner-reels.html');
 const TOPICS = require('./topics.js');
 const QUESTIONS = require('./questions.js');
-const { DAYS, CONFUSABLES, PROMPTS } = require('./extras.js');
+const { DAYS, CONFUSABLES, PROMPTS, DOMAINS } = require('./extras.js');
 const MOTION = require('./motion.js');
 
 // Mock blueprint: 13/16/18/9/9 = 65, the 20/24/28/14/14 weights of 65.
@@ -82,7 +84,7 @@ if (errors.length) {
   process.exit(1);
 }
 
-const data = { topics: TOPICS, questions: QUESTIONS, days: DAYS, confusables: CONFUSABLES, prompts: PROMPTS, motion: MOTION };
+const data = { topics: TOPICS, questions: QUESTIONS, days: DAYS, confusables: CONFUSABLES, prompts: PROMPTS, motion: MOTION, domains: DOMAINS };
 const json = JSON.stringify(data).replace(/</g, '\\u003c');
 const tpl = fs.readFileSync(path.join(HERE, 'page.html'), 'utf8');
 if (!tpl.includes('/*__DATA__*/')) { console.error('page.html has no /*__DATA__*/ slot'); process.exit(1); }
@@ -90,6 +92,22 @@ if (!tpl.includes('/*__DATA__*/')) { console.error('page.html has no /*__DATA__*
 const html = tpl.replace('/*__DATA__*/null', () => json);
 fs.writeFileSync(OUT, html);
 
+// the reels feed shares the study page's tokens and diagram CSS: copied from page.html's
+// marked blocks on every build, so the two pages cannot drift apart
+const block = (name) => {
+  const m = tpl.match(new RegExp(`/\\*@${name}\\*/([\\s\\S]*?)/\\*@/${name}\\*/`));
+  if (!m) { console.error(`page.html has no /*@${name}*/ block`); process.exit(1); }
+  return m[1].trim();
+};
+const rtpl = fs.readFileSync(path.join(HERE, 'reels.html'), 'utf8');
+for (const slot of ['/*__TOKENS__*/', '/*__MOTION__*/', '/*__DATA__*/null'])
+  if (rtpl.split(slot).length !== 2) { console.error(`reels.html needs exactly one ${slot}`); process.exit(1); }
+const rdata = { topics: TOPICS.map(({ id, d, title, hook }) => ({ id, d, title, hook })), motion: MOTION, domains: DOMAINS };
+const reels = rtpl.replace('/*__TOKENS__*/', () => block('tokens')).replace('/*__MOTION__*/', () => block('motion'))
+  .replace('/*__DATA__*/null', () => JSON.stringify(rdata).replace(/</g, '\\u003c'));
+fs.writeFileSync(REELS_OUT, reels);
+
 const fmt = (o) => [1, 2, 3, 4, 5].map((d) => o[d] || 0).join('/');
 console.log(`aif-c01: ${TOPICS.length} topics | motion ${Object.keys(MOTION).length} | practice ${QUESTIONS.filter((q) => q.set === 'P').length} | ` +
   `Mock A ${fmt(counts.A)} | Mock B ${fmt(counts.B)} | ${(html.length / 1024).toFixed(0)} KB → ${path.relative(process.cwd(), OUT)}`);
+console.log(`reels: ${TOPICS.length} reels | ${(reels.length / 1024).toFixed(0)} KB → ${path.relative(process.cwd(), REELS_OUT)}`);
