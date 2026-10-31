@@ -1,4 +1,4 @@
-// Domain 1 motion explainers: one short animated diagram per topic, drawn
+// Domain 1 and 2 motion explainers: one short animated diagram per topic, drawn
 // above the plain text. Geometry only (boxes, lines, dots, labels); no
 // pictures. Each entry: h = viewBox height (width is always 440), steps =
 // the captions, svg = inner markup. An element appears at step --t (with an
@@ -231,5 +231,166 @@ module.exports = {
     txt(232, 160, 'precision 3/5 = 60%', 'lb m', 2, 0.6) +
     txt(232, 182, 'recall 3/4 = 75%', 'lb m', 2, 0.8) +
     dot(196, 164, 16, 'ln s g', 3) + txt(196, 206, 'missed', 'mid lb s', 3, 0.3) },
+
+// ---------------- Domain 2 · Fundamentals of GenAI ----------------
+'tokens-embeddings': { h: 250,
+  steps: [
+    'A model reads tokens, sub-word pieces, not words. Prices and limits are counted in tokens.',
+    'An embedding turns a piece of text into a vector: a point whose position captures its meaning.',
+    'Similar meanings land close together, so a search for “money back” finds the refund policy.',
+    'Chunking cuts a long document into pieces before embedding, so search returns one paragraph, not a whole manual.'],
+  svg:
+    txt(220, 26, 'Unbelievable', 'mid hd', 0) +
+    tag(116, 40, 56, 28, 'Un', 'bx m', 'lb m', 0, 0.4) +
+    tag(180, 40, 80, 28, 'believ', 'bx m', 'lb m', 0, 0.55) +
+    tag(268, 40, 60, 28, 'able', 'bx m', 'lb m', 0, 0.7) +
+    path('M40 100 V232 H246', 'ln', 1) +
+    dot(96, 146, 7, 'dot g', 1, 0.3) + txt(50, 114, 'refund policy', '', 1, 0.3) +
+    dot(124, 160, 7, 'dot g', 1, 0.5) + txt(140, 166, 'money back', '', 1, 0.5) +
+    dot(226, 212, 7, 'dot g', 1, 0.7) + txt(216, 200, 'holiday rota', 'end', 1, 0.7) +
+    dot(110, 153, 30, 'ln m g', 2) + txt(48, 226, 'close = similar', 'lb m', 2, 0.3) +
+    box(278, 100, 54, 132, 'bx', 3, 0, 4) +
+    path('M286 116 H324 M286 128 H318 M286 140 H324 M286 152 H312 M286 164 H324 M286 176 H320 M286 188 H324 M286 200 H316 M286 212 H322', 'ln', 3) +
+    [100, 148, 196].map((y, i) => box(368, y, 60, 36, 'bx m', 3, 0.4 + i * 0.2, 4)).join('') +
+    arrow(336, 166, 362, 166, 'm', 3, 0.3) },
+
+'model-types': { h: 300,
+  steps: [
+    'A transformer reads the whole passage at once and works out which words matter to which. That is attention.',
+    'A foundation model is pre-trained once on huge general data, then adapted to many tasks.',
+    'A multimodal model takes more than one kind of input or output, like a photo plus a question.',
+    'A diffusion model starts from random noise and removes it step by step until a picture appears.'],
+  svg:
+    txt(12, 22, 'Transformer', 'lb', 0) +
+    [[40, 52, 'cat'], [100, 64, 'drank'], [172, 32, 'it'], [212, 44, 'was'], [264, 72, 'thirsty']]
+      .map(([x, w, s], i) => tag(x, 62, w, 28, s, i === 2 ? 'bx m' : 'bx', i === 2 ? 'lb m' : 'lb', 0, i * 0.12)).join('') +
+    path('M188 62 Q 140 22 66 62', 'ln m d', 0, 0.8) +
+    path('M188 62 Q 244 26 300 62', 'ln m d', 0, 1.0) +
+    tag(14, 112, 170, 36, 'Foundation model', 'bx m', 'lb m', 1) +
+    arrow(188, 130, 214, 130, '', 1, 0.3) +
+    [[220, 80, 'summarise'], [306, 52, 'chat'], [364, 60, 'code']]
+      .map(([x, w, s], i) => tag(x, 115, w, 30, s, 'bx', '', 1, 0.5 + i * 0.15)).join('') +
+    box(14, 170, 44, 34, 'bx', 2, 0, 4) +
+    `<polygon class="a pl" points="18,200 30,182 38,192 44,186 54,200" style="${st(2, 0.1)}"/>` +
+    txt(70, 193, '+', 'mid lb', 2, 0.2) +
+    tag(82, 172, 112, 30, 'what is this?', 'bx', '', 2, 0.3) +
+    arrow(198, 187, 236, 187, '', 2, 0.5) +
+    tag(242, 172, 128, 30, 'multimodal', 'bx m', 'lb m', 2, 0.6) +
+    arrow(374, 187, 386, 187, 'm', 2, 0.8) + txt(390, 192, 'answer', '', 2, 0.9) +
+    [0, 1, 2, 3].map((k) => {
+      const x = 14 + k * 76, n = [14, 8, 3, 0][k];
+      let s = box(x, 228, 52, 52, k === 3 ? 'bx m' : 'bx', 3, k * 0.35, 6);
+      for (let j = 0; j < n; j++) s += dot(x + 8 + ((j * 17) % 36), 236 + ((j * 23) % 36), 2.5, 'dot', 3, k * 0.35 + 0.1);
+      if (k === 3) s += `<polygon class="a pl" points="${x + 6},${272} ${x + 20},${250} ${x + 30},${262} ${x + 38},${254} ${x + 46},${272}" style="${st(3, 1.2)}"/>`;
+      if (k < 3) s += arrow(x + 56, 254, x + 72, 254, '', 3, k * 0.35 + 0.2);
+      return s;
+    }).join('') +
+    txt(434, 259, 'noise → image', 'end lb m', 3, 1.3) },
+
+'fm-lifecycle': { h: 196,
+  steps: [
+    'Choose the data, then the model design.',
+    'Pre-train it on a massive amount of unlabelled data. That costs millions, so few companies ever do it.',
+    'Fine-tune it for a narrower job, evaluate it, then deploy it.',
+    'Collect feedback (ratings, human review), which feeds the next round of tuning.',
+    'Most companies start from an existing model and join at fine-tuning or later.'],
+  svg:
+    tag(8, 56, 92, 32, 'Data', 'bx', 'lb', 0) + arrow(102, 72, 118, 72, '', 0, 0.3) +
+    tag(120, 56, 92, 32, 'Model', 'bx', 'lb', 0, 0.4) + arrow(214, 72, 230, 72, '', 1) +
+    tag(232, 56, 92, 32, 'Pre-train', 'bx s', 'lb s', 1, 0.2) + txt(278, 44, 'costs millions', 'mid lb s', 1, 0.5) +
+    arrow(326, 72, 342, 72, '', 2) +
+    tag(344, 56, 92, 32, 'Fine-tune', 'bx m', 'lb m', 2, 0.1) + arrow(390, 90, 390, 136, '', 2, 0.4) +
+    tag(344, 140, 92, 32, 'Evaluate', 'bx', 'lb', 2, 0.5) + arrow(342, 156, 326, 156, '', 2, 0.7) +
+    tag(232, 140, 92, 32, 'Deploy', 'bx', 'lb', 2, 0.8) + arrow(230, 156, 214, 156, '', 3) +
+    tag(120, 140, 92, 32, 'Feedback', 'bx m', 'lb m', 3, 0.2) +
+    path('M166 138 Q 250 104 340 84', 'ln m d', 3, 0.6) +
+    txt(390, 24, 'you start here', 'mid lb m', 4) + path('M390 30 V52', 'ln m', 4, 0.2) },
+
+'genai-tradeoffs': { h: 246,
+  steps: [
+    'Strengths: one model adapts to many jobs, talks naturally and creates new content.',
+    'Weakness: it can hallucinate, stating false things confidently.',
+    'It is also nondeterministic (the same question can get a different answer), and it cannot explain why it answered as it did.',
+    'Choosing a model is a trade-off: modality, latency, cost, context length, compliance and language.'],
+  svg:
+    txt(14, 24, 'Good at', 'lb m', 0) +
+    [[40, 'adaptable'], [80, 'conversational'], [120, 'creates content']]
+      .map(([y, s], i) => tag(14, y, 150, 30, s, 'bx m', 'lb m', 0, 0.2 + i * 0.2)).join('') +
+    txt(234, 24, 'Watch out for', 'lb s', 1) +
+    tag(234, 40, 190, 30, 'hallucinates', 'bx s', 'lb s', 1, 0.2) +
+    tag(234, 80, 190, 30, 'changes its answer', 'bx s', 'lb s', 2) +
+    tag(234, 120, 190, 30, 'hard to explain', 'bx s', 'lb s', 2, 0.3) +
+    txt(14, 186, 'Choose by', 'lb', 3) +
+    [[100, 84, 'modality'], [192, 76, 'latency'], [276, 52, 'cost'], [336, 90, 'context']]
+      .map(([x, w, s], i) => tag(x, 166, w, 30, s, 'bx', '', 3, 0.2 + i * 0.12)).join('') +
+    [[100, 104, 'compliance'], [212, 92, 'language']]
+      .map(([x, w, s], i) => tag(x, 206, w, 30, s, 'bx', '', 3, 0.7 + i * 0.12)).join('') },
+
+'token-pricing': { h: 288,
+  steps: [
+    'You pay for input tokens (what you send) and output tokens (what comes back). Output usually costs more.',
+    'On-demand is a taxi meter: pay only for the tokens you use. It fits low or spiky traffic.',
+    'Provisioned Throughput is a leased car: reserved capacity billed by the hour, used or not.',
+    'Batch is a freight train: cheaper per token for big jobs where nobody waits.',
+    'Prompt caching: a long prefix sent with every request is read from cache, which is cheaper and faster.'],
+  svg:
+    tag(14, 20, 124, 32, 'input tokens', 'bx', 'lb', 0) + arrow(142, 36, 170, 36, '', 0, 0.2) +
+    tag(176, 20, 70, 32, 'model', 'bx m', 'lb m', 0, 0.3) + arrow(250, 36, 278, 36, '', 0, 0.5) +
+    tag(284, 20, 144, 32, 'output tokens', 'bx s', 'lb s', 0, 0.6) +
+    txt(356, 72, 'costs more per token', 'mid', 0, 0.8) +
+    txt(12, 124, 'On-demand', 'lb', 1) +
+    [6, 18, 4, 26, 8, 14, 30, 6, 10, 4, 22, 8].map((h, i) =>
+      `<rect class="a bx m" x="${140 + i * 14}" y="${134 - h}" width="10" height="${h}" rx="2" style="${st(1, 0.2 + i * 0.05, from(0, 6))}"/>`).join('') +
+    txt(430, 124, 'pay per token', 'end lb m', 1, 0.8) +
+    txt(12, 174, 'Provisioned', 'lb', 2) +
+    box(140, 152, 164, 28, 'bx', 2, 0.2, 4) + txt(222, 171, 'reserved, every hour', 'mid', 2, 0.4) +
+    txt(430, 174, 'fixed hourly', 'end lb', 2, 0.6) +
+    txt(12, 224, 'Batch', 'lb', 3) +
+    [0, 1, 2, 3].map((i) => box(140 + i * 7, 212 - i * 5, 34, 22, 'bx', 3, i * 0.1, 3)).join('') +
+    arrow(200, 218, 250, 218, '', 3, 0.5) + txt(430, 224, 'results later, cheaper', 'end lb m', 3, 0.7) +
+    txt(12, 270, 'Caching', 'lb', 4) +
+    tag(140, 252, 112, 28, 'same prefix', 'bx m', 'lb m', 4, 0.2) +
+    tag(258, 252, 80, 28, 'new ask', 'bx', '', 4, 0.4) +
+    txt(430, 271, 'cached', 'end lb m', 4, 0.6) },
+
+'aws-genai-stack': { h: 330,
+  steps: [
+    'A ready foundation model behind an API, no servers: Amazon Bedrock. Building and hosting your own model: SageMaker AI.',
+    'A pre-trained model deployed into your account in a few clicks: SageMaker JumpStart. Amazon’s own models: Nova.',
+    'A business analyst working with data: Amazon Quick. A developer building software: Kiro.',
+    'Writing an agent in code: Strands Agents. Running agents securely in production: Bedrock AgentCore.'],
+  svg:
+    [['ready FM, no servers', 'Amazon Bedrock'], ['build your own model', 'SageMaker AI'],
+     ['one-click model shelf', 'SageMaker JumpStart'], ['Amazon’s own models', 'Amazon Nova'],
+     ['business analyst', 'Amazon Quick'], ['developer’s IDE', 'Kiro'],
+     ['agent written in code', 'Strands Agents'], ['agents in production', 'Bedrock AgentCore']]
+      .map(([who, what], k) => {
+        const y = 24 + k * 40, t = Math.floor(k / 2), d = (k % 2) * 0.5;
+        return `<text class="a end" x="196" y="${y + 5}" style="${st(t, d, from(-14, 0))}">${who}</text>` +
+          arrow(202, y, 224, y, '', t, d + 0.15) +
+          tag(230, y - 15, 200, 30, what, 'bx m', 'lb m', t, d + 0.3);
+      }).join('') },
+
+'agentic-ai': { h: 262,
+  steps: [
+    'An agent gets a goal, reasons about the next step and picks a tool.',
+    'It calls the tool, looks at the result and repeats until the goal is met or a stop rule fires.',
+    'MCP is a standard plug: any agent can reach any tool or data source the same way.',
+    'Memory keeps earlier steps and conversations: short-term for this session, long-term across sessions.',
+    'Context engineering decides what fills the model’s limited window each step: instructions, facts, tool results, history.'],
+  svg:
+    tag(14, 112, 80, 32, 'goal', 'bx', 'lb', 0) + arrow(98, 128, 122, 128, '', 0, 0.2) +
+    dot(170, 128, 34, 'bx m g', 0, 0.4) + txt(170, 133, 'agent', 'mid lb m', 0, 0.5) +
+    path('M134.8 98.4 A46 46 0 1 1 134.8 157.6', 'ln m d', 1) +
+    txt(158, 196, 'act, observe, repeat', 'end', 1, 0.6) +
+    arrow(220, 128, 246, 128, 'm', 2) +
+    box(252, 44, 34, 176, 'bx m', 2, 0.2, 8) + txt(269, 36, 'MCP', 'mid lb m', 2, 0.2) +
+    [['search', 58], ['calendar', 104], ['database', 150], ['payments', 196]]
+      .map(([s, y], i) => path(`M286 ${y} H306`, 'ln m', 2, 0.5 + i * 0.12) +
+        tag(308, y - 15, 118, 30, s, 'bx', '', 2, 0.5 + i * 0.12)).join('') +
+    tag(110, 214, 120, 32, 'memory', 'bx', 'lb', 3) + path('M170 180 V212', 'ln', 3, 0.2) +
+    box(14, 26, 210, 46, 'bx', 4, 0, 8) + txt(18, 18, 'context window', 'lb', 4) +
+    [['bx m', 0], ['bx m', 1], ['bx', 2], ['bx s', 3]]
+      .map(([c, i]) => box(22 + i * 50, 36, 44, 26, c, 4, 0.3 + i * 0.15, 4)).join('') },
 
 };
