@@ -14,6 +14,8 @@ const TOPICS = require('./topics.js');
 const QUESTIONS = require('./questions.js');
 const { DAYS, CONFUSABLES, PROMPTS, DOMAINS } = require('./extras.js');
 const MOTION = require('./motion.js');
+const { ZONES, GLYPHS, COVERED_ELSEWHERE } = require('./services.js');
+const SHEET_OUT = path.join(HERE, '..', '..', '..', 'aws-ai-practitioner-services.html');
 
 // Mock blueprint: 13/16/18/9/9 = 65, the 20/24/28/14/14 weights of 65.
 const MOCK_SPLIT = { 1: 13, 2: 16, 3: 18, 4: 9, 5: 9 };
@@ -79,6 +81,29 @@ for (const [id, m] of Object.entries(MOTION)) {
   for (let i = 0; i < m.steps.length; i++) if (!ts.includes(i)) err(`motion ${id}: caption ${i + 1} has nothing appearing with it`);
 }
 
+// Cheat sheet: every id resolves, every glyph exists, the job and clue never give the name
+// away (they are the question in Hide names mode), and no service in the exam data is missing.
+const sheetIds = new Set();
+for (const z of ZONES) for (const x of z.services) {
+  if (sheetIds.has(x.id)) err(`service ${x.id}: duplicate id`);
+  sheetIds.add(x.id);
+  for (const k of ['name', 'job', 'clue', 'hook']) if (!x[k]) err(`service ${x.id}: missing ${k}`);
+  for (const g of x.g) if (!GLYPHS[g]) err(`service ${x.id}: unknown glyph ${g}`);
+  if (x.job.length > 38) err(`service ${x.id}: job is over 38 characters`);
+  const own = x.name.replace(/^(Amazon|AWS|SageMaker|Bedrock|AgentCore|Glue) /, '').replace(/ \(.*\)$/, '').toLowerCase();
+  for (const k of ['job', 'clue']) if (x[k]?.toLowerCase().includes(own)) err(`service ${x.id}: ${k} gives away the name`);
+}
+for (const z of ZONES) { if (!GLYPHS[z.g]) err(`zone ${z.id}: unknown glyph ${z.g}`);
+  for (const x of z.services) if (x.not && !sheetIds.has(x.not[0])) err(`service ${x.id}: not points at unknown ${x.not[0]}`); }
+const examText = JSON.stringify([TOPICS, QUESTIONS, CONFUSABLES]).replace(/<[^>]+>/g, '');
+const sheetNames = ZONES.flatMap((z) => z.services.map((x) => x.name));
+const named = new Set([...examText.matchAll(/\b(?:Amazon|AWS|SageMaker|Bedrock|AgentCore|Glue) [A-Z][A-Za-z0-9-]*(?: [A-Z][A-Za-z0-9-]*){0,2}/g)].map((x) => x[0]));
+const bare = (n) => n.replace(/^(?:Amazon|AWS) /, '').replace(/ \(.*\)$/, '');
+for (const n of named) {
+  const known = sheetNames.some((x) => bare(x) === bare(n) || bare(n).startsWith(bare(x) + ' '));
+  if (!known && !COVERED_ELSEWHERE.some((c) => n.startsWith(c))) err(`cheat sheet is missing "${n}", named in the exam data`);
+}
+
 if (errors.length) {
   console.error(errors.map((e) => '  ✗ ' + e).join('\n'));
   console.error(`${errors.length} error(s); nothing written.`);
@@ -121,7 +146,44 @@ const reels = rtpl.replace('/*__TOKENS__*/', () => block('tokens')).replace('/*_
   .replace('/*__DATA__*/null', () => JSON.stringify(rdata).replace(/</g, '\\u003c'));
 fs.writeFileSync(REELS_OUT, reels);
 
+// The service cheat sheet is static markup, so it works without JavaScript and prints whole.
+const escHtml = (t) => t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+const glyph = (id, cls) => `<svg class="g ${cls}" aria-hidden="true"><use href="#g-${id}"/></svg>`;
+const allServices = ZONES.flatMap((z) => z.services);
+const serviceById = new Map(allServices.map((x) => [x.id, x]));
+const card = (x) => {
+  const gs = x.g.length > 1 ? `${glyph(x.g[0], 'in')}<span class="to" aria-hidden="true">&rarr;</span>${glyph(x.g[1], 'out')}` : glyph(x.g[0], 'out');
+  const not = x.not ? `<p class="not">Not <a href="#s-${x.not[0]}">${escHtml(serviceById.get(x.not[0]).name)}</a>: ${escHtml(x.not[1])}</p>` : '';
+  const find = [x.name, x.job, x.clue, x.hook].join(' ').toLowerCase();
+  return `<article class="c" id="s-${x.id}" data-s="${escHtml(find)}"><div class="gs">${gs}</div><h3 class="nm">${escHtml(x.name)}</h3>` +
+    `<p class="job">${escHtml(x.job)}</p><p class="clue"><span class="lbl">Question says</span>${escHtml(x.clue)}</p><p class="hook">${escHtml(x.hook)}</p>${not}` +
+    `<button class="rev" type="button">Show the service</button></article>`;
+};
+// The person zone opens with a face: each sense is one service, so a question's verb points at it.
+const FACE = [
+  ['rekognition', 'Rekognition', 'sees', 60, 186, 96, 'start'], ['transcribe', 'Transcribe', 'hears', 122, 150, 128, 'start'],
+  ['polly', 'Polly', 'speaks', 184, 196, 182, 'start'], ['lex', 'Lex', 'holds the talk', 246, 208, 196, 'start'],
+  ['comprehend', 'Comprehend', 'understands', 40, 220, 58, 'end'], ['textract', 'Textract', 'reads paper', 102, 254, 96, 'end'],
+  ['personalize', 'Personalize', 'sniffs your taste', 164, 226, 142, 'end'], ['translate', 'Translate', 'changes language', 226, 236, 182, 'end'],
+];
+const faceSvg = `<div class="figure"><svg viewBox="0 0 440 290" role="img" aria-label="A face. Eyes: Rekognition sees and Textract reads paper. Ear: Transcribe hears. Mouth: Polly speaks, Lex holds the talk, Translate changes language. Brain: Comprehend understands. Nose: Personalize sniffs your taste.">` +
+  `<path class="hd" d="M145 128c0-52 33-88 75-88s75 36 75 88c0 62-33 110-75 110s-75-48-75-110Z"/><path class="hd" d="M145 112c-12-4-16 8-14 20s8 22 16 18M295 112c12-4 16 8 14 20s-8 22-16 18"/>` +
+  `<path class="hd" d="M176 58c10-14 28-14 38-4 10-10 32-8 40 6"/><path class="hd" d="M176 96c6-6 14-6 20 0M244 96c6-6 14-6 20 0"/><path class="hd" d="M220 112l-8 30h14"/><path class="hd" d="M196 182c14 12 34 12 48 0"/>` +
+  FACE.map(([id, n, v, y, px, py, side]) => {
+    const left = side === 'start', tx = left ? 8 : 432, lx = left ? 104 : 336;
+    return `<path class="lead" d="M${lx} ${y - 4}L${px} ${py}"/><circle class="pt" cx="${px}" cy="${py}" r="3.5"/><a href="#s-${id}"><text x="${tx}" y="${y - 4}" text-anchor="${side}" class="n">${n}</text><text x="${tx}" y="${y + 12}" text-anchor="${side}" class="v">${v}</text></a>`;
+  }).join('') + '</svg></div>';
+const sheet = fs.readFileSync(path.join(HERE, 'services.html'), 'utf8')
+  .replace('/*__TOKENS__*/', () => block('tokens'))
+  .replace('<!--__SYMBOLS__-->', () => Object.entries(GLYPHS).map(([id, m]) => `<symbol id="g-${id}" viewBox="0 0 24 24">${m}</symbol>`).join(''))
+  .replace('<!--__COUNT__-->', () => String(allServices.length))
+  .replace('<!--__TOWN__-->', () => ZONES.map((z) => `<a href="#${z.id}">${glyph(z.g, '')}<b>${z.place}<i>${z.services.length}</i></b><span>${z.say}</span></a>`).join(''))
+  .replace('<!--__ZONES__-->', () => ZONES.map((z) => `<section class="zone" id="${z.id}"><div class="zhead"><h2>${z.place}</h2><p>${z.say}</p></div>` +
+    (z.id === 'person' ? faceSvg : '') + `<div class="cards">${z.services.map(card).join('')}</div></section>`).join('\n'));
+fs.writeFileSync(SHEET_OUT, sheet);
+
 const fmt = (o) => [1, 2, 3, 4, 5].map((d) => o[d] || 0).join('/');
 console.log(`aif-c01: ${TOPICS.length} topics | motion ${Object.keys(MOTION).length} | practice ${QUESTIONS.filter((q) => q.set === 'P').length} | ` +
   `Mock A ${fmt(counts.A)} | Mock B ${fmt(counts.B)} | ${(html.length / 1024).toFixed(0)} KB → ${path.relative(process.cwd(), OUT)}`);
+console.log(`services: ${allServices.length} services in ${ZONES.length} places | ${(sheet.length / 1024).toFixed(0)} KB → ${path.relative(process.cwd(), SHEET_OUT)}`);
 console.log(`reels: ${TOPICS.length} reels | narration ${recorded}/${script.length} recorded (${VOICE}) | ${(reels.length / 1024).toFixed(0)} KB → ${path.relative(process.cwd(), REELS_OUT)}`);
