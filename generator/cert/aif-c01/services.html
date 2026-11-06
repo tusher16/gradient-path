@@ -70,6 +70,8 @@ h2{font-family:var(--display); font-weight:800; font-size:clamp(26px,3.6vw,36px)
 .hook{margin:8px 0 0; font-size:14px; line-height:1.4; color:var(--memory); font-weight:500}
 .not{margin:8px 0 0; padding-top:8px; border-top:1px dashed var(--line); font-size:14px; line-height:1.4; color:var(--ink-2)}
 .not a{color:var(--signal); font-weight:600}
+.watch{display:inline-flex; align-items:center; min-height:44px; margin-top:4px; font-size:14px; font-weight:600; color:var(--memory)}
+.quiz .c:not(.shown) .watch{display:none}
 .rev{display:none; margin-top:10px; width:100%; min-height:44px; border:1px dashed var(--line); border-radius:8px; background:var(--sunk); font-size:14px; font-weight:500}
 /* self-test: the job and clue become the question */
 .quiz .c:not(.shown) .nm,.quiz .c:not(.shown) .hook,.quiz .c:not(.shown) .not,.quiz .c:not(.shown) .gs{display:none}
@@ -87,7 +89,7 @@ footer{margin:46px 0 34px; padding-top:18px; border-top:1px solid var(--line); f
   .cards{grid-template-columns:1fr}
 }
 @media print{
-  .bar,header.top nav,.rev,.town{display:none}
+  .bar,header.top nav,.rev,.town,.watch{display:none}
   body{font-size:11pt; background:#fff}
   .c{box-shadow:none; break-inside:avoid}
   section.zone{padding-top:14px}
@@ -97,7 +99,7 @@ footer{margin:46px 0 34px; padding-top:18px; border-top:1px solid var(--line); f
 <div class="wrap" id="root">
 <header class="top">
   <a class="home" href="/">Gradient Path <span>/ AIF-C01</span></a>
-  <nav aria-label="Pages"><a href="/aws-ai-practitioner">Study page</a><a href="/aws-ai-practitioner-reels">Reels</a><button class="tog" type="button" id="theme">Theme</button></nav>
+  <nav aria-label="Pages"><a href="/aws-ai-practitioner">Study page</a><a href="/aws-ai-practitioner-services-reels">Service reels</a><button class="tog" type="button" id="theme">Theme</button></nav>
 </header>
 <main>
 <h1>One town. <!--__COUNT__--> services. One job each.</h1>

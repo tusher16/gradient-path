@@ -57,3 +57,7 @@ The grounding sweep over 116 glossary drafts (`most|usually|often|\d…`) flagge
 ## 2026-10-30 — External model reviews need the same scope check as your own content
 
 Two AI reviews of the AIF-C01 page were applied. Gemini's "missing" list was half out of scope: 11 of its services and concepts appear nowhere in the v1.2 domain pages or in-scope list, apparently carried over from the older guide and from third-party prep material. One of its accuracy claims (b48) was simply wrong. GPT's narrower list was correct. In the other direction, the independent fact-check caught a fact that had gone stale in the last three months (DynamoDB vector search), which turned a "clearly wrong" distractor into a second right answer. Lesson: triage every review claim against the fetched primary source before editing, and re-check distractors as well as keys, because a service launch can silently make a wrong option right. First occurrence.
+
+## [impact: medium] A hidden preview pane freezes the page, so it cannot judge motion
+
+In a hidden browser pane `requestAnimationFrame` and IntersectionObserver stall while timers and scripts keep going, so a healthy page looks stuck or half drawn, and a script-only check still passes. Before calling something a motion or scroll bug, test `requestAnimationFrame`; then verify in a browser that renders, such as headless Chrome through Playwright, and sample `document.getAnimations()` rather than trusting screenshot timing. That sampling is what exposed the Replay bug (#38).

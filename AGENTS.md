@@ -76,10 +76,11 @@ python3 build_index.py
 node generator/cert/aif-c01/build.js   # → 30 topics | motion 30 | practice 57 | Mock A 13/16/18/9/9 | Mock B 13/16/18/9/9
                                        #   reels: 30 reels | narration 167/167 recorded (af_heart) → aws-ai-practitioner-reels.html
                                        #   services: 82 services in 8 places → aws-ai-practitioner-services.html
+                                       #   service reels: 90 reels | narration 302/302 recorded (af_heart) → aws-ai-practitioner-services-reels.html
 
 # Record reel narration with Kokoro-82M after any caption or hook edit, then rebuild.
 # Only changed segments are recorded; one-time setup is in the script's docstring.
-generator/cert/aif-c01/tts/.venv/bin/python generator/cert/aif-c01/tts/narrate.py   # → 167 segments, 0 to record
+generator/cert/aif-c01/tts/.venv/bin/python generator/cert/aif-c01/tts/narrate.py   # → 469 segments, 0 to record
 node generator/cert/aif-c01/build.js
 
 # Local serve check (post-deploy verification set in docs/TEST_PLAN.md)

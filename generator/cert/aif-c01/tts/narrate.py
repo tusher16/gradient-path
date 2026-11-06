@@ -37,6 +37,8 @@ SAY = [
     (r'\be\.g\.', 'for example'), (r'\bBERTScore\b', 'bert score'), (r'\bROUGE\b', 'rouge'),
     (r'\bBLEU\b', 'blue'), (r'\bRAG\b', 'rag'), (r'\bSaaS\b', 'sass'), (r'\bGenAI\b', 'Gen AI'),
     (r'\bAIF-C01\b', 'A I F, C zero one'), (r'\bKiro\b', 'Keero'),
+    (r'\bpgvector\b', 'P G vector'), (r'\bk-NN\b', 'K N N'), (r'\.NET\b', 'dot net'), (r'\bCI/CD\b', 'C I, C D'),
+    (r'\bA2I\b', 'A 2 I'), (r'\bJSON\b', 'jay-son'), (r'\bPostgreSQL\b', 'Postgres Q L'), (r'\bCVEs\b', 'C V Es'),
     (r'([a-z])([A-Z])', r'\1 \2'),   # SageMaker -> Sage Maker, CloudTrail -> Cloud Trail
 ]
 

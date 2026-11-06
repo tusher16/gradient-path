@@ -11,6 +11,7 @@
 /* tokens and the diagram styles are copied in from page.html by build.js, never edited here */
 /*__TOKENS__*/
 /*__MOTION__*/
+/*@reelcss*/
 *{box-sizing:border-box}
 [hidden]{display:none !important}
 html,body{height:100%}
@@ -86,6 +87,7 @@ button{font:inherit; color:inherit; cursor:pointer}
   .card{width:100%; height:100%; border-radius:0; border:0; padding:16px 16px 12px}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none !important} .card .mo .a.on{animation:none}}
+/*@/reelcss*/
 </style></head>
 <body>
 
@@ -103,6 +105,7 @@ button{font:inherit; color:inherit; cursor:pointer}
 const DATA = /*__DATA__*/null;
 (function(){
 'use strict';
+/*@helpers*/
 const $ = (s, el = document) => el.querySelector(s), $$ = (s, el = document) => [...el.querySelectorAll(s)];
 const esc = (s) => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const reduced = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -110,6 +113,7 @@ const sleep = (ms) => new Promise(r => setTimeout(r, ms));
 const canSpeak = 'speechSynthesis' in window;
 const T = DATA.topics, DOMS = DATA.domains;
 function toast(msg){ const t = $('#toast'); t.textContent = msg; t.classList.add('on'); clearTimeout(toast.h); toast.h = setTimeout(() => t.classList.remove('on'), 1800); }
+/*@/helpers*/
 
 // ---------- render ----------
 const first = {}; T.forEach((t) => { if (!(t.d in first)) first[t.d] = t.id; });
@@ -140,6 +144,7 @@ html += `<section class="reel" id="end"><div class="card plain">
   <div class="row"><a class="btn go" href="/aws-ai-practitioner#console">Practise questions</a><button class="btn" type="button" data-jump="intro">Back to the start</button></div>
 </div></section>`;
 $('#feed').innerHTML = html;
+/*@player*/
 // group each diagram's elements by the step they belong to, once
 const steps = new Map();
 $$('article.reel').forEach(r => {
@@ -163,7 +168,7 @@ const player = new Audio(); player.preload = 'auto';
 const clipsOf = (r) => DATA.audio[T[+r.dataset.i].id] || [];
 const firstClip = Object.values(DATA.audio).flat().find(Boolean) || null;
 if (!canSpeak && !firstClip) { $('#sound').disabled = true; $('#sound').title = 'This browser cannot read aloud'; $('#start-sound').hidden = true; }
-function prefetch(r){ if (r) clipsOf(r).forEach(u => { if (u) { const a = new Audio(); a.preload = 'auto'; a.src = u; } }); }
+function prefetch(r){ if (r && r.matches('article.reel')) clipsOf(r).forEach(u => { if (u) { const a = new Audio(); a.preload = 'auto'; a.src = u; } }); }
 const readTime = (s) => Math.min(7500, Math.max(2600, s.length * 58));
 const lastStep = (r) => DATA.motion[T[+r.dataset.i].id].steps.length - 1;
 function speak(text, fin){
@@ -190,6 +195,7 @@ function show(r, k, instant){
 }
 function reset(r){
   $$('.a', r).forEach(el => el.classList.remove('on', 'now'));
+  void r.getBoundingClientRect();   // make the browser see the removal, so Replay restarts the animations
   $$('.seg i', r).forEach(s => s.classList.remove('on'));
   $('.cap', r).textContent = ''; $('.hk', r).textContent = '';
 }
@@ -209,6 +215,7 @@ async function play(r, from = 0){
   }
   if (tok !== P.tok) return;
   P.at = m.steps.length;
+  show(r, m.steps.length, false);
   $$('.seg i', r).forEach(s => s.classList.add('on'));
   $('.hk', r).textContent = t.hook;
   await say(DATA.segs[+r.dataset.i][m.steps.length], tok, clips[m.steps.length]);
@@ -278,6 +285,7 @@ $('#theme').addEventListener('click', () => {
 });
 // a shared link opens on its reel
 const h = location.hash.slice(1); if (h && document.getElementById(h)) document.getElementById(h).scrollIntoView({block: 'start'});
+/*@/player*/
 })();
 </script>
 </body></html>

@@ -16,6 +16,8 @@ const { DAYS, CONFUSABLES, PROMPTS, DOMAINS } = require('./extras.js');
 const MOTION = require('./motion.js');
 const { ZONES, GLYPHS, COVERED_ELSEWHERE } = require('./services.js');
 const SHEET_OUT = path.join(HERE, '..', '..', '..', 'aws-ai-practitioner-services.html');
+const SVC_REELS_OUT = path.join(HERE, '..', '..', '..', 'aws-ai-practitioner-services-reels.html');
+const serviceReels = require('./service-reels.js');
 
 // Mock blueprint: 13/16/18/9/9 = 65, the 20/24/28/14/14 weights of 65.
 const MOCK_SPLIT = { 1: 13, 2: 16, 3: 18, 4: 9, 5: 9 };
@@ -120,9 +122,9 @@ fs.writeFileSync(OUT, html);
 
 // the reels feed shares the study page's tokens and diagram CSS: copied from page.html's
 // marked blocks on every build, so the two pages cannot drift apart
-const block = (name) => {
-  const m = tpl.match(new RegExp(`/\\*@${name}\\*/([\\s\\S]*?)/\\*@/${name}\\*/`));
-  if (!m) { console.error(`page.html has no /*@${name}*/ block`); process.exit(1); }
+const block = (name, src = tpl) => {
+  const m = src.match(new RegExp(`/\\*@${name}\\*/([\\s\\S]*?)/\\*@/${name}\\*/`));
+  if (!m) { console.error(`template has no /*@${name}*/ block`); process.exit(1); }
   return m[1].trim();
 };
 const rtpl = fs.readFileSync(path.join(HERE, 'reels.html'), 'utf8');
@@ -137,6 +139,11 @@ const AUDIO_DIR = path.join(HERE, '..', '..', '..', 'audio', 'aif-c01');
 const segs = TOPICS.map((t) => [...MOTION[t.id].steps.map((s, k) => (k === 0 ? t.title + '. ' : '') + s), 'Remember. ' + t.hook]);
 const key = (text) => crypto.createHash('sha1').update(VOICE + '|' + text).digest('hex').slice(0, 10);
 const script = TOPICS.flatMap((t, i) => segs[i].map((text, k) => ({ file: `${t.id}-${k}-${key(text)}.mp3`, text })));
+// Service reels: one per cheat sheet entry, sharing the voice folder under an svc- prefix.
+const SVC = serviceReels({ ZONES, GLYPHS });
+if (SVC.errors.length) { console.error(SVC.errors.map((e) => '  ✗ ' + e).join('\n')); process.exit(1); }
+const svcFile = (id, k, text) => `svc-${id}-${k}-${key(text)}.mp3`;
+for (const t of SVC.topics) SVC.segs[t.id].forEach((text, k) => script.push({ file: svcFile(t.id, k, text), text }));
 fs.writeFileSync(path.join(HERE, 'tts', 'script.json'), JSON.stringify({ voice: VOICE, segments: script }, null, 1));
 const have = new Set(fs.existsSync(AUDIO_DIR) ? fs.readdirSync(AUDIO_DIR) : []);
 const audio = {}; let recorded = 0;
@@ -145,6 +152,21 @@ const rdata = { topics: TOPICS.map(({ id, d, title, hook }) => ({ id, d, title, 
 const reels = rtpl.replace('/*__TOKENS__*/', () => block('tokens')).replace('/*__MOTION__*/', () => block('motion'))
   .replace('/*__DATA__*/null', () => JSON.stringify(rdata).replace(/</g, '\\u003c'));
 fs.writeFileSync(REELS_OUT, reels);
+
+// The service reels run the same player as the topic reels, copied from reels.html's marked
+// blocks, so a fix to one feed reaches both.
+const svcAudio = {}; let svcRecorded = 0, svcTotal = 0;
+for (const t of SVC.topics) svcAudio[t.id] = SVC.segs[t.id].map((text, k) => { svcTotal++; const f = svcFile(t.id, k, text); if (have.has(f)) { svcRecorded++; return '/audio/aif-c01/' + f; } return null; });
+const svcData = { topics: SVC.topics, motion: SVC.motion, segs: SVC.topics.map((t) => SVC.segs[t.id]), audio: svcAudio, voice: VOICE,
+  zones: ZONES.map((z) => ({ id: z.id, place: z.place, n: z.services.length })) };
+const svcReels = fs.readFileSync(path.join(HERE, 'service-reels.html'), 'utf8')
+  .replace('/*__TOKENS__*/', () => block('tokens')).replace('/*__MOTION__*/', () => block('motion'))
+  .replace('/*__REELCSS__*/', () => block('reelcss', rtpl))
+  .replace('<!--__SYMBOLS__-->', () => Object.entries(GLYPHS).map(([id, m]) => `<symbol id="g-${id}" viewBox="0 0 24 24">${m}</symbol>`).join(''))
+  .replace('/*__HELPERS__*/', () => block('helpers', rtpl))
+  .replace('/*__PLAYER__*/', () => block('player', rtpl))
+  .replace('/*__DATA__*/null', () => JSON.stringify(svcData).replace(/</g, '\\u003c'));
+fs.writeFileSync(SVC_REELS_OUT, svcReels);
 
 // The service cheat sheet is static markup, so it works without JavaScript and prints whole.
 const escHtml = (t) => t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -157,6 +179,7 @@ const card = (x) => {
   const find = [x.name, x.job, x.clue, x.hook].join(' ').toLowerCase();
   return `<article class="c" id="s-${x.id}" data-s="${escHtml(find)}"><div class="gs">${gs}</div><h3 class="nm">${escHtml(x.name)}</h3>` +
     `<p class="job">${escHtml(x.job)}</p><p class="clue"><span class="lbl">Question says</span>${escHtml(x.clue)}</p><p class="hook">${escHtml(x.hook)}</p>${not}` +
+    `<a class="watch" href="/aws-ai-practitioner-services-reels#r-${x.id}">Watch the reel</a>` +
     `<button class="rev" type="button">Show the service</button></article>`;
 };
 // The person zone opens with a face: each sense is one service, so a question's verb points at it.
@@ -186,4 +209,5 @@ const fmt = (o) => [1, 2, 3, 4, 5].map((d) => o[d] || 0).join('/');
 console.log(`aif-c01: ${TOPICS.length} topics | motion ${Object.keys(MOTION).length} | practice ${QUESTIONS.filter((q) => q.set === 'P').length} | ` +
   `Mock A ${fmt(counts.A)} | Mock B ${fmt(counts.B)} | ${(html.length / 1024).toFixed(0)} KB → ${path.relative(process.cwd(), OUT)}`);
 console.log(`services: ${allServices.length} services in ${ZONES.length} places | ${(sheet.length / 1024).toFixed(0)} KB → ${path.relative(process.cwd(), SHEET_OUT)}`);
-console.log(`reels: ${TOPICS.length} reels | narration ${recorded}/${script.length} recorded (${VOICE}) | ${(reels.length / 1024).toFixed(0)} KB → ${path.relative(process.cwd(), REELS_OUT)}`);
+console.log(`reels: ${TOPICS.length} reels | narration ${recorded}/${script.length - svcTotal} recorded (${VOICE}) | ${(reels.length / 1024).toFixed(0)} KB → ${path.relative(process.cwd(), REELS_OUT)}`);
+console.log(`service reels: ${SVC.topics.length} reels | narration ${svcRecorded}/${svcTotal} recorded (${VOICE}) | ${(svcReels.length / 1024).toFixed(0)} KB → ${path.relative(process.cwd(), SVC_REELS_OUT)}`);

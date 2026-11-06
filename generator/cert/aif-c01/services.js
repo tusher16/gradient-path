@@ -32,7 +32,7 @@ const ZONES = [
   ] },
   { id: 'workshop', place: 'The workshop', say: 'SageMaker. Build, train and run your own model.', g: 'wrench', services: [
     s('sagemaker', 'Amazon SageMaker AI', 'Build, train and host your own', 'custom model, training jobs, full control', 'The whole workshop. You own the model.', ['wrench', 'cube'], ['bedrock', 'Bedrock is for using a ready FM with no servers.']),
-    s('jumpstart', 'SageMaker JumpStart', 'A shelf of pre-trained models', 'deploy a pre-trained model to your own endpoint', 'The workshop’s model shelf.', ['shelf', 'cube'], ['bedrock', 'Bedrock has no endpoint for you to run.']),
+    s('jumpstart', 'SageMaker JumpStart', 'A shelf of pre-trained models', 'pre-trained model on your own endpoint', 'The workshop’s model shelf.', ['shelf', 'cube'], ['bedrock', 'Bedrock has no endpoint for you to run.']),
     s('canvas', 'SageMaker Canvas', 'Build a model without code', 'business analyst, no-code predictions', 'Paint a model. No code.', ['person', 'cube']),
     s('wrangler', 'SageMaker Data Wrangler', 'Prepares data for ML', 'clean and transform data for training, visually', 'Wrangles messy data into line.', ['dots', 'table']),
     s('feature-store', 'SageMaker Feature Store', 'Keeps features for reuse', 'share inputs across teams, training and serving', 'A pantry of ready ingredients.', ['shelf', 'table']),
